@@ -19,6 +19,7 @@
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaToDecorationsHint="True"
 		Icon="/Assets/Images/wonderlab.ico"
+		Loaded="OnLoaded"
 		FontFamily="{StaticResource DefaultFontFamily}">
 	<i:Interaction.Behaviors>
 		<ia:EventTriggerBehavior EventName="Loaded" SourceObject="Window">
@@ -50,30 +51,28 @@
 			
 			<ui:NavigationView Grid.Row="1"
 							   ClipToBounds="False"
-							   Content="{Binding ActivePage}"
+							   Name="navigationView"
+							   SelectionChanged="OnSelectionChanged"
+							   MainContent="{Binding HomePage, Mode=OneWay}"
 							   IsOpenBackgroundPanel="{Binding IsOpenBackgroundPanel}">
 				<ui:NavigationView.Items>
 					<ui:NavigationViewItem Icon="&#xEA8A;"
 										   IsSelected="True"
 										   CommandParameter="HomePage"
 										   Content="{DynamicResource Main_Home}"
-										   Command="{Binding NavigationToCommand}"
 										   Foreground="{DynamicResource PrimaryBaseColor}"/>
 
 					<ui:NavigationViewItem Icon="&#xEDDC;"
-										   Command="{Binding NavigationToCommand}"
 										   Content="{DynamicResource Main_Download}"
 										   CommandParameter="DownloadNavigationPage"
 										   Foreground="{DynamicResource SuccessBaseColor}"/>
 
 					<ui:NavigationViewItem Icon="&#xF0B9;"
 										   CommandParameter="MultiplayerPage"
-										   Command="{Binding NavigationToCommand}"
 										   Content="{DynamicResource Main_Multiplayer}"
 										   Foreground="{DynamicResource WarningBaseColor}"/>
 
 					<ui:NavigationViewItem Icon="&#xF8B0;"
-										   Command="{Binding NavigationToCommand}"
 										   CommandParameter="SettingNavigationPage"
 										   Content="{DynamicResource Main_Settings}"
 										   Foreground="{DynamicResource SecondaryColor600}"/>
@@ -112,6 +111,8 @@
 						</Button>
 					</Grid>
 				</ui:NavigationView.FooterContent>
+
+				<ui:Frame Name="frame"/>
 			</ui:NavigationView>
 
 			<ui:TaskListPanel Grid.Row="1"

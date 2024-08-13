@@ -22,8 +22,9 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
     private readonly SettingService _settingService;
     private readonly DialogService _dialogService;
     private readonly TaskService _taskService;
-    private readonly HostNavigationService _navigationService;
     private readonly NotificationService _notificationService;
+
+    public readonly HostNavigationService _navigationService;
 
     [ObservableProperty] private string _imagePath;
 
@@ -39,6 +40,14 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
     [ObservableProperty] private ReadOnlyObservableCollection<ITaskJob> _tasks;
     [ObservableProperty] private ReadOnlyObservableCollection<INotification> _notifications;
 
+    public object HomePage {
+        get {
+            var homePage = _navigationService.HomePage;
+            homePage.DataContext = App.GetService<HomePageViewModel>();
+            return homePage;
+        }
+    }
+
     public MainWindowViewModel(
         TaskService taskService,
         DialogService dialogService,
@@ -50,10 +59,6 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         _settingService = settingService;
         _navigationService = navigationService;
         _notificationService = notificationService;
-        _navigationService.NavigationRequest += p => {
-            ActivePage = p.Page;
-        };
-
         WeakReferenceMessenger.Default.Register<BlurEnableMessage>(this, BlurEnableValueHandle);
         WeakReferenceMessenger.Default.Register<BlurRadiusChangeMessage>(this, BlurRadiusChangeHandle);
         WeakReferenceMessenger.Default.Register<ParallaxModeChangeMessage>(this, ParallaxModeChangeHandle);
@@ -75,9 +80,6 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         };
 
         switch (pageKey) {
-            case "HomePage":
-                _navigationService.NavigationTo<HomePageViewModel>();
-                break;
             case "MultiplayerPage":
                 _navigationService.NavigationTo<MultiplayerPageViewModel>();
                 break;
@@ -122,7 +124,5 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
             2 => ParallaxMode.Solid,
             _ => ParallaxMode.None,
         };
-
-        _navigationService.NavigationTo<HomePageViewModel>();
     }
 }

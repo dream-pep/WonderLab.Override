@@ -25,35 +25,40 @@
 		
 		<Setter Property="Template">
 			<ControlTemplate>
-				<Grid Background="Transparent"
-					  RowDefinitions="1*, Auto">
-					<Border Opacity="0"
-							Grid.Row="0"
+				<Grid RowDefinitions="1*, Auto">
+					<ContentPresenter Margin="15 5 15 15"
+									  Name="PART_ContentPresenter"
+									  Content="{TemplateBinding MainContent}">
+						<ContentPresenter.Transitions>
+							<Transitions>
+								<DoubleTransition Property="Opacity"
+												  Duration="0:0:0.3"
+												  Easing="CubicEaseOut"/>
+							</Transitions>
+						</ContentPresenter.Transitions>
+					</ContentPresenter>
+
+					<Border Grid.Row="0"
 							CornerRadius="12"
 							Name="PART_Border"
-							Margin="14 5 14 15"
-							BorderThickness="1"
-							RenderTransform="translateY(15px)"
-							Effect="{StaticResource UnderlineShadow}"
+							Margin="14 5 14 -520"
+							BorderThickness="1.5"
+							Width="800"
+							Height="420"
+							VerticalAlignment="Bottom"
+							HorizontalAlignment="Center"
 							Background="{TemplateBinding Background}"
 							BorderBrush="{TemplateBinding BorderBrush}">
 						<Border.Transitions>
 							<Transitions>
-								<DoubleTransition Property="Opacity"
-												  Duration="0:0:0.35"
-												  Easing="CubicEaseOut"/>
-
-								<TransformOperationsTransition Duration="0:0:0.25"
-															   Property="RenderTransform"
-															   Easing="CubicEaseOut"/>
+								<ThicknessTransition Property="Margin"
+													 Duration="0:0:0.35"
+													 Easing="ExponentialEaseInOut"/>
 							</Transitions>
 						</Border.Transitions>
-					</Border>
 
-					<ContentPresenter Grid.Row="0"
-									  Margin="14 5 14 15"
-									  Background="Transparent"
-									  Name="PART_ContentPresenter"/>
+						<ContentPresenter Content="{TemplateBinding Content}"/>
+					</Border>
 
 					<!--navbar-->
 					<Border Opacity="1"
@@ -88,73 +93,5 @@
 				</Grid>
 			</ControlTemplate>
 		</Setter>
-
-		<!--<Style Selector="^ /template/ LayoutTransformControl#PART_LayoutTransformControl">
-			<Style.Animations>
-				<Animation Duration="0:0:0.35" FillMode="Forward">
-					<KeyFrame Cue="0%">
-						<Setter Property="Opacity" Value="0"/>
-						<Setter Property="TranslateTransform.Y" Value="{Binding $parent[controls:NavigationView].TemplateSettings.ActualPx}"/>
-					</KeyFrame>
-					<KeyFrame Cue="100%">
-						<Setter Property="Opacity" Value="0"/>
-						<Setter Property="IsHitTestVisible" Value="False"/>
-						<Setter Property="TranslateTransform.Y" Value="{Binding $parent[controls:NavigationView].TemplateSettings.ActualPx}"/>
-					</KeyFrame>
-				</Animation>
-			</Style.Animations>
-		</Style>-->
-
-		<!--<Style Selector="^ /template/ controls|Frame#PART_PanelFrame">
-			<Style.Animations>
-				<Animation Duration="0:0:0.35" FillMode="Forward">
-					<KeyFrame Cue="0%">
-						<Setter Property="Opacity" Value="1"/>
-					</KeyFrame>
-					<KeyFrame Cue="100%">
-						<Setter Property="Opacity" Value="1"/>
-					</KeyFrame>
-				</Animation>
-			</Style.Animations>
-		</Style>-->
-
-		<!--IsPanelOpen-->
-		<!--<Style Selector="^:ispanelopen /template/ LayoutTransformControl#PART_LayoutTransformControl">
-			<Style.Animations>
-				<Animation FillMode="Forward"
-						   Duration="0:0:0.35" 
-						   Easing="ExponentialEaseOut">
-					<KeyFrame Cue="0%">
-						<Setter Property="IsVisible" Value="True"/>
-						<Setter Property="TranslateTransform.Y" Value="{Binding $parent[controls:NavigationView].TemplateSettings.ActualPx}"/>
-					</KeyFrame>
-					<KeyFrame Cue="100%">
-						<Setter Property="Opacity" Value="1"/>
-						<Setter Property="IsHitTestVisible" Value="True"/>
-						<Setter Property="TranslateTransform.Y" Value="0"/>
-					</KeyFrame>
-				</Animation>
-			</Style.Animations>
-		</Style>
-
-		<Style Selector="^:ispanelclose /template/ LayoutTransformControl#PART_LayoutTransformControl">
-			<Setter Property="RenderTransformOrigin" Value="50%,0%"/>
-			<Style.Animations>
-				<Animation FillMode="Forward"
-						   Duration="0:0:0.25" 
-						   Easing="ExponentialEaseIn">
-					<KeyFrame Cue="0%">
-						<Setter Property="TranslateTransform.Y" Value="0"/>
-					</KeyFrame>
-					<KeyFrame Cue="95%">
-						<Setter Property="TranslateTransform.Y" Value="{Binding $parent[controls:NavigationView].TemplateSettings.ActualPx}"/>
-					</KeyFrame>
-					<KeyFrame Cue="100%">
-						<Setter Property="IsVisible" Value="False"/>
-						<Setter Property="IsHitTestVisible" Value="False"/>
-					</KeyFrame>
-				</Animation>
-			</Style.Animations>
-		</Style>-->
     </ControlTheme>
 </ResourceDictionary>

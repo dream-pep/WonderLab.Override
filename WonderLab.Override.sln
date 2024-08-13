@@ -11,9 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlessingStudio.Wrap", "refs
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "refs", "refs", "{52760DE2-56D8-4F2A-9253-90E4C25C1E28}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WonderLab.Desktop.Backend", "WonderLab.Desktop.Backend\WonderLab.Desktop.Backend.csproj", "{40FEB1EC-BA97-41AE-995C-CAE52B0BB9F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WonderLab.Desktop.Backend", "WonderLab.Desktop.Backend\WonderLab.Desktop.Backend.csproj", "{40FEB1EC-BA97-41AE-995C-CAE52B0BB9F4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinecraftLaunch", "refs\MinecraftLaunch\MinecraftLaunch\MinecraftLaunch.csproj", "{5BDC9ADC-ACC9-4412-8D63-2D2F4DFCC49E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentAvalonia", "..\..\..\Code\FluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj", "{B22E034C-5726-4B67-BDEA-5B690C6D2376}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,6 +65,14 @@ Global
 		{5BDC9ADC-ACC9-4412-8D63-2D2F4DFCC49E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5BDC9ADC-ACC9-4412-8D63-2D2F4DFCC49E}.Release|x64.ActiveCfg = Release|Any CPU
 		{5BDC9ADC-ACC9-4412-8D63-2D2F4DFCC49E}.Release|x64.Build.0 = Release|Any CPU
+		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Debug|x64.Build.0 = Debug|Any CPU
+		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Release|x64.ActiveCfg = Release|Any CPU
+		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
