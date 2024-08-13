@@ -13,15 +13,9 @@ namespace WonderLab.Views.Controls.Media.Transitions;
 /// like from a master list to a detail page.
 /// </summary>
 public class EntranceNavigationTransition : NavigationTransition {
-    /// <summary>
-    /// Gets or sets whether the animation should drill in (false) or drill out (true)
-    /// </summary>
-    public bool IsReversed { get; set; } = false;
-
-    //Zoom & Fade
     public async override void RunAnimation(Animatable ctrl, CancellationToken cancellationToken) {
         var animation = new Animation {
-            Easing = new SplineEasing(0.1, 0.9, 0.2, 1.0),
+            Easing = new ExponentialEaseInOut(),
             Children = {
                 new KeyFrame {
                     Setters = {
@@ -38,7 +32,7 @@ public class EntranceNavigationTransition : NavigationTransition {
                     Cue = new Cue(1d)
                 }
             },
-            Duration = TimeSpan.FromSeconds(0.5),
+            Duration = TimeSpan.FromSeconds(0.5d),
             FillMode = FillMode.Forward
         };
 

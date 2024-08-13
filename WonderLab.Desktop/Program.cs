@@ -4,6 +4,10 @@ using WonderLab.Extensions;
 using Microsoft.Extensions.Logging;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using WonderLab.Services.Download;
 
 namespace WonderLab.Desktop;
 
@@ -11,6 +15,8 @@ public sealed class Program {
     [STAThread]
     public static void Main(string[] args) {
         try {
+            var arg = args.FirstOrDefault() ?? "";
+            UpdateService.IsDebugMode = arg.Contains("debug");
             BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
         } catch (Exception ex) {
             var logger = App.ServiceProvider.GetService<ILogger<Program>>();

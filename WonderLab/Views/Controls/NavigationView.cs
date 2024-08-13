@@ -5,13 +5,8 @@ using Avalonia.Controls;
 using Avalonia.Metadata;
 using Avalonia.Threading;
 using System.Windows.Input;
-using System.Threading.Tasks;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
-using Avalonia.Animation;
-using Avalonia.Animation.Easings;
-using Avalonia.Styling;
-using Avalonia.Media.Transformation;
 using Avalonia.Controls.Presenters;
 
 namespace WonderLab.Views.Controls;

@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 namespace WonderLab.Services.Download;
 
 public sealed class UpdateService {
+    public static bool IsDebugMode { get; set; }
+
     private const string BASE_API = "http://47.113.149.130:14514/api/update";
 
     private readonly ILogger<UpdateService> _logger;

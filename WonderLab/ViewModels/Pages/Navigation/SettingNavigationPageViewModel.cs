@@ -9,20 +9,12 @@ using Avalonia.Threading;
 namespace WonderLab.ViewModels.Pages.Navigation;
 
 public sealed partial class SettingNavigationPageViewModel : ViewModelBase {
-    private readonly SettingNavigationService _navigationService;
+    public readonly SettingNavigationService _navigationService;
 
     [ObservableProperty] private object _activeItem;
     [ObservableProperty] private NavigationPageData _activePage;
 
     public SettingNavigationPageViewModel(SettingNavigationService navigationService, Dispatcher dispatcher) {
-        navigationService.NavigationRequest += async p => {
-            await dispatcher.InvokeAsync(() => {
-                if (ActivePage?.PageKey != p.PageKey) {
-                    ActivePage = p;
-                }
-            }, DispatcherPriority.ApplicationIdle);
-        };
-
         _navigationService = navigationService;
         _navigationService.NavigationTo<LaunchSettingPageViewModel>();
     }
@@ -44,9 +36,6 @@ public sealed partial class SettingNavigationPageViewModel : ViewModelBase {
                 break;
             case "NetworkSettingPage":
                 _navigationService.NavigationTo<NetworkSettingPageViewModel>(); 
-                break;
-            default:
-                _navigationService.NavigationTo<LaunchSettingPageViewModel>();
                 break;
         }
     }

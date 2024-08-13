@@ -9,7 +9,7 @@ using WonderLab.ViewModels.Pages.Download;
 namespace WonderLab.ViewModels.Pages.Navigation;
 
 public sealed partial class DownloadNavigationPageViewModel : ViewModelBase {
-    private readonly DownloadNavigationService _navigationService;
+    public readonly DownloadNavigationService _navigationService;
 
     [ObservableProperty] private NavigationPageData _activePage;
 

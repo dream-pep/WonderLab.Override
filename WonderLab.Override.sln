@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WonderLab.Desktop.Backend",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinecraftLaunch", "refs\MinecraftLaunch\MinecraftLaunch\MinecraftLaunch.csproj", "{5BDC9ADC-ACC9-4412-8D63-2D2F4DFCC49E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FluentAvalonia", "..\..\..\Code\FluentAvalonia\src\FluentAvalonia\FluentAvalonia.csproj", "{B22E034C-5726-4B67-BDEA-5B690C6D2376}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,14 +63,6 @@ Global
 		{5BDC9ADC-ACC9-4412-8D63-2D2F4DFCC49E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5BDC9ADC-ACC9-4412-8D63-2D2F4DFCC49E}.Release|x64.ActiveCfg = Release|Any CPU
 		{5BDC9ADC-ACC9-4412-8D63-2D2F4DFCC49E}.Release|x64.Build.0 = Release|Any CPU
-		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Debug|x64.Build.0 = Debug|Any CPU
-		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Release|Any CPU.Build.0 = Release|Any CPU
-		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Release|x64.ActiveCfg = Release|Any CPU
-		{B22E034C-5726-4B67-BDEA-5B690C6D2376}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

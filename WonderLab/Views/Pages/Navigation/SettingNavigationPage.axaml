@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:WonderLab.Views.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="vm:SettingNavigationPageViewModel"
+			 Loaded="OnLoaded"
              x:Class="WonderLab.Views.Pages.Navigation.SettingNavigationPage">
 	<Grid ColumnDefinitions="165, 1*">
 		<Border BorderThickness="0 0 1 0"
@@ -13,59 +14,56 @@
                 BorderBrush="{DynamicResource ContentBrush4}"
                 Background="{DynamicResource SettingSideBarBackground}">
 			<ListBox Margin="0 10"
+					 Name="listBox"
                      ClipToBounds="False"
-                     Background="Transparent">
+                     Background="Transparent"
+					 SelectionChanged="OnSelectionChanged">
 				<ListBox.ItemsPanel>
 					<ItemsPanelTemplate>
 						<StackPanel Spacing="8"/>
 					</ItemsPanelTemplate>
 				</ListBox.ItemsPanel>
 				<controls:NavigationViewItem Width="145"
-                                             Icon="&#xE945;"
+											 Icon="&#xE945;"
 											 Margin="0 5 0 0"
-                                             IsSelected="True"
-                                             Classes="sidebaritem"
+											 IsSelected="True"
+											 Classes="sidebaritem"
+											 CommandParameter="LaunchSettingPage"
 											 Content="{DynamicResource Nav_Settings_Launch}"
-                                             CommandParameter="LaunchSettingPage"
-                                             Command="{Binding NavigationToCommand}"
-                                             Foreground="{DynamicResource SecondaryBrush600}"/>
+											 Foreground="{DynamicResource SecondaryBrush600}"/>
 
 				<controls:NavigationViewItem Width="145"
-							                 Icon="&#xE716;"
-							                 Classes="sidebaritem"
+											 Icon="&#xE716;"
+											 Classes="sidebaritem"
+											 CommandParameter="AccountSettingPage"
 											 Content="{DynamicResource Nav_Settings_Account}"
-							                 CommandParameter="AccountSettingPage"
-							                 Command="{Binding NavigationToCommand}"
-							                 Foreground="{DynamicResource SecondaryBrush600}"/>
+											 Foreground="{DynamicResource SecondaryBrush600}"/>
 				
 				<controls:NavigationViewItem Width="145"
-                                             Icon="&#xE701;"
-                                             Classes="sidebaritem"
+											 Icon="&#xE701;"
+											 Classes="sidebaritem"
+											 CommandParameter="NetworkSettingPage"
 											 Content="{DynamicResource Nav_Settings_Network}"
-                                             CommandParameter="NetworkSettingPage"
-                                             Command="{Binding NavigationToCommand}"
-                                             Foreground="{DynamicResource SecondaryBrush600}"/>
+											 Foreground="{DynamicResource SecondaryBrush600}"/>
 
 				<controls:NavigationViewItem Width="145"
-                                             Icon="&#xE790;"
-                                             Classes="sidebaritem"
-                                             CommandParameter="DetailSettingPage"
-											 Content="{DynamicResource Nav_Settings_Appearance}"
-                                             Command="{Binding NavigationToCommand}"
-                                             Foreground="{DynamicResource SecondaryBrush600}"/>
+											 Icon="&#xE790;"
+											 Classes="sidebaritem"
+											 CommandParameter="DetailSettingPage"
+											 Foreground="{DynamicResource SecondaryBrush600}"
+											 Content="{DynamicResource Nav_Settings_Appearance}"/>
 
 				<controls:NavigationViewItem Width="145"
 											 Icon="&#xE736;"
-							                 Classes="sidebaritem"
-							                 CommandParameter="AboutPage"
-							                 Content="{DynamicResource Nav_Settings_About}"
-							                 Command="{Binding NavigationToCommand}"
-							                 Foreground="{DynamicResource SecondaryBrush600}"/>
+											 Classes="sidebaritem"
+											 CommandParameter="AboutPage"
+											 Content="{DynamicResource Nav_Settings_About}"
+											 Foreground="{DynamicResource SecondaryBrush600}"/>
 			</ListBox>
 		</Border>
 
-		<controls:Frame Margin="36 0"
-						Grid.Column="1"
-                        Content="{Binding ActivePage.Page}"/>
+		<controls:Frame Name="frame"
+						Margin="36 0"
+						Grid.Column="1"/>
 	</Grid>
 </UserControl>

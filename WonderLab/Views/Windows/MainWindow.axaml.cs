@@ -7,9 +7,7 @@ namespace WonderLab.Views.Windows;
 public partial class MainWindow : Window {
     private MainWindowViewModel _viewModel;
 
-    public MainWindow() {
-        InitializeComponent();
-    }
+    public MainWindow() => InitializeComponent();
 
     private void OnLoaded(object sender, Avalonia.Interactivity.RoutedEventArgs e) {
         _viewModel = DataContext as MainWindowViewModel;

@@ -43,13 +43,13 @@ public sealed class Frame : ContentControl {
         var pageStack = GetPageInStack(pageStackData.Instance) ?? pageStackData;
         Content = pageStack.Instance;
 
-        if (PART_ContentPresenter is not null) {
-            PART_ContentPresenter.Opacity = 0;
+        //if (PART_ContentPresenter is not null) {
+        //    PART_ContentPresenter.Opacity = 0;
 
-            Dispatcher.UIThread.Post(() => {
-                pageStack.NavigationTransition.RunAnimation(PART_ContentPresenter, default);
-            }, DispatcherPriority.Render);
-        }
+        //    Dispatcher.UIThread.Post(() => {
+        //        pageStack.NavigationTransition.RunAnimation(PART_ContentPresenter, default);
+        //    }, DispatcherPriority.Render);
+        //}
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e) {

@@ -6,15 +6,18 @@
              xmlns:vm="using:WonderLab.ViewModels.Pages.Navigation"			 
 			 xmlns:controls="clr-namespace:WonderLab.Views.Controls"
 			 x:DataType="vm:DownloadNavigationPageViewModel"
-             x:Class="WonderLab.Views.Pages.Navigation.DownloadNavigationPage">
+             x:Class="WonderLab.Views.Pages.Navigation.DownloadNavigationPage"
+			 Loaded="OnLoaded">
 	<Grid RowDefinitions="Auto, 1*">
 		<Border CornerRadius="12 12 0 0"
 				BorderThickness="0 0 0 0.5"
 				BorderBrush="{DynamicResource ContentBrush4}"
 				Background="{DynamicResource SettingSideBarBackground}">
 			<ListBox Margin="10 6"
+					 Name="listBox"
 					 ClipToBounds="False"
-					 Background="Transparent">
+					 Background="Transparent"
+					 SelectionChanged="OnSelectionChanged">
 				<ListBox.ItemsPanel>
 					<ItemsPanelTemplate>
 						<StackPanel Orientation="Horizontal" Spacing="8"/>
@@ -43,7 +46,7 @@
 		</Border>
 
 		<controls:Frame Grid.Row="1"
-						Margin="36 0"
-						Content="{Binding ActivePage.Page}"/>
+						Name="frame"
+						Margin="36 0"/>
 	</Grid>
 </UserControl>

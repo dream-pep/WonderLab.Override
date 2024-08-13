@@ -13,6 +13,7 @@ using Avalonia.Controls.Notifications;
 using WonderLab.Classes.Datas.ViewData;
 using Microsoft.Extensions.DependencyInjection;
 using MinecraftLaunch;
+using WonderLab.Services.Download;
 
 namespace WonderLab.Classes.Datas.TaskData;
 
@@ -46,6 +47,10 @@ public sealed class InitTask : TaskBase {
 #if DEBUG
         return;
 #else
+        if (UpdateService.IsDebugMode) {
+            return;
+        }
+
         if (string.IsNullOrEmpty(_settingService.Data.TestUserUuid)) {
             _dialogService.ShowContentDialog<TestUserCheckDialogViewModel>();
             return;
