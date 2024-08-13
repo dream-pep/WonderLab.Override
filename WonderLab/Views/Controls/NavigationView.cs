@@ -23,6 +23,9 @@ public sealed class NavigationView : SelectingItemsControl {
 
     private bool _isRunPanelAnimation;
 
+    [Obsolete("弃用回调逻辑.")]
+    public event EventHandler GoBacked;
+
     public static readonly StyledProperty<object> ContentProperty =
         AvaloniaProperty.Register<NavigationView, object>(nameof(Content));
 
@@ -32,6 +35,9 @@ public sealed class NavigationView : SelectingItemsControl {
     public static readonly StyledProperty<object> FooterContentProperty =
         AvaloniaProperty.Register<NavigationView, object>(nameof(FooterContent));
 
+    public static readonly StyledProperty<bool> CanGoBackProperty =
+        AvaloniaProperty.Register<NavigationView, bool>(nameof(CanGoBack), false);
+
     public static readonly StyledProperty<bool> IsOpenBackgroundPanelProperty =
         AvaloniaProperty.Register<NavigationView, bool>(nameof(IsOpenBackgroundPanel));
 
@@ -39,6 +45,11 @@ public sealed class NavigationView : SelectingItemsControl {
     public object Content {
         get => GetValue(ContentProperty);
         set => SetValue(ContentProperty, value);
+    }
+
+    public bool CanGoBack {
+        get => GetValue(CanGoBackProperty);
+        set => SetValue(CanGoBackProperty, value);
     }
 
     public object MainContent {
@@ -72,7 +83,7 @@ public sealed class NavigationView : SelectingItemsControl {
 
             Dispatcher.UIThread.Post(() => {
                 _PART_ContentPresenter.Opacity = @bool ? 0 : 1;
-                _PART_Border.Margin = new(14, 5, 14, @bool ? 15 : -520);
+                _PART_Border.Margin = new(12, 5, 12, @bool ? 15 : -520);
             }, DispatcherPriority.Render);
         }
     }

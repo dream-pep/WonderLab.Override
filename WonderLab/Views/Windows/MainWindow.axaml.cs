@@ -20,5 +20,6 @@ public partial class MainWindow : Window {
 
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e) {
         _viewModel?.NavigationToCommand.Execute((navigationView.SelectedItem as NavigationViewItem).CommandParameter);
+        navigationView.CanGoBack = frame.CanGoBack;
     }
 }

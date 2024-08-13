@@ -40,12 +40,16 @@
                             IsVisible="{TemplateBinding IsButtonGroupVisible}"
                             BorderThickness="{TemplateBinding BorderThickness}">
                         <Grid Margin="15 0" ColumnDefinitions="Auto Auto">
-                            <Button Content="&#xE921;"
-                                    Name="MinimizedButton"									
+                            <Button Width="22"
+									Height="22"
+									Content="&#xE921;"
+                                    Name="MinimizedButton"
                                     Classes="titlebarbutton"
                                     Foreground="{TemplateBinding Foreground}"/>
 
-                            <Button Grid.Column="1" 
+                            <Button Width="22"
+									Height="22"
+									Grid.Column="1" 
                                     Margin="5 0 0 0"
                                     Content="&#xE8BB;"
                                     Name="CloseButton"

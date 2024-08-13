@@ -25,12 +25,6 @@ public sealed class Frame : ContentControl {
 
     public bool CanGoBack => _pageStack.Count > 0;
 
-    public void GoBack() {
-        if (CanGoBack && _pageStack.TryPop(out _)) {
-            SetContentAndAnimate(_pageStack.Peek());
-        }
-    }
-
     public void Navigate(Control control, NavigationTransition transition = null) {
         _pageStack.Push(new(transition) {
             Instance = control,

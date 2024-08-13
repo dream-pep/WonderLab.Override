@@ -92,8 +92,6 @@
 	
 		<!-- TitleBarButton -->
 		<Style Selector="^.titlebarbutton">
-			<Setter Property="Width" Value="22"/>
-			<Setter Property="Height" Value="22"/>
 			<Setter Property="FontSize" Value="12"/>
 			<Setter Property="ClipToBounds" Value="True"/>
 			<Setter Property="Background" Value="Transparent"/>
@@ -106,10 +104,10 @@
 						                        ClipToBounds="False"
 												FontSize="{TemplateBinding FontSize}"
 						                        RippleFill="{DynamicResource DividerBrush}"
-						                        CornerRadius="4">
+						                        CornerRadius="{TemplateBinding CornerRadius}">
 							<Border Name="Layout"
-							        CornerRadius="4"
-							        Background="{TemplateBinding Background}">
+							        Background="{TemplateBinding Background}"
+							        CornerRadius="{TemplateBinding CornerRadius}">
 								<Border.Transitions>
 									<Transitions>
 										<BrushTransition Duration="0:0:0.35"
