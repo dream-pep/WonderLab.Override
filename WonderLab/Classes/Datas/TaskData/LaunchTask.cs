@@ -74,14 +74,5 @@ public sealed class LaunchTask : TaskBase {
         result.OutputLogReceived += (_, args) => {
 
         };
-
-        _notificationService.QueueJob(new NotificationViewData {
-            Title = "成功",
-            Content = $"已完成启动步骤，等待游戏进程退出",
-            NotificationType = NotificationType.Success
-        });
-
-        IsIndeterminate = true;
-        await result.Process.WaitForExitAsync(token);
     }
 }

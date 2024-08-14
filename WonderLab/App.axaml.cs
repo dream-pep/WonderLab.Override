@@ -154,13 +154,14 @@ public sealed partial class App : Application {
 
     private static void ConfigureServices(IServiceCollection services) {
         services.AddTransient<GameService>();
+        services.AddTransient<BackendService>();
         services.AddTransient<DownloadService>();
 
         services.AddSingleton<TaskService>();
         services.AddSingleton<WrapService>();
         services.AddSingleton<SkinService>();
-        services.AddSingleton<ThemeService>();
         services.AddSingleton<UPnPService>();
+        services.AddSingleton<ThemeService>();
         services.AddSingleton<UpdateService>();
         services.AddSingleton<DialogService>();
         services.AddSingleton<WindowService>();

@@ -1,20 +1,18 @@
-﻿using Avalonia.Threading;
-using WonderLab.ViewModels.Pages;
+﻿using WonderLab.ViewModels.Pages;
 using CommunityToolkit.Mvvm.Input;
 using WonderLab.Classes.Interfaces;
 using WonderLab.Services.Navigation;
 using CommunityToolkit.Mvvm.ComponentModel;
 using WonderLab.ViewModels.Pages.Navigation;
-using WonderLab.Classes.Datas;
 using System.Collections.ObjectModel;
 using WonderLab.Services;
 using WonderLab.Classes.Datas.TaskData;
-using System;
-using System.Timers;
 using WonderLab.Services.UI;
 using CommunityToolkit.Mvvm.Messaging;
 using WonderLab.Classes.Datas.MessageData;
 using WonderLab.Classes.Enums;
+using Avalonia.Controls;
+using WonderLab.Views.Pages;
 
 namespace WonderLab.ViewModels.Windows;
 
@@ -40,13 +38,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
     [ObservableProperty] private ReadOnlyObservableCollection<ITaskJob> _tasks;
     [ObservableProperty] private ReadOnlyObservableCollection<INotification> _notifications;
 
-    public object HomePage {
-        get {
-            var homePage = _navigationService.HomePage;
-            homePage.DataContext = App.GetService<HomePageViewModel>();
-            return homePage;
-        }
-    }
+    [ObservableProperty] private object _homePage;
 
     public MainWindowViewModel(
         TaskService taskService,
@@ -59,6 +51,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         _settingService = settingService;
         _navigationService = navigationService;
         _notificationService = notificationService;
+
         WeakReferenceMessenger.Default.Register<BlurEnableMessage>(this, BlurEnableValueHandle);
         WeakReferenceMessenger.Default.Register<BlurRadiusChangeMessage>(this, BlurRadiusChangeHandle);
         WeakReferenceMessenger.Default.Register<ParallaxModeChangeMessage>(this, ParallaxModeChangeHandle);
@@ -80,6 +73,9 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         };
 
         switch (pageKey) {
+            case "HomePage":
+                HomePage = _navigationService.NavigationToHome();
+                break;
             case "MultiplayerPage":
                 _navigationService.NavigationTo<MultiplayerPageViewModel>();
                 break;
@@ -88,9 +84,6 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
                 break;
             case "DownloadNavigationPage":
                 _navigationService.NavigationTo<DownloadNavigationPageViewModel>();
-                break;
-            default:
-                _navigationService.NavigationTo<HomePageViewModel>();
                 break;
         }
     }
@@ -124,5 +117,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
             2 => ParallaxMode.Solid,
             _ => ParallaxMode.None,
         };
+
+        HomePage = _navigationService.NavigationToHome();
     }
 }

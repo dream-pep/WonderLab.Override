@@ -13,6 +13,8 @@ using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using Microsoft.ApplicationInsights;
+using Avalonia.Platform;
+using System.IO.Compression;
 
 namespace WonderLab.Services;
 
@@ -51,6 +53,7 @@ internal sealed class SettingBackgroundService : BackgroundService {
 
     private readonly Dispatcher _dispatcher;
     private readonly FileInfo _settingDataFilePath;
+    private readonly DirectoryInfo _backendDirectory;
     private readonly WeakReferenceMessenger _weakReferenceMessenger;
 
     public SettingBackgroundService(
@@ -73,6 +76,9 @@ internal sealed class SettingBackgroundService : BackgroundService {
         string documentsPath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
         _settingDataFilePath = new(Path
             .Combine(documentsPath, "Blessing-Studio", "wonderlab", "settingData.json"));
+
+        _backendDirectory = new(Path
+            .Combine(_settingDataFilePath.Directory.FullName, "backend"));
     }
 
     private void Save() {
@@ -85,7 +91,14 @@ internal sealed class SettingBackgroundService : BackgroundService {
         _logger.LogInformation("开始初始化设置数据服务");
 
         if (!_settingDataFilePath.Directory!.Exists) {
-            _settingDataFilePath.Directory.Create(); 
+            _settingDataFilePath.Directory.Create();
+        }
+
+        if (!_backendDirectory.Exists) {
+            _backendDirectory.Create();
+
+            using var stream = AssetLoader.Open(new Uri($"resm:WonderLab.Assets.WonderLab.Backend"));
+            ZipFile.ExtractToDirectory(stream, _backendDirectory.FullName);
         }
 
         if (_settingDataFilePath.Exists) {

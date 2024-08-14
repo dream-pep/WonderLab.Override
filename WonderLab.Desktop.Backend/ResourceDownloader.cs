@@ -15,7 +15,7 @@ public static class ResourceDownloader {
 
         if (isNeedComplete) {
             await checker.MissingResources.DownloadResourceEntrysAsync(GetSource(source), x => {
-                Console.WriteLine($"[{x.CompletedCount}/{x.TotalCount}][{x.ToPercentage() * 100:0.00}%]");
+                Console.WriteLine($"[{x.CompletedCount}/{x.TotalCount}][{x.ToPercentage() * 100:0.00}]");
             }, new() {
                 MultiPartsCount = 8,
                 MultiThreadsCount = thread,

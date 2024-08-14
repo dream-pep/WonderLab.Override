@@ -100,7 +100,8 @@
 		                             Name="GameListBox"
 		                             Background="Transparent"
 		                             ItemsSource="{TemplateBinding GameEntries}"
-		                             ScrollViewer.VerticalScrollBarVisibility="Hidden">
+		                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
+									 IsVisible="{TemplateBinding IsGameEmpty, Converter={StaticResource BooleanReverseConverter}}">
 								<ListBox.Styles>
 									<Style Selector="ListBoxItem">
 										<Setter Property="Margin" Value="12 5 12 0"/>

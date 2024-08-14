@@ -19,7 +19,8 @@
 			<ui:SettingCard Title="{DynamicResource Settings_Launch_Folder}">
 				<ItemsControl>
 					<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Folder_Select}">
-						<ComboBox ItemsSource="{Binding GameFolders}"
+						<ComboBox FlowDirection="RightToLeft"
+								  ItemsSource="{Binding GameFolders}"
 								  SelectedItem="{Binding ActiveGameFolder}"/>
 					</ui:SettingCardItem>
 
@@ -42,7 +43,8 @@
 			<ui:SettingCard Title="{DynamicResource Settings_Launch_Java}">
 				<ItemsControl>
 					<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Java_Select}">
-						<ComboBox SelectedItem="{Binding ActiveJava}"
+						<ComboBox FlowDirection="RightToLeft"
+								  SelectedItem="{Binding ActiveJava}"
 								  ItemsSource="{Binding Javas, Mode=TwoWay}">
 							<ComboBox.ItemTemplate>
 								<DataTemplate>

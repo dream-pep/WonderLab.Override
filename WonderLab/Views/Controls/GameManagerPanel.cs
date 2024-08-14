@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using Avalonia.Controls.Primitives;
 using WonderLab.Classes.Datas.ViewData;
 using Microsoft.Extensions.DependencyInjection;
+using System.Diagnostics;
+using System.Linq;
 
 namespace WonderLab.Views.Controls;
 
@@ -67,8 +69,7 @@ public sealed class GameManagerPanel : ContentControl {
         AvaloniaProperty.Register<GameManagerPanel, ICommand>(nameof(OpenCommand));
 
     public static readonly StyledProperty<IEnumerable<GameViewData>> GameEntriesProperty =
-        AvaloniaProperty.Register<GameManagerPanel, IEnumerable<GameViewData>>(nameof(GameEntries),
-            new AvaloniaList<GameViewData>());
+        AvaloniaProperty.Register<GameManagerPanel, IEnumerable<GameViewData>>(nameof(GameEntries));
 
     private void ClosePane() {
         var width = _windowService.ActualWidth - 30;
@@ -100,22 +101,20 @@ public sealed class GameManagerPanel : ContentControl {
                 Height = _maxRect.Height;
                 _openPaneButton.Content = "收起界面";
                 IsPaneOpen = true;
-            });
+            }, DispatcherPriority.Render);
 
             await Task.Delay(390, _cancellationTokenSource.Token).ContinueWith(x => {
                 if (x.IsCompletedSuccessfully) {
-                    Dispatcher.UIThread.Post(() => _contentPanel.Opacity = 1);
+                    Dispatcher.UIThread.Post(() => _contentPanel.Opacity = 1, DispatcherPriority.Render);
                 }
             });
         }
-
-
     }
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-        
-        _windowService = App.ServiceProvider.GetService<WindowService>();
+
+        _windowService = App.GetService<WindowService>();
         if (SelectedGame != null) {
             _rectCache = MathUtil.CalculateText(SelectedGame.Entry.Id, _titleTextBlock);
             _titleTextBlock.Text = SelectedGame.Entry.Id;

@@ -23,11 +23,9 @@ public sealed partial class HomePageViewModel : ViewModelBase {
     private readonly SettingService _settingService;
     private readonly NotificationService _notificationService;
 
-    [ObservableProperty]
-    private GameViewData activeGameEntry;
-
-    public bool IsGameEmpty => !GameEntries.Any();
-    public ObservableCollection<GameViewData> GameEntries { get; private set; }
+    [ObservableProperty] private bool _isGameEmpty;
+    [ObservableProperty] private GameViewData _activeGameEntry;
+    [ObservableProperty] private ObservableCollection<GameViewData> _gameEntries;
 
     /// <inheritdoc />
     public HomePageViewModel(
@@ -41,6 +39,7 @@ public sealed partial class HomePageViewModel : ViewModelBase {
         _notificationService = notificationService;
 
         GameEntries = _gameService.GameEntries.ToObservableList();
+        IsGameEmpty = GameEntries.Count == 0;
 
         RunBackgroundWork(async() => {
             await Task.Delay(250);
@@ -68,7 +67,7 @@ public sealed partial class HomePageViewModel : ViewModelBase {
             _gameService,
             App.GetService<DialogService>(),
             _settingService, App.GetService<AccountService>(),
-            App.GetService<DownloadService>(),
+            App.GetService<BackendService>(),
             _notificationService,
             App.GetService<WeakReferenceMessenger>());
 

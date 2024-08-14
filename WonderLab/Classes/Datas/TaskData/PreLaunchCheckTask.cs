@@ -1,9 +1,10 @@
-﻿using System.Threading;
+﻿using System;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WonderLab.Services;
 using WonderLab.Services.UI;
 using WonderLab.Services.Game;
-using System.Linq;
 using WonderLab.Classes.Datas.ViewData;
 using MinecraftLaunch.Components.Fetcher;
 using System.Collections.Immutable;
@@ -17,13 +18,11 @@ using MinecraftLaunch.Classes.Enums;
 using WonderLab.Services.Auxiliary;
 using MinecraftLaunch.Components.Authenticator;
 using MinecraftLaunch.Classes.Models.Auth;
-using System;
 using WonderLab.ViewModels.Dialogs.Setting;
 using CommunityToolkit.Mvvm.Messaging;
 using WonderLab.Classes.Datas.MessageData;
-using Avalonia.Threading;
-using MinecraftLaunch.Classes.Interfaces;
 using WonderLab.Classes.Enums;
+using MinecraftLaunch.Classes.Models.Event;
 
 namespace WonderLab.Classes.Datas.TaskData;
 
@@ -36,7 +35,7 @@ public sealed class PreLaunchCheckTask : TaskBase {
     private readonly DialogService _dialogService;
     private readonly AccountService _accountService;
     private readonly SettingService _settingService;
-    private readonly DownloadService _downloadService;
+    private readonly BackendService _backendService;
     private readonly NotificationService _notificationService;
 
     private bool _isReturnTrue;
@@ -53,14 +52,14 @@ public sealed class PreLaunchCheckTask : TaskBase {
         DialogService dialogService,
         SettingService settingService,
         AccountService accountService,
-        DownloadService downloadService,
+        BackendService backendService,
         NotificationService notificationService,
         WeakReferenceMessenger weakReferenceMessenger) {
         _gameService = gameService;
         _dialogService = dialogService;
         _settingService = settingService;
         _accountService = accountService;
-        _downloadService = downloadService;
+        _backendService = backendService;
         _notificationService = notificationService;
 
         _javaFetcher = javaFetcher;
@@ -82,11 +81,11 @@ public sealed class PreLaunchCheckTask : TaskBase {
         try {
             _isReturnTrue = true;
 
-            var task1 = Task.Run(CheckJavaAndExecuteAsync, token);
-            var task2 = Task.Run(CheckResourcesAndExecuteAsync, token);
-            var task3 = Task.Run(CheckAccountAndExecuteAsync, token);
-
-            await Task.WhenAll(task1, task2, task3).ContinueWith(task => {
+            await Task.Run(async () => {
+                await CheckJavaAndExecuteAsync();
+                await CheckResourcesAndExecuteAsync();
+                await CheckAccountAndExecuteAsync();
+            }, token).ContinueWith(x => {
                 IsIndeterminate = false;
                 ReportProgress(1, "预启动检查完成");
                 CanLaunch?.Invoke(this, _isReturnTrue);
@@ -125,7 +124,6 @@ public sealed class PreLaunchCheckTask : TaskBase {
     private async Task CheckResourcesAndExecuteAsync() {
         ReportProgress("正在检查游戏本体资源完整性");
 
-        var failedCount = 0;
         var resultResource = await CheckResourcesAsync();
 
         if (!resultResource) {
@@ -137,36 +135,24 @@ public sealed class PreLaunchCheckTask : TaskBase {
             });
 
             var downloadSource = _settingService.Data.IsUseMirrorDownloadSource
-                ? MirrorDownloadManager.Bmcl
-                : null;
+                ? "bmcl"
+                : "mojang";
 
-            _downloadService.Setup(_resourceChecker.MissingResources.Select(x => new DownloadItemData {
-                Url = x.Url,
-                Size = x.Size,
-                Path = x.Path
-            }));
+            _backendService.Completed += OnCompleted;
+            _backendService.ProgressChanged += OnProgressChanged;
+            _backendService.RunResourceComplete(_gameService.ActiveGameEntry.Entry.Id, 
+                _gameService.ActiveGameEntry.Entry.GameFolderPath, 
+                _settingService.Data.MultiThreadsCount, 
+                downloadSource);
 
-            _downloadService.Completed += (_, arg) => {
-                if (arg is DownloadResult.Incomplete) {
-                    _notificationService.QueueJob(new NotificationViewData {
-                        Title = "警告",
-                        Content = $"共计 {failedCount} 个文件下载失败，WonderLab 会继续尝试启动游戏，但是大概率会出现问题！",
-                        NotificationType = NotificationType.Warning
-                    });
-                }
-            };
 
-            _downloadService.ProgressChanged += (_, args) => {
-                failedCount = args.FailedCount;
-                string speed = GetSpeedText(args.Speed);
+            void OnCompleted(object obj, EventArgs args) {
+                ReportProgress(0);
+            }
 
-                ReportProgress(((args.TotalBytes > 0) ? (double)args.DownloadedBytes / args.TotalBytes : 0.0) * 100,
-                    $"{args.CompletedCount} / {args.TotalCount} - {speed}");
-            };
-
-            await _downloadService.DownloadAllAsync();
-
-            ReportProgress(0);
+            void OnProgressChanged(object obj, ProgressChangedEventArgs args) {
+                ReportProgress(args.Progress, $"{args.Progress}% - {args.ProgressStatus}");
+            }
         }
     }
 
