@@ -17,9 +17,10 @@ using WonderLab.Views.Pages;
 namespace WonderLab.ViewModels.Windows;
 
 public sealed partial class MainWindowViewModel : ViewModelBase {
-    private readonly SettingService _settingService;
-    private readonly DialogService _dialogService;
     private readonly TaskService _taskService;
+    private readonly DialogService _dialogService;
+    private readonly SettingService _settingService;
+    private readonly LanguageService _languageService;
     private readonly NotificationService _notificationService;
 
     public readonly HostNavigationService _navigationService;
@@ -38,17 +39,19 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
     [ObservableProperty] private ReadOnlyObservableCollection<ITaskJob> _tasks;
     [ObservableProperty] private ReadOnlyObservableCollection<INotification> _notifications;
 
-    [ObservableProperty] private object _homePage;
+    [ObservableProperty] private Control _homePage;
 
     public MainWindowViewModel(
         TaskService taskService,
         DialogService dialogService,
         SettingService settingService,
+        LanguageService languageService,
         HostNavigationService navigationService,
         NotificationService notificationService) {
         _taskService = taskService;
         _dialogService = dialogService;
         _settingService = settingService;
+        _languageService = languageService;
         _navigationService = navigationService;
         _notificationService = notificationService;
 
@@ -106,7 +109,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
     }
 
     public void OnLoaded() {
-        _taskService.QueueJob(new InitTask(_settingService, _dialogService, _notificationService));
+        _taskService.QueueJob(new InitTask(_languageService, _settingService, _dialogService, _notificationService));
 
         Tasks = new(_taskService.TaskJobs);
         Notifications = new(_notificationService.Notifications);

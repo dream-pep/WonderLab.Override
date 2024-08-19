@@ -2,9 +2,9 @@
 using WonderLab.Views.Pages;
 using System.Collections.Generic;
 using WonderLab.Views.Pages.Navigation;
-using Microsoft.Extensions.DependencyInjection;
 using Avalonia.Threading;
 using WonderLab.ViewModels.Pages;
+using Avalonia.Controls;
 
 namespace WonderLab.Services.Navigation;
 
@@ -18,7 +18,7 @@ public sealed class HostNavigationService(Dispatcher dispatcher) : NavigationSer
         { nameof(DownloadNavigationPage), App.GetService<DownloadNavigationPage> },
     };
 
-    public object NavigationToHome() {
+    public Control NavigationToHome() {
         var page = App.GetService<HomePage>();
         page.DataContext = App.GetService<HomePageViewModel>();
         return page;

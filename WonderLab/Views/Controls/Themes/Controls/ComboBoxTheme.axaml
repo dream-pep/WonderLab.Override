@@ -39,7 +39,7 @@
 		<Setter Property="Background" Value="{DynamicResource ComboBoxBackground}" />
 		<Setter Property="BorderBrush" Value="{DynamicResource ComboBoxBorderBrush}" />
 		<Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-		<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+		<Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
 		<Setter Property="HorizontalContentAlignment" Value="Stretch" />
 		<Setter Property="VerticalContentAlignment" Value="Center" />
 		<Setter Property="HorizontalAlignment" Value="Left" />

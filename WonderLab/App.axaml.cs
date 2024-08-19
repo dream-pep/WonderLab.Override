@@ -117,7 +117,7 @@ public sealed partial class App : Application {
         ConfigureViewModel(services);
 
         //Pages
-        services.AddTransient<HomePage>();
+        services.AddSingleton<HomePage>();
         services.AddSingleton<MultiplayerPage>();
 
         services.AddSingleton<OobeWelcomePage>();
@@ -168,6 +168,7 @@ public sealed partial class App : Application {
         services.AddSingleton<SettingService>();
         services.AddSingleton<AccountService>();
         services.AddSingleton<LanguageService>();
+        services.AddSingleton<GameNewsService>();
         services.AddSingleton<NotificationService>();
         services.AddSingleton<OobeNavigationService>();
         services.AddSingleton<HostNavigationService>();

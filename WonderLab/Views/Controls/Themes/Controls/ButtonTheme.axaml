@@ -40,8 +40,8 @@
 								  Property="Opacity"
 								  Easing="ExponentialEaseOut"/>
 
-				<TransformOperationsTransition Duration="0:0:0.25"
-											   Easing="CircularEaseOut"
+				<TransformOperationsTransition Duration="0:0:0.2"
+											   Easing="ExponentialEaseInOut"
 											   Property="RenderTransform"/>
 			</Transitions>
 		</Setter>
@@ -230,7 +230,7 @@
 		</Style>
 
 		<Style Selector="^.card:pressed /template/ Border#PART_Layout">
-			<Setter Property="RenderTransform" Value="scale(0.96)"/>
+			<Setter Property="RenderTransform" Value="scale(0.98)"/>
 		</Style>
 
 		<Style Selector="^.card:pointerover /template/ Border#PART_Layout">

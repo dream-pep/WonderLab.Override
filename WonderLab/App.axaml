@@ -8,6 +8,7 @@
         <FluentTheme/>
 		<dialogHostAvalonia:DialogHostStyles/>
 		<StyleInclude Source="avares://DialogHost.Avalonia/Styles.xaml"/>
+		<StyleInclude Source="avares://AsyncImageLoader.Avalonia/AdvancedImage.axaml" />
     </Application.Styles>
 
 	<Application.Resources>
@@ -25,6 +26,7 @@
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/ImageCardTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/PopupRootTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/SettingCardTheme.axaml"/>
+				<ResourceInclude Source="/Views/Controls/Themes/Controls/ListBoxItemTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/ProgressBarTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/ComboBoxItemTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/ProgressRingTheme.axaml"/>
@@ -33,6 +35,7 @@
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/NavigationViewTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/TaskListPanelTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/SettingCardItemTheme.axaml"/>
+				<ResourceInclude Source="/Views/Controls/Themes/Controls/AutoCompleteBoxTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/NotificationItemTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/GameManagerPanelTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/NavigationViewItemTheme.axaml"/>
@@ -42,7 +45,8 @@
 			</ResourceDictionary.MergedDictionaries>
 
 			<FontFamily x:Key="DefaultFontFamily">resm:WonderLab.Assets.Fonts.DinPro.ttf?assembly=WonderLab#DIN Pro</FontFamily>
-			
+
+			<converter:ModDataConverter x:Key="ModDataConverter"/>
 			<converter:LogSerializeConverter x:Key="LogSerializeConverter"/>
 			<converter:BooleanReverseConverter x:Key="BooleanReverseConverter"/>
 			<converter:BooleanToIntegerConverter x:Key="BooleanToIntegerConverter"/>

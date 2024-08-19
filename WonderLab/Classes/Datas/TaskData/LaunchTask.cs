@@ -74,5 +74,11 @@ public sealed class LaunchTask : TaskBase {
         result.OutputLogReceived += (_, args) => {
 
         };
+
+        _notificationService.QueueJob(new NotificationViewData {
+            Title = "成功",
+            Content = $"已完成启动步骤",
+            NotificationType = NotificationType.Success
+        });
     }
 }

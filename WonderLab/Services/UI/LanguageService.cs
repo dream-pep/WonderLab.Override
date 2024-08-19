@@ -1,7 +1,17 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Platform;
 using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.Logging;
+using System.Collections.Immutable;
+using WonderLab.Classes.Datas;
+using System.IO;
+using System.Diagnostics;
+using MinecraftLaunch.Extensions;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Encodings.Web;
 
 namespace WonderLab.Services.UI;
 
@@ -10,6 +20,9 @@ public sealed class LanguageService {
     private ResourceDictionary _actualLanguage;
     private readonly string _basePath = "avares://Wonderlab/Assets/Languages/";
 
+    public int CurrentLanguageIndex { get; private set; }
+    public ImmutableArray<ModData> ModDatas { get; private set; }
+
     public LanguageService(ILogger<LanguageService> logger) {
         _logger = logger;
         _actualLanguage = AvaloniaXamlLoader
@@ -17,6 +30,7 @@ public sealed class LanguageService {
     }
 
     public void SetLanguage(int languageIndex) {
+        CurrentLanguageIndex = languageIndex;
         string languageXaml = languageIndex switch {
             0 => "zh-CN.axaml",
             1 => "zh-TW.axaml",
@@ -45,5 +59,14 @@ public sealed class LanguageService {
 
         value = "Not Found";
         return false;
+    }
+
+    public void InitModsData() {
+        using var stream = AssetLoader.Open(new Uri($"resm:WonderLab.Assets.mods.json"));
+        using StreamReader streamReader = new(stream);
+        var json = streamReader.ReadToEnd();
+        ModDatas = JsonSerializer.Deserialize<IEnumerable<ModData>>(json, options: new JsonSerializerOptions {
+            WriteIndented = true,
+        }).ToImmutableArray();
     }
 }

@@ -22,11 +22,13 @@ public sealed class InitTask : TaskBase {
 
     private readonly DialogService _dialogService;
     private readonly SettingService _settingService;
+    private readonly LanguageService _languageService;
     private readonly NotificationService _notificationService;
 
-    public InitTask(SettingService settingService, DialogService dialogService, NotificationService notificationService) {
+    public InitTask(LanguageService languageService,SettingService settingService, DialogService dialogService, NotificationService notificationService) {
         _dialogService = dialogService;
         _settingService = settingService;
+        _languageService = languageService;
         _notificationService = notificationService;
 
         IsIndeterminate = true;
@@ -43,6 +45,7 @@ public sealed class InitTask : TaskBase {
 
         IsIndeterminate = false;
         MirrorDownloadManager.IsUseMirrorDownloadSource = _settingService.Data.IsUseMirrorDownloadSource;
+        await Task.Run(_languageService.InitModsData, token);
 
 #if DEBUG
         return;

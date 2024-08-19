@@ -50,13 +50,14 @@ public sealed class SkinService {
     private (Bitmap head, Bitmap body, Bitmap leftHead, Bitmap rightHead, Bitmap leftLeg, Bitmap rightLeg) GetSteve() {
         _logger.LogInformation("开始获取默认 Skin");
 
-        var memoryStream = new MemoryStream();
-        using var stream = AssetLoader.Open(new Uri($"resm:WonderLab.Assets.Images.steve.png"));
-        stream!.CopyTo(memoryStream);
-        memoryStream.Position = 0;
-
         string imagePath = Path.Combine(Path.GetTempPath(), "steve.png");
+
         if (!File.Exists(imagePath)) {
+            var memoryStream = new MemoryStream();
+            using var stream = AssetLoader.Open(new Uri($"resm:WonderLab.Assets.Images.steve.png"));
+            stream!.CopyTo(memoryStream);
+            memoryStream.Position = 0;
+
             using var bitmap = new Bitmap(memoryStream);
             bitmap.Save(imagePath);
         }
