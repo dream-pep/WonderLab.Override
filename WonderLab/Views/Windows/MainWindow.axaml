@@ -48,11 +48,10 @@
 		<Grid RowDefinitions="Auto, 1*">
 			<ui:SuperTitleBar Grid.Row="0"
 							  Title="WonderLab - DEBUG MODE"/>
-			
+
 			<ui:NavigationView Grid.Row="1"
 							   ClipToBounds="False"
 							   Name="navigationView"
-							   SelectionChanged="OnSelectionChanged"
 							   MainContent="{Binding HomePage, Mode=OneWay}"
 							   IsOpenBackgroundPanel="{Binding IsOpenBackgroundPanel}">
 				<ui:NavigationView.Items>
@@ -60,19 +59,23 @@
 										   IsSelected="True"
 										   CommandParameter="HomePage"
 										   Content="{DynamicResource Main_Home}"
+										   Command="{Binding NavigationToCommand}"
 										   Foreground="{DynamicResource PrimaryBaseColor}"/>
 
 					<ui:NavigationViewItem Icon="&#xEDDC;"
+										   Command="{Binding NavigationToCommand}"
 										   Content="{DynamicResource Main_Download}"
 										   CommandParameter="DownloadNavigationPage"
 										   Foreground="{DynamicResource SuccessBaseColor}"/>
 
 					<ui:NavigationViewItem Icon="&#xF0B9;"
 										   CommandParameter="MultiplayerPage"
+										   Command="{Binding NavigationToCommand}"
 										   Content="{DynamicResource Main_Multiplayer}"
 										   Foreground="{DynamicResource WarningBaseColor}"/>
 
 					<ui:NavigationViewItem Icon="&#xF8B0;"
+										   Command="{Binding NavigationToCommand}"
 										   CommandParameter="SettingNavigationPage"
 										   Content="{DynamicResource Main_Settings}"
 										   Foreground="{DynamicResource SecondaryColor600}"/>

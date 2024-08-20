@@ -12,7 +12,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using WonderLab.Classes.Datas.MessageData;
 using WonderLab.Classes.Enums;
 using Avalonia.Controls;
-using WonderLab.Views.Pages;
 
 namespace WonderLab.ViewModels.Windows;
 
@@ -108,7 +107,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         };
     }
 
-    public void OnLoaded() {
+    public void OnLoaded(object sender, object p) {
         _taskService.QueueJob(new InitTask(_languageService, _settingService, _dialogService, _notificationService));
 
         Tasks = new(_taskService.TaskJobs);

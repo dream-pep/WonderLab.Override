@@ -12,13 +12,13 @@ public sealed class ImageCard : TemplatedControl {
         AvaloniaProperty.Register<ImageCard, string>(nameof(Source));
 
     public static readonly StyledProperty<string> TitleProperty =
-        AvaloniaProperty.Register<ImageCard, string>(nameof(Title));
+        AvaloniaProperty.Register<ImageCard, string>(nameof(Title), "Loading...");
 
     public static readonly StyledProperty<string> DescriptionProperty =
-        AvaloniaProperty.Register<ImageCard, string>(nameof(Description));
+        AvaloniaProperty.Register<ImageCard, string>(nameof(Description), "Loading...");
 
     public static readonly StyledProperty<string> DateProperty =
-        AvaloniaProperty.Register<ImageCard, string>(nameof(Date));
+        AvaloniaProperty.Register<ImageCard, string>(nameof(Date), "Loading...");
 
     public static readonly StyledProperty<ICommand> CommandProperty =
         AvaloniaProperty.Register<ImageCard, ICommand>(nameof(Command));

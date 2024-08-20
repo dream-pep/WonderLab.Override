@@ -15,8 +15,4 @@ public sealed partial class SettingNavigationPage : UserControl {
             frame.Navigate(x.Page as Control);
         };
     }
-
-    private void OnSelectionChanged(object sender, SelectionChangedEventArgs e) {
-        _viewModel?.NavigationToCommand.Execute((listBox.SelectedItem as NavigationViewItem).CommandParameter);
-    }
 }

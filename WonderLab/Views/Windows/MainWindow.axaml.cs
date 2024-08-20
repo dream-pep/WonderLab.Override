@@ -15,9 +15,4 @@ public partial class MainWindow : Window {
             frame.Navigate(x.Page as Control);
         };
     }
-
-    private void OnSelectionChanged(object sender, SelectionChangedEventArgs e) {
-        _viewModel?.NavigationToCommand.Execute((navigationView.SelectedItem as NavigationViewItem).CommandParameter);
-        navigationView.CanGoBack = frame.CanGoBack;
-    }
 }

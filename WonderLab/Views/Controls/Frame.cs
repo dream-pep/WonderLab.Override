@@ -9,6 +9,7 @@ using System.Linq;
 using System.Collections.Generic;
 using WonderLab.Classes.Datas.ViewData;
 using WonderLab.Views.Controls.Media.Transitions;
+using System.Threading;
 
 namespace WonderLab.Views.Controls;
 
@@ -22,6 +23,7 @@ public sealed class Frame : ContentControl {
     private ContentPresenter PART_ContentPresenter;
 
     private Stack<PageStackData> _pageStack = new();
+    private CancellationTokenSource tokenSource = new();
 
     public bool CanGoBack => _pageStack.Count > 0;
 
@@ -43,13 +45,17 @@ public sealed class Frame : ContentControl {
         var pageStack = GetPageInStack(pageStackData.Instance) ?? pageStackData;
         Content = pageStack.Instance;
 
-        //if (PART_ContentPresenter is not null) {
-        //    PART_ContentPresenter.Opacity = 0;
+        if (PART_ContentPresenter is not null) {
+            PART_ContentPresenter.Opacity = 0;
 
-        //    Dispatcher.UIThread.Post(() => {
-        //        pageStack.NavigationTransition.RunAnimation(PART_ContentPresenter, default);
-        //    }, DispatcherPriority.Render);
-        //}
+            Dispatcher.UIThread.Post(() => {
+                tokenSource.Cancel();
+                tokenSource.Dispose();
+                tokenSource = new CancellationTokenSource();
+
+                pageStack.NavigationTransition.RunAnimation(PART_ContentPresenter, tokenSource.Token);
+            }, DispatcherPriority.Render);
+        }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e) {
