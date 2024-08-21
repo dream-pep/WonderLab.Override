@@ -12,6 +12,11 @@ using CommunityToolkit.Mvvm.Messaging;
 using WonderLab.Classes.Datas.MessageData;
 using WonderLab.Classes.Enums;
 using Avalonia.Controls;
+using System.Diagnostics;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using WonderLab.ViewModels.Dialogs;
+using System.Linq;
 
 namespace WonderLab.ViewModels.Windows;
 
@@ -107,7 +112,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         };
     }
 
-    public void OnLoaded(object sender, object p) {
+    public void OnLoaded(object sender, object args) {
         _taskService.QueueJob(new InitTask(_languageService, _settingService, _dialogService, _notificationService));
 
         Tasks = new(_taskService.TaskJobs);
@@ -121,5 +126,18 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         };
 
         HomePage = _navigationService.NavigationToHome();
+    }
+
+    public void OnDrop(object sender, DragEventArgs args) {
+        var file = args.Data.GetFiles().First();
+        _dialogService.ShowContentDialog<FileDropDialogViewModel>(file);
+    }
+
+    public void OnDragEnter(object sender, DragEventArgs args) {
+        _dialogService.ShowContentDialog<FileDropDialogViewModel>();
+    }
+
+    public void OnDragLeave(object sender, DragEventArgs args) {
+        _dialogService.CloseContentDialog();
     }
 }

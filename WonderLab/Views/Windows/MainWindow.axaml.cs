@@ -1,6 +1,7 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia.Input;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
 using WonderLab.ViewModels.Windows;
-using WonderLab.Views.Controls;
 
 namespace WonderLab.Views.Windows;
 
@@ -9,10 +10,14 @@ public partial class MainWindow : Window {
 
     public MainWindow() => InitializeComponent();
 
-    private void OnLoaded(object sender, Avalonia.Interactivity.RoutedEventArgs e) {
+    private void OnLoaded(object sender, RoutedEventArgs e) {
         _viewModel = DataContext as MainWindowViewModel;
         _viewModel._navigationService.NavigationRequest += x => {
             frame.Navigate(x.Page as Control);
         };
+
+        AddHandler(DragDrop.DropEvent, _viewModel.OnDrop);
+        //AddHandler(DragDrop.DragEnterEvent, _viewModel.OnDragEnter);
+        //AddHandler(DragDrop.DragLeaveEvent, _viewModel.OnDragLeave);
     }
 }

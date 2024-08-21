@@ -30,11 +30,6 @@ public sealed class LaunchTask : TaskBase {
 
     public override async ValueTask BuildWorkItemAsync(CancellationToken token) {
         ReportProgress(0d, "0%");
-        _notificationService.QueueJob(new NotificationViewData {
-            Title = "信息",
-            Content = $"开始启动游戏实例  {_gameService.ActiveGameEntry.Entry.Id}，稍安勿躁！",
-            NotificationType = NotificationType.Information
-        });
 
         var data = _settingService.Data;
         var launchConfig = new LaunchConfig() {

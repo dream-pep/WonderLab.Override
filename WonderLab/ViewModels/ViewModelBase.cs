@@ -16,9 +16,11 @@ public class ViewModelBase : ObservableObject {
 }
 
 public class DialogViewModelBase : ViewModelBase {
+    public event EventHandler Initialized;
     public virtual object Parameter { get; set; }
 
     public void Initialize(object parameter) {
         Parameter = parameter;
+        Initialized?.Invoke(this, EventArgs.Empty);
     }
 }

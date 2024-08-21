@@ -19,14 +19,14 @@
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaToDecorationsHint="True"
 		Icon="/Assets/Images/wonderlab.ico"
-		Loaded="OnLoaded"
+		Loaded="OnLoaded" 
+		DragDrop.AllowDrop="True"
 		FontFamily="{StaticResource DefaultFontFamily}">
 	<i:Interaction.Behaviors>
 		<ia:EventTriggerBehavior EventName="Loaded" SourceObject="Window">
 			<ia:CallMethodAction TargetObject="{Binding}" MethodName="OnLoaded"/>
 		</ia:EventTriggerBehavior>
 	</i:Interaction.Behaviors>
-	
 	<Panel>
 		<ExperimentalAcrylicBorder Name="AcrylicMaterial"
 								   IsHitTestVisible="False">

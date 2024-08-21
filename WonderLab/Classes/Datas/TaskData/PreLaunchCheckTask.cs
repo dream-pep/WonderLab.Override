@@ -81,6 +81,12 @@ public sealed class PreLaunchCheckTask : TaskBase {
         try {
             _isReturnTrue = true;
 
+            _notificationService.QueueJob(new NotificationViewData {
+                Title = "信息",
+                Content = $"开始启动游戏实例  {_gameService.ActiveGameEntry.Entry.Id}，稍安勿躁！",
+                NotificationType = NotificationType.Information
+            });
+
             await Task.Run(async () => {
                 await CheckJavaAndExecuteAsync();
                 await CheckResourcesAndExecuteAsync();

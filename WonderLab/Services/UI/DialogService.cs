@@ -21,6 +21,7 @@ public sealed class DialogService {
     private readonly Dispatcher _dispatcher;
     private readonly WindowService _windowService;
     private readonly Dictionary<string, Func<object>> _dialogs = new() {
+        { nameof(FileDropDialog), App.ServiceProvider.GetRequiredService<FileDropDialog> },
         { nameof(TestUserCheckDialog), App.ServiceProvider.GetRequiredService<TestUserCheckDialog> },
         { nameof(RecheckToOobeDialog), App.ServiceProvider.GetRequiredService<RecheckToOobeDialog> },
         { nameof(JoinMutilplayerDialog), App.ServiceProvider.GetRequiredService<JoinMutilplayerDialog> },
@@ -112,6 +113,8 @@ public sealed class DialogService {
     }
 
     public void CloseContentDialog() {
-        _dispatcher.Invoke(() => DialogHost.Close("dialogHost"));
+        if (DialogHost.IsDialogOpen("dialogHost")) {
+            _dispatcher.Invoke(() => DialogHost.Close("dialogHost"));
+        }
     }
 }

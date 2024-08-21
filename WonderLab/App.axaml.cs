@@ -140,6 +140,7 @@ public sealed partial class App : Application {
         services.AddSingleton<OobeWindow>();
 
         //Dialog
+        services.AddTransient<FileDropDialog>();
         services.AddTransient<TestUserCheckDialog>();
         services.AddTransient<RecheckToOobeDialog>();
         services.AddTransient<RefreshAccountDialog>();
@@ -169,6 +170,7 @@ public sealed partial class App : Application {
         services.AddSingleton<AccountService>();
         services.AddSingleton<LanguageService>();
         services.AddSingleton<GameNewsService>();
+        services.AddSingleton<MinecraftListPage>();
         services.AddSingleton<NotificationService>();
         services.AddSingleton<OobeNavigationService>();
         services.AddSingleton<HostNavigationService>();
@@ -205,6 +207,7 @@ public sealed partial class App : Application {
 
         //Download Page
         services.AddSingleton<SearchPageViewModel>();
+        services.AddSingleton<MinecraftListPageViewModel>();
 
         //Setting Page
         services.AddSingleton<AboutPageViewModel>();
@@ -214,6 +217,7 @@ public sealed partial class App : Application {
         services.AddSingleton<NetworkSettingPageViewModel>();
 
         //Dialog
+        services.AddTransient<FileDropDialogViewModel>();
         services.AddTransient<TestUserCheckDialogViewModel>();
         services.AddTransient<RecheckToOobeDialogViewModel>();
         services.AddTransient<RefreshAccountDialogViewModel>();

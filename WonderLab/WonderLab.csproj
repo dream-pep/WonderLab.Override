@@ -119,4 +119,8 @@
 	    <SubType>Designer</SubType>
 	  </AvaloniaXaml>
 	</ItemGroup>
+
+	<ItemGroup>
+	  <UpToDateCheckInput Remove="Views\Pages\Download\MinecraftListPage.axaml" />
+	</ItemGroup>
 </Project>

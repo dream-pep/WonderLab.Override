@@ -32,6 +32,9 @@ public sealed partial class DownloadNavigationPageViewModel : ViewModelBase {
             case "SearchPage":
                 _navigationService.NavigationTo<SearchPageViewModel>();
                 break;
+            case "MinecraftListPage":
+                _navigationService.NavigationTo<MinecraftListPageViewModel>();
+                break;
             default:
                 _navigationService.NavigationTo<SearchPageViewModel>();
                 break;

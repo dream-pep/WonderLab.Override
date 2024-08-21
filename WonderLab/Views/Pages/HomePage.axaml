@@ -12,7 +12,7 @@
           RowDefinitions="1*, 10, Auto">
         <ui:GameManagerPanel IsGameEmpty="{Binding IsGameEmpty}"
 							 GameEntries="{Binding GameEntries}"
-							 SelectedGame="{Binding ActiveGameEntry}"/>
+							 SelectedGame="{Binding ActiveGameEntry, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         
         <Button Grid.Row="2"
 				Height="45"
@@ -21,9 +21,9 @@
 				Classes="launchbutton"
 				Command="{Binding LaunchCommand}">
             <TextBlock FontSize="16"
-                       FontWeight="Bold"
-                       Text="{DynamicResource Home_Launch}" 
-                       Foreground="{DynamicResource ContentBrush1}"/>
+					   FontWeight="Bold"
+					   Text="{DynamicResource Home_Launch}" 
+					   Foreground="{DynamicResource ContentBrush1}"/>
         </Button>
 	</Grid>
 </UserControl>
