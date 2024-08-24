@@ -2,12 +2,10 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace WonderLab;
+namespace WonderLab.Views.Pages.Download;
 
-public partial class MinecraftListPage : UserControl
-{
-    public MinecraftListPage()
-    {
+public partial class MinecraftListPage : UserControl {
+    public MinecraftListPage() {
         InitializeComponent();
     }
 }

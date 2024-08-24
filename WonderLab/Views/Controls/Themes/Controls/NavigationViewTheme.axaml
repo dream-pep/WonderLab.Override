@@ -40,16 +40,24 @@
 					<Border Grid.Row="0"
 							CornerRadius="12"
 							Name="PART_Border"
-							Margin="12 5 12 -520"
+							Margin="14 5 14 -520"
 							BorderThickness="1.5"
-							Width="810"
+							Width="825"
 							Height="425"
+							MinWidth="825"
+							MinHeight="425"
+							MaxWidth="1215"
+							MaxHeight="637"
 							VerticalAlignment="Bottom"
 							HorizontalAlignment="Center"
 							Background="{TemplateBinding Background}"
 							BorderBrush="{TemplateBinding BorderBrush}">
 						<Border.Transitions>
 							<Transitions>
+								<DoubleTransition Property="Opacity"
+												  Duration="0:0:0.3"
+												  Easing="CubicEaseInOut"/>
+								
 								<ThicknessTransition Property="Margin"
 													 Duration="0:0:0.35"
 													 Easing="ExponentialEaseInOut"/>

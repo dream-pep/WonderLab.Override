@@ -17,6 +17,7 @@
 	<ItemGroup>
 		<AvaloniaResource Remove="Assets\Fonts\DinPro.ttf" />
 		<AvaloniaResource Remove="Assets\Fonts\SegoeFluentIcons.ttf" />
+		<AvaloniaResource Remove="Assets\Images\Icons\release_minecraft.png" />
 		<AvaloniaResource Remove="Assets\Images\steve.png" />
 		<AvaloniaResource Remove="Assets\Languages\en-US.axaml" />
 		<AvaloniaResource Remove="Assets\Languages\ja-JP.axaml" />
@@ -29,6 +30,7 @@
 
 	<ItemGroup>
 		<None Remove="Assets\Fonts\DinPro.ttf" />
+		<None Remove="Assets\Images\Icons\release_minecraft.png" />
 		<None Remove="Assets\Images\steve.png" />
 		<None Remove="Assets\mods.json" />
 		<None Remove="Assets\WonderLab.Backend" />
@@ -37,6 +39,7 @@
 	<ItemGroup>
 		<EmbeddedResource Include="Assets\Fonts\DinPro.ttf" />
 		<EmbeddedResource Include="Assets\Fonts\SegoeFluentIcons.ttf" />
+		<EmbeddedResource Include="Assets\Images\Icons\release_minecraft.png" />
 		<EmbeddedResource Include="Assets\Images\steve.png" />
 		<EmbeddedResource Include="Assets\mods.json" />
 		<EmbeddedResource Include="Assets\WonderLab.Backend" />

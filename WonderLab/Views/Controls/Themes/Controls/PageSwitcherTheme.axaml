@@ -1,0 +1,107 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:controls="using:WonderLab.Views.Controls">
+	<Design.PreviewWith>
+		<Border Padding="20" Height="250">
+			<!-- Add Controls for Previewer Here -->
+			<controls:PageSwitcher MaxPageItemCount="15"/>
+		</Border>
+	</Design.PreviewWith>
+
+	<ControlTheme x:Key="{x:Type controls:PageSwitcher}" TargetType="controls:PageSwitcher">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border Margin="0 24 0 16">
+					<Grid RowDefinitions="1*, 10, Auto">
+						<ListBox Background="{TemplateBinding Background}"
+								 ItemTemplate="{TemplateBinding ItemTemplate}"
+								 ItemsSource="{TemplateBinding SelectPageItems}"
+								 ScrollViewer.VerticalScrollBarVisibility="Hidden">
+							<ListBox.Styles>
+								<Style Selector="ListBoxItem">
+									<Setter Property="ClipToBounds" Value="True"/>
+									<Setter Property="Background" Value="Transparent"/>
+									<Setter Property="Template">
+										<ControlTemplate>
+											<controls:RippleControl CornerRadius="12"
+																	RippleOpacity="0.2"
+																	RippleFill="{DynamicResource DividerBrush}">
+												<Border CornerRadius="12"
+														Name="PART_LayoutBorder"
+														Background="Transparent"
+														BorderBrush="{DynamicResource ContentBrush3}">
+													<Border.Transitions>
+														<Transitions>
+															<BrushTransition Duration="0:0:0.35"
+																			 Property="Background"
+																			 Easing="QuinticEaseOut"/>
+														</Transitions>
+													</Border.Transitions>
+
+													<ContentPresenter Padding="0 8"
+																	  Margin="0 0 0 0"
+																	  Name="PART_Presenter"
+																	  Content="{TemplateBinding Content}"
+																	  ContentTemplate="{TemplateBinding ContentTemplate}"
+																	  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+																	  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}">
+														<ContentPresenter.Transitions>
+															<Transitions>
+																<ThicknessTransition Property="Margin"
+																					 Duration="0:0:0.2"
+																					 Easing="BackEaseOut"/>
+															</Transitions>
+														</ContentPresenter.Transitions>
+													</ContentPresenter>
+												</Border>
+											</controls:RippleControl>
+										</ControlTemplate>
+									</Setter>
+								</Style>
+
+								<Style Selector="ListBoxItem:pointerover /template/ Border#PART_LayoutBorder">
+									<Setter Property="Background" Value="{DynamicResource DividerBrush}"/>
+								</Style>
+
+								<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_Presenter">
+									<Setter Property="Margin" Value="8 0 0 0"/>
+								</Style>
+							</ListBox.Styles>
+						</ListBox>
+
+						<StackPanel Spacing="8"
+									Grid.Row="2"
+									Orientation="Horizontal"
+									HorizontalAlignment="Center">
+							<Button Width="25"
+									Height="25"
+									Content="&#xE72B;"
+									Name="PART_GobackButton"
+									Classes="titlebarbutton"/>
+
+							<TextBlock FontSize="14"
+									   Text="114/514"
+									   VerticalAlignment="Center"
+									   Name="PART_NumericalIndicator">
+								<TextBlock.Transitions>
+									<Transitions>
+										<DoubleTransition Duration="0:0:0.2"
+														  Property="FontSize"
+														  Easing="CubicEaseOut"/>
+									</Transitions>
+								</TextBlock.Transitions>
+							</TextBlock>
+
+							<Button Width="25"
+									Height="25"
+									Content="&#xE72A;"
+									Classes="titlebarbutton"
+									Name="PART_GoforwardButton"/>
+						</StackPanel>
+					</Grid>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+</ResourceDictionary>

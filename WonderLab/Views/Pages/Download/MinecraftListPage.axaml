@@ -1,8 +1,62 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="WonderLab.MinecraftListPage">
-  Welcome to Avalonia!
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="WonderLab.Views.Pages.Download.MinecraftListPage"
+			 xmlns:ui="using:WonderLab.Views.Controls"
+			 xmlns:vm="using:WonderLab.ViewModels.Pages.Download"
+			 xmlns:mlm="using:MinecraftLaunch.Classes.Models.Install"
+			 xmlns:ail="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+			 x:DataType="vm:MinecraftListPageViewModel">
+	<Grid>
+		<ui:PageSwitcher ItemsSource="{Binding MinecraftList}">
+			<ui:PageSwitcher.ItemTemplate>
+				<DataTemplate DataType="mlm:VersionManifestEntry">
+					<Grid Margin="12 0"
+						  ColumnDefinitions="Auto, 1*, Auto">
+						<Border Width="30"
+								Height="30"
+								CornerRadius="5"
+								ClipToBounds="True"
+								BorderThickness="2"
+								BorderBrush="{DynamicResource ContentBrush4}">
+							<ail:AdvancedImage CornerRadius="5"
+											   Source="resm:WonderLab.Assets.Images.Icons.release_minecraft.png"/>
+						</Border>
+						
+						<Grid Margin="8 0 0 0"
+							  Grid.Column="1"
+							  RowDefinitions="Auto, Auto">
+							<TextBlock FontSize="14"
+									   Text="{Binding Id}"/>
+
+							<TextBlock Grid.Row="1"
+									   FontSize="12"
+									   Text="{Binding ReleaseTime}"
+									   Foreground="{DynamicResource DefaultBrush400}"/>
+						</Grid>
+
+						<StackPanel Spacing="12"
+									Grid.Column="2"
+									Orientation="Horizontal"
+									VerticalAlignment="Center">
+							<Border Padding="6 3"
+									CornerRadius="4" 
+									HorizontalAlignment="Center"
+									Background="{DynamicResource SuccessBrush500}">
+								<TextBlock FontSize="12"
+										   Text="{Binding Type}"
+										   VerticalAlignment="Center"/>
+							</Border>
+
+							<ui:FontIcon FontSize="14" 
+										 Glyph="&#xE76C;"
+										 VerticalAlignment="Center"/>
+						</StackPanel>
+					</Grid>
+				</DataTemplate>
+			</ui:PageSwitcher.ItemTemplate>
+		</ui:PageSwitcher>
+	</Grid>
 </UserControl>

@@ -8,7 +8,7 @@
 			 xmlns:data="using:WonderLab.Classes.Datas"
 			 xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
 			 xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
-			 x:Class="WonderLab.Views.Download.SearchPage"
+			 x:Class="WonderLab.Views.Pages.Download.SearchPage"
 			 x:DataType="vm:SearchPageViewModel">
 	<i:Interaction.Behaviors>
 		<ia:EventTriggerBehavior EventName="Loaded" SourceObject="Window">

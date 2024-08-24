@@ -43,7 +43,7 @@ using WonderLab.Classes;
 using WonderLab.Views.Dialogs.Multiplayer;
 using WonderLab.ViewModels.Dialogs.Multiplayer;
 using WonderLab.ViewModels.Pages.Download;
-using WonderLab.Views.Download;
+using WonderLab.Views.Pages.Download;
 
 namespace WonderLab;
 

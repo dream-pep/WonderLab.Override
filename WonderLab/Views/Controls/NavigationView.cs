@@ -8,6 +8,8 @@ using System.Windows.Input;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Presenters;
+using Avalonia.Interactivity;
+using WonderLab.Services.UI;
 
 namespace WonderLab.Views.Controls;
 
@@ -62,6 +64,15 @@ public sealed class NavigationView : SelectingItemsControl {
         set => SetValue(IsOpenBackgroundPanelProperty, value);
     }
 
+    protected override void OnLoaded(RoutedEventArgs e) {
+        base.OnLoaded(e);
+
+        App.GetService<WindowService>().HandlePropertyChanged(BoundsProperty, () => {
+            _PART_Border.Width = _PART_ContentPresenter.Bounds.Width - 10;
+            _PART_Border.Height = _PART_ContentPresenter.Bounds.Height -10;
+        });
+    }
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e) {
         base.OnApplyTemplate(e);
 
@@ -78,7 +89,7 @@ public sealed class NavigationView : SelectingItemsControl {
 
             Dispatcher.UIThread.Post(() => {
                 _PART_ContentPresenter.Opacity = @bool ? 0 : 1;
-                _PART_Border.Margin = new(12, 5, 12, @bool ? 15 : -520);
+                _PART_Border.Margin = new(14, 5, 14, @bool ? 15 : -_PART_ContentPresenter.Bounds.Height);
             }, DispatcherPriority.Render);
         }
     }

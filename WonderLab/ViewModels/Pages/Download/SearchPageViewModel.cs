@@ -1,21 +1,21 @@
-﻿using Avalonia.Controls;
-using CommunityToolkit.Mvvm.ComponentModel;
-using System;
-using System.Collections.Immutable;
-using System.Collections.ObjectModel;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using WonderLab.Classes.Datas;
-using WonderLab.Classes.Datas.ViewData;
-using WonderLab.Extensions;
-using WonderLab.Services.Game;
+using System.Collections.Immutable;
+using Avalonia.Controls;
+using Microsoft.Extensions.Logging;
 using WonderLab.Services.UI;
+using WonderLab.Classes.Datas;
+using WonderLab.Services.Game;
+using WonderLab.Classes.Datas.ViewData;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace WonderLab.ViewModels.Pages.Download;
 
 public sealed partial class SearchPageViewModel : ViewModelBase {
     private readonly LanguageService _languageService;
     private readonly GameNewsService _gameNewsService;
+    private readonly ILogger<SearchPageViewModel> _logger;
 
     [ObservableProperty] public string _searchText;
     [ObservableProperty] public bool _isDropDownOpen;
@@ -32,7 +32,8 @@ public sealed partial class SearchPageViewModel : ViewModelBase {
         }
     }
 
-    public SearchPageViewModel(LanguageService languageService, GameNewsService gameNewsService) {
+    public SearchPageViewModel(LanguageService languageService, GameNewsService gameNewsService, ILogger<SearchPageViewModel> logger) {
+        _logger = logger;
         _languageService = languageService;
         _gameNewsService = gameNewsService;
 
@@ -40,9 +41,13 @@ public sealed partial class SearchPageViewModel : ViewModelBase {
     }
 
     public async void OnLoaded() {
-        await Task.Run(async () => {
-            JavaPatchNotes = (await _gameNewsService.GetJavaPatchNotesAsync()).ToImmutableArray();
-            CurrentJavaPatchNote = new(JavaPatchNotes.First(), JavaPatchNotes.ElementAt(1));
-        });
+        try {
+            await Task.Run(async () => {
+                JavaPatchNotes = (await _gameNewsService.GetJavaPatchNotesAsync()).ToImmutableArray();
+                CurrentJavaPatchNote = new(JavaPatchNotes.First(), JavaPatchNotes.ElementAt(1));
+            });
+        } catch (Exception ex) {
+            _logger.LogError("遭遇了错误，完整信息堆栈：{Trace}", ex.ToString());
+        }
     }
 }

@@ -73,6 +73,7 @@
 						<Grid Margin="15" RowDefinitions="Auto, Auto, 1*, Auto">
 							<TextBlock FontSize="18"
 									   FontWeight="Bold"
+									   TextWrapping="WrapWithOverflow"
 									   Text="{TemplateBinding Description}"
 									   Foreground="{TemplateBinding Foreground}"
 									   Effect="{StaticResource TextBlockShadow}"/>
@@ -81,6 +82,7 @@
 									   FontSize="24"
 									   FontWeight="Bold"
 									   Text="{TemplateBinding Title}"
+									   TextWrapping="WrapWithOverflow"
 									   Foreground="{TemplateBinding Foreground}"
 									   Effect="{StaticResource TextBlockShadow}"/>
 							

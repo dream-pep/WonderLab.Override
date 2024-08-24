@@ -1,7 +1,7 @@
 ﻿using System;
 using Avalonia.Threading;
-using WonderLab.Views.Download;
 using System.Collections.Generic;
+using WonderLab.Views.Pages.Download;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace WonderLab.Services.Navigation;
