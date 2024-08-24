@@ -21,8 +21,10 @@
 								ClipToBounds="True"
 								BorderThickness="2"
 								BorderBrush="{DynamicResource ContentBrush4}">
-							<ail:AdvancedImage CornerRadius="5"
-											   Source="resm:WonderLab.Assets.Images.Icons.release_minecraft.png"/>
+							<Border.Background>
+								<ImageBrush Stretch="UniformToFill"
+											Source="resm:WonderLab.Assets.Images.Icons.release_minecraft.png"/>
+							</Border.Background>
 						</Border>
 						
 						<Grid Margin="8 0 0 0"
