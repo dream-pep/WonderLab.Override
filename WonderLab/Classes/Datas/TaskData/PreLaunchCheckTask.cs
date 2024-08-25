@@ -225,9 +225,15 @@ public sealed class PreLaunchCheckTask : TaskBase {
                     break;
             }
 
-            return (false, false);
+            return (true, false);
         } catch (Exception) {
-            return (false, true);
+            _notificationService.QueueJob(new NotificationViewData
+            {
+                Title = "错误",
+                Content = "在检查账户时发生了错误！",
+                NotificationType = NotificationType.Error
+            });
+            return (false, false);
         }
     }
 
