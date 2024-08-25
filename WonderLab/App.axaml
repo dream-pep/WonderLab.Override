@@ -49,8 +49,10 @@
 
 			<converter:ModDataConverter x:Key="ModDataConverter"/>
 			<converter:LogSerializeConverter x:Key="LogSerializeConverter"/>
+			<converter:MinecraftTypeConverter x:Key="MinecraftTypeConverter"/>
 			<converter:BooleanReverseConverter x:Key="BooleanReverseConverter"/>
 			<converter:BooleanToIntegerConverter x:Key="BooleanToIntegerConverter"/>
+			<converter:MinecraftTypeIconConverter x:Key="MinecraftTypeIconConverter"/>
 			<converter:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
 			<converter:FitSquarelyWithinAspectRatioConverter x:Key="FitSquarelyWithinAspectRatioConverter"/>
 		</ResourceDictionary>

@@ -7,8 +7,6 @@ using WonderLab.Services.Download;
 
 namespace WonderLab.ViewModels.Pages.Download;
 public sealed partial class MinecraftListPageViewModel : ViewModelBase {
-    //private readonly IEnumerable<VersionManifestEntry> _minecraftList;
-
     [ObservableProperty] private IEnumerable _minecraftList;
 
     public MinecraftListPageViewModel(DownloadService downloadService) {

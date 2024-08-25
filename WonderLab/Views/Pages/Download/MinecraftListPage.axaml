@@ -23,7 +23,7 @@
 								BorderBrush="{DynamicResource ContentBrush4}">
 							<Border.Background>
 								<ImageBrush Stretch="UniformToFill"
-											Source="resm:WonderLab.Assets.Images.Icons.release_minecraft.png"/>
+											Source="{Binding Type, Converter={StaticResource MinecraftTypeIconConverter}}"/>
 							</Border.Background>
 						</Border>
 						
@@ -48,8 +48,8 @@
 									HorizontalAlignment="Center"
 									Background="{DynamicResource SuccessBrush500}">
 								<TextBlock FontSize="12"
-										   Text="{Binding Type}"
-										   VerticalAlignment="Center"/>
+										   VerticalAlignment="Center"
+										   Text="{Binding Type, Converter={StaticResource MinecraftTypeConverter}}"/>
 							</Border>
 
 							<ui:FontIcon FontSize="14" 

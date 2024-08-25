@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using MinecraftLaunch;
 using MinecraftLaunch.Components.Installer;
 using MinecraftLaunch.Classes.Models.Install;
@@ -17,10 +18,10 @@ public sealed class DownloadService {
     }
 
     public async Task<IEnumerable<VersionManifestEntry>> GetMinecraftListAsync() {
-        var result = await VanlliaInstaller.EnumerableGameCoreAsync(_settingService.Data.IsUseMirrorDownloadSource 
+        var result = (await VanlliaInstaller.EnumerableGameCoreAsync(_settingService.Data.IsUseMirrorDownloadSource 
             ? MirrorDownloadManager.Bmcl
-            : default);
+            : default)).ToImmutableArray();
 
-        return result;
+        return result.Sort((x, x1) => x1.ReleaseTime.CompareTo(x.ReleaseTime));
     }
 }

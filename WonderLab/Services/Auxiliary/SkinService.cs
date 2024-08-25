@@ -53,12 +53,7 @@ public sealed class SkinService {
         string imagePath = Path.Combine(Path.GetTempPath(), "steve.png");
 
         if (!File.Exists(imagePath)) {
-            var memoryStream = new MemoryStream();
-            using var stream = AssetLoader.Open(new Uri($"resm:WonderLab.Assets.Images.steve.png"));
-            stream!.CopyTo(memoryStream);
-            memoryStream.Position = 0;
-
-            using var bitmap = new Bitmap(memoryStream);
+            using var bitmap = $"resm:WonderLab.Assets.Images.steve.png".ToBitmap();
             bitmap.Save(imagePath);
         }
 

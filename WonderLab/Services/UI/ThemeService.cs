@@ -1,9 +1,16 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Styling;
+using Avalonia.Media.Imaging;
+using WonderLab.Extensions;
 
 namespace WonderLab.Services.UI;
 
 public sealed class ThemeService {
+    public static readonly Lazy<Bitmap> OldMinecraftIcon = new("resm:WonderLab.Assets.Images.Icons.old_minecraft.png".ToBitmap());
+    public static readonly Lazy<Bitmap> ReleaseMinecraftIcon = new("resm:WonderLab.Assets.Images.Icons.release_minecraft.png".ToBitmap());
+    public static readonly Lazy<Bitmap> SnapshotMinecraftIcon = new("resm:WonderLab.Assets.Images.Icons.snapshot_minecraft.png".ToBitmap());
+
     private readonly string DINPro = "resm:WonderLab.Assets.Fonts.DinPro.ttf?assembly=WonderLab#DIN Pro";
 
     public void SetCurrentTheme(int index) {
@@ -15,7 +22,7 @@ public sealed class ThemeService {
         };
     }
 
-    public void ApplyDefaultFont(string fontName) {
+    public void ApplyDefaultFont() {
         Application.Current.Resources["DefaultFontFamily"] = $"{DINPro}";
     }
 }

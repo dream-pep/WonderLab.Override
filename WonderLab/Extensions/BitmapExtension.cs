@@ -1,18 +1,29 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
 using SixLabors.ImageSharp;
-using Avalonia.Media.Imaging;
+using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.PixelFormats;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using WonderLab.Views.Controls;
-using System.Linq;
-using SixLabors.ImageSharp.Processing;
 using SixLabors.ImageSharp.Processing.Processors.Quantization;
+using Avalonia.Platform;
+using Avalonia.Media.Imaging;
+using WonderLab.Views.Controls;
 
 namespace WonderLab.Extensions;
 public static class BitmapExtension {
+    public static Bitmap ToBitmap(this string uri) {
+        var memoryStream = new MemoryStream();
+        using var stream = AssetLoader.Open(new Uri(uri));
+        stream!.CopyTo(memoryStream);
+        memoryStream.Position = 0;
+
+        return new Bitmap(memoryStream);
+    }
+
     public static Bitmap ToBitmap<TPixel>(this Image<TPixel> raw) where TPixel : unmanaged, IPixel<TPixel> {
         using var stream = new MemoryStream();
         raw.Save(stream, new PngEncoder());
@@ -39,5 +50,4 @@ public static class BitmapExtension {
 
         return topColors;
     }
-
 }
