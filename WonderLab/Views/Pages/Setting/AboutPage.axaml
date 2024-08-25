@@ -134,6 +134,16 @@
 												 CommandParameter="https://github.com/laolarou726"/>
 							</StackPanel>
 						</ui:SettingCardItem>
+
+						<ui:SettingCardItem Description="部分图标引用自">
+							<StackPanel Spacing="10"
+										Orientation="Horizontal">
+								<HyperlinkButton Content="pdimu"
+												 Command="{Binding JumpToLinkCommand}"
+												 Foreground="{DynamicResource SecondaryBrush600}"
+												 CommandParameter="https://github.com/pdimu"/>
+							</StackPanel>
+						</ui:SettingCardItem>
 					</ItemsControl>
 				</ui:SettingCard>
 				<ui:SettingCard Title="{DynamicResource Settings_About_IncludedOSLib}">
