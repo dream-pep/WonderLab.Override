@@ -83,7 +83,6 @@ public sealed partial class BackendService {
                 return;
             }
 
-            Debug.WriteLine(args.Data);
             arg = args.Data;
         };
 

@@ -23,12 +23,10 @@ public sealed class QueuedHostedService : BackgroundService {
     }
 
     public override Task StopAsync(CancellationToken stoppingToken) {
-        _logger.LogInformation("程序主机已关闭");
         return base.StopAsync(stoppingToken);
     }
 
     public override Task StartAsync(CancellationToken cancellationToken) {
-        _logger.LogInformation("程序主机已开启");
         return base.StartAsync(cancellationToken);
     }
 

@@ -11,8 +11,6 @@ using System.Collections.Immutable;
 using MinecraftLaunch.Classes.Models.Game;
 using MinecraftLaunch.Components.Checker;
 using Avalonia.Controls.Notifications;
-using MinecraftLaunch.Extensions;
-using MinecraftLaunch;
 using WonderLab.Services.Download;
 using MinecraftLaunch.Classes.Enums;
 using WonderLab.Services.Auxiliary;
@@ -21,8 +19,8 @@ using MinecraftLaunch.Classes.Models.Auth;
 using WonderLab.ViewModels.Dialogs.Setting;
 using CommunityToolkit.Mvvm.Messaging;
 using WonderLab.Classes.Datas.MessageData;
-using WonderLab.Classes.Enums;
 using MinecraftLaunch.Classes.Models.Event;
+using System.Diagnostics;
 
 namespace WonderLab.Classes.Datas.TaskData;
 
@@ -84,7 +82,8 @@ public sealed class PreLaunchCheckTask : TaskBase {
             _notificationService.QueueJob(new NotificationViewData {
                 Title = "信息",
                 Content = $"开始启动游戏实例  {_gameService.ActiveGameEntry.Entry.Id}，稍安勿躁！",
-                NotificationType = NotificationType.Information
+                NotificationType = NotificationType.Information, 
+                JumpAction = () => { Debug.WriteLine("Jump"); }
             });
 
             await Task.Run(async () => {
@@ -146,9 +145,9 @@ public sealed class PreLaunchCheckTask : TaskBase {
 
             _backendService.Completed += OnCompleted;
             _backendService.ProgressChanged += OnProgressChanged;
-            _backendService.RunResourceComplete(_gameService.ActiveGameEntry.Entry.Id, 
-                _gameService.ActiveGameEntry.Entry.GameFolderPath, 
-                _settingService.Data.MultiThreadsCount, 
+            _backendService.RunResourceComplete(_gameService.ActiveGameEntry.Entry.Id,
+                _gameService.ActiveGameEntry.Entry.GameFolderPath,
+                _settingService.Data.MultiThreadsCount,
                 downloadSource);
 
 
@@ -235,21 +234,5 @@ public sealed class PreLaunchCheckTask : TaskBase {
             });
             return (false, false);
         }
-    }
-
-    private static string GetSpeedText(double speed) {
-        if (speed < 1024d) {
-            return speed.ToString("0") + " B/s";
-        }
-
-        if (speed < 1024d * 1024d) {
-            return (speed / 1024d).ToString("0.0") + " KB/s";
-        }
-
-        if (speed < 1024d * 1024d * 1024d) {
-            return (speed / (1024d * 1024d)).ToString("0.00") + " MB/s";
-        }
-
-        return "0";
     }
 }

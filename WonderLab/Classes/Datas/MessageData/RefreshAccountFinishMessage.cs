@@ -1,3 +1,3 @@
 ﻿namespace WonderLab.Classes.Datas.MessageData;
 
-public sealed record RefreshAccountFinishMessage();
+public sealed record RefreshAccountFinishMessage;
