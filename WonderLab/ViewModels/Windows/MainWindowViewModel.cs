@@ -34,6 +34,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
     [ObservableProperty] private object _activePage;
     [ObservableProperty] private ParallaxMode _parallaxMode;
 
+    [ObservableProperty] private bool _testBool;
     [ObservableProperty] private bool _isEnableBlur;
     [ObservableProperty] private bool _isOpenTaskListPanel;
     [ObservableProperty] private bool _isOpenBackgroundPanel;
@@ -60,6 +61,11 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         WeakReferenceMessenger.Default.Register<BlurEnableMessage>(this, BlurEnableValueHandle);
         WeakReferenceMessenger.Default.Register<BlurRadiusChangeMessage>(this, BlurRadiusChangeHandle);
         WeakReferenceMessenger.Default.Register<ParallaxModeChangeMessage>(this, ParallaxModeChangeHandle);
+    }
+
+    [RelayCommand]
+    public void Test() {
+        TestBool = !TestBool;
     }
 
     [RelayCommand]
