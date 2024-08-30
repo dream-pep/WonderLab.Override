@@ -29,6 +29,7 @@ public sealed record SettingData {
     [JsonPropertyName("isDebugMode")] public bool IsDebugMode { get; set; }
     [JsonPropertyName("isEnableBlur")] public bool IsEnableBlur { get; set; }
     [JsonPropertyName("isFullScreen")] public bool IsFullScreen { get; set; }
+    [JsonPropertyName("isAlignCenter")] public bool IsAlignCenter { get; set; }
     [JsonPropertyName("isAutoSelectJava")] public bool IsAutoSelectJava { get; set; }
     [JsonPropertyName("isGameIndependent")] public bool IsGameIndependent { get; set; }
     [JsonPropertyName("isAutoAllocateMemory")] public bool IsAutoAllocateMemory { get; set; }

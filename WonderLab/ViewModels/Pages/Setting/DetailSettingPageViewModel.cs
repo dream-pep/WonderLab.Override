@@ -27,6 +27,7 @@ public sealed partial class DetailSettingPageViewModel : ViewModelBase {
     [ObservableProperty] private bool _isImage = false;
     [ObservableProperty] private bool _isDebugMode = false;
     [ObservableProperty] private bool _isEnableBlur = false;
+    [ObservableProperty] private bool _isAlignCenter = false;
 
     [ObservableProperty] private int _blurRadius = 0;
     [ObservableProperty] private int _themeIndex = 0;
@@ -55,6 +56,7 @@ public sealed partial class DetailSettingPageViewModel : ViewModelBase {
         IsDebugMode = _settingService.Data.IsDebugMode;
         ParallaxMode = _settingService.Data.ParallaxMode;
         IsEnableBlur = _settingService.Data.IsEnableBlur;
+        IsAlignCenter = _settingService.Data.IsAlignCenter;
         LanguageIndex = _settingService.Data.LanguageIndex;
         BackgroundIndex = _settingService.Data.BackgroundIndex;
 
@@ -100,6 +102,10 @@ public sealed partial class DetailSettingPageViewModel : ViewModelBase {
                 break;
             case nameof(IsDebugMode):
                 _settingService.Data.IsDebugMode = IsDebugMode;
+                break;
+            case nameof(IsAlignCenter):
+                _settingService.Data.IsAlignCenter = IsAlignCenter;
+                WeakReferenceMessenger.Default.Send(new AlignCenterChangeMessage(IsAlignCenter));
                 break;
             case nameof(IsEnableBlur):
                 _settingService.Data.IsEnableBlur = IsEnableBlur;

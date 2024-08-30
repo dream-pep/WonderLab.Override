@@ -17,6 +17,13 @@
 			
 			<ui:SettingCard Title="{DynamicResource Settings_Appearance}">
 				<ItemsControl>
+					<ui:SettingCardItem Description="底栏居中对齐">
+						<ToggleSwitch OnContent=""
+									  OffContent=""
+									  Margin="0 0 -10 0"
+									  IsChecked="{Binding IsAlignCenter}"/>
+					</ui:SettingCardItem>
+
 					<ui:SettingCardItem Description="{DynamicResource Settings_Appearance_Theme}">
 						<ComboBox SelectedIndex="{Binding ThemeIndex}">
 							<ComboBoxItem Content="{DynamicResource Item_Theme_Light}"/>

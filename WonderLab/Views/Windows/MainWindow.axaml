@@ -53,8 +53,9 @@
 
 			<ui:NavigationView Grid.Row="1"
 							   ClipToBounds="False"
+							   Name="navigationView"
+							   IsCenter="{Binding IsAlignCenter}"
 							   MainContent="{Binding HomePage, Mode=OneWay}"
-							   Name="navigationView" IsCenter="{Binding TestBool}"
 							   IsOpenBackgroundPanel="{Binding IsOpenBackgroundPanel}">
 				<ui:NavigationView.Items>
 					<ui:NavigationViewItem Icon="&#xEA8A;"
@@ -138,8 +139,6 @@
 						CloseOnClickAway="False"
 					    DisableOpeningAnimation="True"
 					    dha:DialogHostStyle.CornerRadius="14"
-						OverlayBackground="{DynamicResource DialogOverlayBackground}"/>
-		
-		<Button Content="Test" Command="{Binding TestCommand}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+						OverlayBackground="{DynamicResource DialogOverlayBackground}"/>		
 	</Panel>
 </Window>

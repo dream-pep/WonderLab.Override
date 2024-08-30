@@ -34,8 +34,8 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
     [ObservableProperty] private object _activePage;
     [ObservableProperty] private ParallaxMode _parallaxMode;
 
-    [ObservableProperty] private bool _testBool;
     [ObservableProperty] private bool _isEnableBlur;
+    [ObservableProperty] private bool _isAlignCenter;
     [ObservableProperty] private bool _isOpenTaskListPanel;
     [ObservableProperty] private bool _isOpenBackgroundPanel;
 
@@ -60,12 +60,8 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
 
         WeakReferenceMessenger.Default.Register<BlurEnableMessage>(this, BlurEnableValueHandle);
         WeakReferenceMessenger.Default.Register<BlurRadiusChangeMessage>(this, BlurRadiusChangeHandle);
+        WeakReferenceMessenger.Default.Register<AlignCenterChangeMessage>(this, AlignCenterChangeHandle);
         WeakReferenceMessenger.Default.Register<ParallaxModeChangeMessage>(this, ParallaxModeChangeHandle);
-    }
-
-    [RelayCommand]
-    public void Test() {
-        TestBool = !TestBool;
     }
 
     [RelayCommand]
@@ -103,6 +99,10 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         IsEnableBlur = blurEnable.IsEnableBlur;
     }
 
+    private void AlignCenterChangeHandle(object obj, AlignCenterChangeMessage alignCenter) {
+        IsAlignCenter = alignCenter.IsAlignCenter;
+    }
+
     private void BlurRadiusChangeHandle(object obj, BlurRadiusChangeMessage blurRadiusChange) {
         BlurRadius = blurRadiusChange.BlurRadius;
     }
@@ -122,6 +122,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         Tasks = new(_taskService.TaskJobs);
         Notifications = new(_notificationService.Notifications);
 
+        IsAlignCenter = _settingService.Data.IsAlignCenter;
         ParallaxMode = _settingService.Data.ParallaxMode switch {
             0 => ParallaxMode.None,
             1 => ParallaxMode.Flat,
