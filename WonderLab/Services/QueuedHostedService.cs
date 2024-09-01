@@ -84,7 +84,6 @@ public sealed class QueuedHostedService : BackgroundService {
                 }
 
                 workItem?.Dispose();
-
                 sw.Reset();
             }
         }

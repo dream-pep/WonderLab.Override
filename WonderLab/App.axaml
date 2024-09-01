@@ -39,6 +39,7 @@
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/AutoCompleteBoxTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/NotificationItemTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/GameManagerPanelTheme.axaml"/>
+				<ResourceInclude Source="/Views/Controls/Themes/Controls/DragDropSelectorTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/NavigationViewItemTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/SmoothScrollViewerTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/DialogContentPanelTheme.axaml"/>

@@ -115,7 +115,7 @@ public sealed partial class App : Application {
 
     private static void ConfigureView(IServiceCollection services) {
         ConfigureViewModel(services);
-
+        
         //Pages
         services.AddSingleton<HomePage>();
         services.AddSingleton<MultiplayerPage>();
@@ -183,8 +183,6 @@ public sealed partial class App : Application {
         services.AddSingleton((Func<IServiceProvider, IBackgroundTaskQueue>)((IServiceProvider _)
             => new BackgroundTaskQueue(100)));
 
-        services.AddSingleton((Func<IServiceProvider, IBackgroundNotificationQueue>)((IServiceProvider _)
-            => new BackgroundNotificationQueue(200)));
         //services.AddScoped<TelemetryService>();
     }
 

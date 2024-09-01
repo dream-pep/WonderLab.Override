@@ -1,0 +1,47 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+					xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					xmlns:controls="using:WonderLab.Views.Controls">
+	<Design.PreviewWith>
+		<Border Padding="20">
+			<controls:DragDropSelector Height="510" Width="840"/>
+		</Border>
+	</Design.PreviewWith>
+	
+	<ControlTheme x:Key="{x:Type controls:DragDropSelector}" TargetType="controls:DragDropSelector">
+		<Setter Property="Background" Value="Black"/>
+		<Setter Property="VerticalAlignment" Value="Stretch"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border IsHitTestVisible="False" Background="{TemplateBinding Background}"
+						VerticalAlignment="{TemplateBinding VerticalAlignment}"
+						HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
+					<Grid RowDefinitions="1*, Auto">
+						<Border Grid.Row="1"
+								Height="100"
+								Background="Red">
+							<ListBox Name="PART_ListBox"
+									 HorizontalAlignment="Center">
+								<ListBox.ItemsPanel>
+									<ItemsPanelTemplate>
+										<StackPanel Spacing="0" Orientation="Horizontal"/>
+									</ItemsPanelTemplate>
+								</ListBox.ItemsPanel>
+								
+								<ListBoxItem Content="test"/>
+								<ListBoxItem Content="test"/>
+								<ListBoxItem Content="test"/>
+								<ListBoxItem Content="test"/>
+							</ListBox>
+						</Border>
+					</Grid>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+
+		<Style Selector="^ /template/ ListBox#PART_ListBox">
+			
+		</Style>
+	</ControlTheme>
+</ResourceDictionary>

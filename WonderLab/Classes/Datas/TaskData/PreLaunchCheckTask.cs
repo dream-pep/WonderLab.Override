@@ -21,6 +21,11 @@ using CommunityToolkit.Mvvm.Messaging;
 using WonderLab.Classes.Datas.MessageData;
 using MinecraftLaunch.Classes.Models.Event;
 using System.Diagnostics;
+using MinecraftLaunch.Components.Downloader;
+using MinecraftLaunch.Utilities;
+using MinecraftLaunch;
+using Waher.Script.Functions.ComplexNumbers;
+using MinecraftLaunch.Extensions;
 
 namespace WonderLab.Classes.Datas.TaskData;
 
@@ -76,25 +81,58 @@ public sealed class PreLaunchCheckTask : TaskBase {
     }
 
     public override async ValueTask BuildWorkItemAsync(CancellationToken token) {
+        var data = _settingService.Data ?? new();
+
         try {
-            _isReturnTrue = true;
+            //Check Java
+            ReportProgress(0.35d, "正在检查 Java 相关信息");
+            if (data.Javas.Count is 0) {
+                var javas = await _javaFetcher.FetchAsync();
+                data.Javas.AddRange(javas);
+            }
 
-            _notificationService.QueueJob(new NotificationViewData {
-                Title = "信息",
-                Content = $"开始启动游戏实例  {_gameService.ActiveGameEntry.Entry.Id}，稍安勿躁！",
-                NotificationType = NotificationType.Information, 
-                JumpAction = () => { Debug.WriteLine("Jump"); }
-            });
+            if ((data.IsAutoSelectJava && data.Javas is { Count: 0 }) || (!data.IsAutoSelectJava && data.ActiveJava is null)) {
+                _notificationService.QueueJob(new NotificationViewData {
+                    Title = "错误",
+                    Content = data.IsAutoSelectJava ? "预启动检查失败，原因：未添加任何 Java！" : "预启动检查失败，原因：未选择任何 Java！",
+                    NotificationType = NotificationType.Error
+                });
 
-            await Task.Run(async () => {
-                await CheckJavaAndExecuteAsync();
-                await CheckResourcesAndExecuteAsync();
-                await CheckAccountAndExecuteAsync();
-            }, token).ContinueWith(x => {
+                InvokeTaskFinished();
+                return;
+            }
+
+            //Check Resource
+            if (!await await Task.Run(_resourceChecker.CheckAsync)) {
+                _notificationService.QueueJob(new NotificationViewData {
+                    Title = "警告",
+                    Content = $"发现了 {_resourceChecker.MissingResources.Count} 个缺失资源，正在尝试将其补全！",
+                    NotificationType = NotificationType.Warning
+                });
+
+                ResourceDownloader resourceDownloader = new(new() {
+                    IsPartialContentSupported = true,
+                    FileSizeThreshold = 1024 * 1024 * 3,
+                    MultiThreadsCount = data.MultiThreadsCount,
+                    MultiPartsCount = 8
+                },
+                    _resourceChecker.MissingResources,
+                    data.IsUseMirrorDownloadSource ? MirrorDownloadManager.Bmcl : default);
+
                 IsIndeterminate = false;
-                ReportProgress(1, "预启动检查完成");
-                CanLaunch?.Invoke(this, _isReturnTrue);
-            }, token);
+                resourceDownloader.ProgressChanged += OnProgressChanged;
+                await resourceDownloader.DownloadAsync();
+                IsIndeterminate = true;
+            }
+
+            //Check Account
+            if (data.ActiveAccount is null) {
+                _notificationService.QueueJob(new NotificationViewData {
+                    Title = "错误",
+                    Content = "预启动检查失败，原因：未选择任何账户！",
+                    NotificationType = NotificationType.Error
+                });
+            }
         } catch (Exception) {
             _notificationService.QueueJob(new NotificationViewData {
                 Title = "错误",
@@ -102,137 +140,11 @@ public sealed class PreLaunchCheckTask : TaskBase {
                 NotificationType = NotificationType.Error
             });
 
-            await CheckTaskCancellationToken.CancelAsync();
-            return;
+            InvokeTaskFinished();
         }
     }
 
-    private async Task CheckJavaAndExecuteAsync() {
-        ReportProgress("正在检查 Java 相关信息");
-        var resultJava = await CheckJavaAsync();
-        if (!resultJava.value && !resultJava.canExecute) {
-            _notificationService.QueueJob(new NotificationViewData {
-                Title = "错误",
-                Content = "未找到 Java，请先添加一个 Java 后再尝试启动游戏!",
-                NotificationType = NotificationType.Error
-            });
-
-            _isReturnTrue = false;
-            CanBeCancelled = true;
-            await CheckTaskCancellationToken.CancelAsync();
-        } else if (!resultJava.value && resultJava.canExecute) {
-            _settingService.Data.Javas = [.. _javas];
-            _settingService.Data.ActiveJava = _javas.FirstOrDefault();
-        }
-    }
-
-    private async Task CheckResourcesAndExecuteAsync() {
-        ReportProgress("正在检查游戏本体资源完整性");
-
-        var resultResource = await CheckResourcesAsync();
-
-        if (!resultResource) {
-            IsIndeterminate = false;
-            _notificationService.QueueJob(new NotificationViewData {
-                Title = "警告",
-                Content = $"发现了 {_resourceChecker.MissingResources.Count} 个缺失资源，正在尝试将其补全！",
-                NotificationType = NotificationType.Warning
-            });
-
-            var downloadSource = _settingService.Data.IsUseMirrorDownloadSource
-                ? "bmcl"
-                : "mojang";
-
-            _backendService.Completed += OnCompleted;
-            _backendService.ProgressChanged += OnProgressChanged;
-            _backendService.RunResourceComplete(_gameService.ActiveGameEntry.Entry.Id,
-                _gameService.ActiveGameEntry.Entry.GameFolderPath,
-                _settingService.Data.MultiThreadsCount,
-                downloadSource);
-
-
-            void OnCompleted(object obj, EventArgs args) {
-                ReportProgress(0);
-            }
-
-            void OnProgressChanged(object obj, ProgressChangedEventArgs args) {
-                ReportProgress(args.Progress, $"{args.Progress}% - {args.ProgressStatus}");
-            }
-        }
-    }
-
-    private async Task CheckAccountAndExecuteAsync() {
-        IsIndeterminate = true;
-        ReportProgress("正在验证账户信息");
-        var (value, canExecute) = await CheckAccountAsync();
-        if (!value && canExecute) {
-            ReportProgress("账户信息过期，正在执行刷新");
-            _dialogService.ShowContentDialog<RefreshAccountDialogViewModel>(_settingService.Data.ActiveAccount);
-            await WaitForRunAsync(_accountRefreshCancellationToken.Token);
-        } else if (!value && !canExecute) {
-            _notificationService.QueueJob(new NotificationViewData {
-                Title = "错误",
-                Content = "未找到账户信息，请先添加一个账户后再尝试启动游戏！",
-                NotificationType = NotificationType.Error
-            });
-
-            CanBeCancelled = true;
-            _isReturnTrue = false;
-            await CheckTaskCancellationToken.CancelAsync();
-            return;
-        }
-    }
-
-    private async ValueTask<(bool value, bool canExecute)> CheckJavaAsync() {
-        _javas = await _javaFetcher.FetchAsync();
-        var data = _settingService.Data;
-        if (data is null) {
-            return (false, !_javas.IsEmpty);
-        }
-
-        return data.IsAutoSelectJava
-            ? (data.Javas?.Count != 0, !_javas.IsEmpty)
-            : (data.ActiveJava is not null, !_javas.IsEmpty);
-    }
-
-    private async ValueTask<bool> CheckResourcesAsync() {
-        return await _resourceChecker.CheckAsync();
-    }
-
-    private async ValueTask<(bool value, bool canExecute)> CheckAccountAsync() {
-        var activeAccount = _settingService.Data.ActiveAccount;
-
-        if (activeAccount is null) {
-            return (false, false);
-        }
-
-        try {
-            switch (activeAccount.Type) {
-                case AccountType.Offline:
-                    return (true, false);
-                case AccountType.Yggdrasil:
-                    _accountService.InitializeComponent(new YggdrasilAuthenticator(activeAccount as YggdrasilAccount), AccountType.Yggdrasil);
-                    _settingService.Data.ActiveAccount = (await _accountService.AuthenticateAsync(3)).FirstOrDefault();
-                    break;
-                case AccountType.Microsoft:
-                    _accountService.InitializeComponent(new MicrosoftAuthenticator(activeAccount as MicrosoftAccount,
-                        "9fd44410-8ed7-4eb3-a160-9f1cc62c824c", true),
-                        AccountType.Microsoft,
-                        true);
-
-                    _settingService.Data.ActiveAccount = (await _accountService.AuthenticateAsync(2)).FirstOrDefault();
-                    break;
-            }
-
-            return (true, false);
-        } catch (Exception) {
-            _notificationService.QueueJob(new NotificationViewData
-            {
-                Title = "错误",
-                Content = "在检查账户时发生了错误！",
-                NotificationType = NotificationType.Error
-            });
-            return (false, false);
-        }
+    private void OnProgressChanged(object sender, DownloadProgressChangedEventArgs e) {
+        ReportProgress(e.ToPercentage() * 100, $"{e.ToPercentage() * 100:0.00}% - {e.CompletedCount}/{e.TotalCount}");
     }
 }

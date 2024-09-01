@@ -12,14 +12,15 @@ namespace WonderLab.Classes.Datas.TaskData;
 /// 任务基类
 /// </summary>
 public abstract partial class TaskBase : ObservableObject, ITaskJob, IDisposable {
+    private bool _insideIsIndeterminate;
     private bool _isTaskFinishedEventFired;
-    private DispatcherTimer _debounceTimer;
-    private const int MinUpdateInterval = 400; // 最小更新间隔（毫秒）
-    private DateTime _lastUpdateTime;
 
     private double _insideProgress;
-    private bool _insideIsIndeterminate;
     private string _insideProgressDetail;
+
+    private readonly DispatcherTimer _timer = new(DispatcherPriority.Background) {
+        Interval = TimeSpan.FromSeconds(0.35d),
+    };
 
     [ObservableProperty] private double _progress;
 
@@ -38,12 +39,14 @@ public abstract partial class TaskBase : ObservableObject, ITaskJob, IDisposable
     public event EventHandler<EventArgs> TaskFinished;
 
     public TaskBase() {
-        _debounceTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(100) };
-        _debounceTimer.Tick += (s, e) => {
-            (s as DispatcherTimer).Stop();
-            Progress = _insideProgress;
-            ProgressDetail = _insideProgressDetail;
+        _timer.Tick += async (_, args) => {
+            await _timer.Dispatcher.InvokeAsync(() => {
+                Progress = _insideProgress;
+                ProgressDetail = _insideProgressDetail;
+            });
         };
+
+        _timer.Start();
     }
 
     public async ValueTask<TaskStatus> WaitForRunAsync(CancellationToken token) {
@@ -61,7 +64,8 @@ public abstract partial class TaskBase : ObservableObject, ITaskJob, IDisposable
 
     public void InvokeTaskFinished() {
         if (!_isTaskFinishedEventFired) {
-            this.TaskFinished?.Invoke(this, EventArgs.Empty);
+            _timer.Stop();
+            TaskFinished?.Invoke(this, EventArgs.Empty);
             _isTaskFinishedEventFired = true;
         }
     }
@@ -93,36 +97,18 @@ public abstract partial class TaskBase : ObservableObject, ITaskJob, IDisposable
         return !IsDeletedRequested;
     }
 
-    protected bool ShouldUpdate() {
-        var now = DateTime.Now;
-        if ((now - _lastUpdateTime).TotalMilliseconds >= MinUpdateInterval) {
-            _lastUpdateTime = now;
-            return true;
+    protected void ReportProgress(string detail) {
+        if (!string.IsNullOrEmpty(detail)) {
+            _insideProgressDetail = detail;
         }
-        return false;
     }
 
-    protected void DebounceUIUpdate() {
-        Progress = _insideProgress;
-        ProgressDetail = _insideProgressDetail;
-    }
+    protected void ReportProgress(double progress) {
+        if (progress < 0.0) {
+            IsIndeterminate = true;
+        }
 
-    protected async void ReportProgress(string detail) {
-        await Dispatcher.UIThread.InvokeAsync(() => {
-            if (!string.IsNullOrEmpty(detail)) {
-                ProgressDetail = detail;
-            }
-        });
-    }
-
-    protected async void ReportProgress(double progress) {
-        await Dispatcher.UIThread.InvokeAsync(() => {
-            if (progress < 0.0) {
-                IsIndeterminate = true;
-            }
-
-            Progress = progress;
-        });
+        _insideProgress = progress;
     }
 
     protected void ReportProgress(double progress, string detail) {
