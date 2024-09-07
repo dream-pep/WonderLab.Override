@@ -15,6 +15,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using WonderLab.ViewModels.Dialogs;
 using System.Linq;
+using WonderLab.Views.Controls;
 
 namespace WonderLab.ViewModels.Windows;
 
@@ -134,6 +135,10 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
     }
 
     public void OnDrop(object sender, DragEventArgs args) {
+        if (args.Data.GetDataFormats().Contains(DragDropSelector.DEFAULT_DRAG_DATAFORMAT)) {
+            return;
+        }
+
         var file = args.Data.GetFiles().First();
         _dialogService.ShowContentDialog<FileDropDialogViewModel>(file);
     }

@@ -19,6 +19,7 @@
 						CornerRadius="{TemplateBinding CornerRadius}"
 						BorderThickness="{TemplateBinding BorderThickness}">
 					<controls:SmoothScrollViewer Name="PART_ScrollViewer"
+												 ClipToBounds="{TemplateBinding ClipToBounds}"
 												 AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
 												 VerticalSnapPointsType="{TemplateBinding (ScrollViewer.VerticalSnapPointsType)}"
 												 IsScrollInertiaEnabled="{TemplateBinding (ScrollViewer.IsScrollInertiaEnabled)}"
@@ -30,7 +31,8 @@
 												 HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}">
 						<ItemsPresenter Name="PART_ItemsPresenter"
 										Margin="{TemplateBinding Padding}"
-										ItemsPanel="{TemplateBinding ItemsPanel}"/>
+										ItemsPanel="{TemplateBinding ItemsPanel}"
+										ClipToBounds="{TemplateBinding ClipToBounds}"/>
 					</controls:SmoothScrollViewer>
 				</Border>
 			</ControlTemplate>

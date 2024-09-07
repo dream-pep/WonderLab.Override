@@ -140,5 +140,7 @@
 					    DisableOpeningAnimation="True"
 					    dha:DialogHostStyle.CornerRadius="14"
 						OverlayBackground="{DynamicResource DialogOverlayBackground}"/>
+		
+		<ui:DragDropSelector ZIndex="11111111"/>
 	</Panel>
 </Window>
