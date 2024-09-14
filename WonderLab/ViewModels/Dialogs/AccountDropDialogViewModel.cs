@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections;
+using System.Linq;
+using WonderLab.Classes.Datas.ViewData;
 using WonderLab.Services;
 using WonderLab.Services.UI;
 
@@ -16,7 +18,7 @@ public sealed partial class AccountDropDialogViewModel : DialogViewModelBase {
         _dialogService = dialogService;
         _settingService = settingService;
 
-        Accounts = _settingService.Data.Accounts;
+        Accounts = _settingService.Data.Accounts.Select(x => new AccountViewData(x));
     }
 
     [RelayCommand]
