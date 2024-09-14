@@ -15,10 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WonderLab.Desktop.Backend",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MinecraftLaunch", "refs\MinecraftLaunch\MinecraftLaunch\MinecraftLaunch.csproj", "{5BDC9ADC-ACC9-4412-8D63-2D2F4DFCC49E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DragAndDropSample", "..\..\..\Code\Avalonia.Xaml.Behaviors\samples\DragAndDropSample\DragAndDropSample.csproj", "{E551BC7E-CCB7-4624-AE86-AD081C7B54E9}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Avalonia.Xaml.Interactions.DragAndDrop", "..\..\..\Code\Avalonia.Xaml.Behaviors\src\Avalonia.Xaml.Interactions.DragAndDrop\Avalonia.Xaml.Interactions.DragAndDrop.csproj", "{920E6F1C-9B16-451A-A968-A1B2DF25FBCF}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,22 +63,6 @@ Global
 		{5BDC9ADC-ACC9-4412-8D63-2D2F4DFCC49E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5BDC9ADC-ACC9-4412-8D63-2D2F4DFCC49E}.Release|x64.ActiveCfg = Release|Any CPU
 		{5BDC9ADC-ACC9-4412-8D63-2D2F4DFCC49E}.Release|x64.Build.0 = Release|Any CPU
-		{E551BC7E-CCB7-4624-AE86-AD081C7B54E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E551BC7E-CCB7-4624-AE86-AD081C7B54E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E551BC7E-CCB7-4624-AE86-AD081C7B54E9}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E551BC7E-CCB7-4624-AE86-AD081C7B54E9}.Debug|x64.Build.0 = Debug|Any CPU
-		{E551BC7E-CCB7-4624-AE86-AD081C7B54E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E551BC7E-CCB7-4624-AE86-AD081C7B54E9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E551BC7E-CCB7-4624-AE86-AD081C7B54E9}.Release|x64.ActiveCfg = Release|Any CPU
-		{E551BC7E-CCB7-4624-AE86-AD081C7B54E9}.Release|x64.Build.0 = Release|Any CPU
-		{920E6F1C-9B16-451A-A968-A1B2DF25FBCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{920E6F1C-9B16-451A-A968-A1B2DF25FBCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{920E6F1C-9B16-451A-A968-A1B2DF25FBCF}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{920E6F1C-9B16-451A-A968-A1B2DF25FBCF}.Debug|x64.Build.0 = Debug|Any CPU
-		{920E6F1C-9B16-451A-A968-A1B2DF25FBCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{920E6F1C-9B16-451A-A968-A1B2DF25FBCF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{920E6F1C-9B16-451A-A968-A1B2DF25FBCF}.Release|x64.ActiveCfg = Release|Any CPU
-		{920E6F1C-9B16-451A-A968-A1B2DF25FBCF}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

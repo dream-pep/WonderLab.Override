@@ -14,6 +14,7 @@ using WonderLab.Services.Auxiliary;
 using WonderLab.Services.Download;
 using CommunityToolkit.Mvvm.Messaging;
 using Avalonia.Controls.Notifications;
+using WonderLab.ViewModels.Dialogs;
 
 namespace WonderLab.ViewModels.Pages;
 
@@ -21,6 +22,7 @@ public sealed partial class HomePageViewModel : ViewModelBase {
     private readonly GameService _gameService;
     private readonly TaskService _taskService;
     private readonly SettingService _settingService;
+    private readonly DialogService _dialogService;
     private readonly NotificationService _notificationService;
 
     [ObservableProperty] private bool _isGameEmpty;
@@ -31,10 +33,12 @@ public sealed partial class HomePageViewModel : ViewModelBase {
     public HomePageViewModel(
         GameService gameService,
         TaskService taskService,
+        DialogService dialogService,
         SettingService settingService,
         NotificationService notificationService) {
         _gameService = gameService;
         _taskService = taskService;
+        _dialogService = dialogService;
         _settingService = settingService;
         _notificationService = notificationService;
 
@@ -62,6 +66,9 @@ public sealed partial class HomePageViewModel : ViewModelBase {
 
             return;
         }
+
+        _dialogService.ShowContentDialog<AccountDropDialogViewModel>();
+        return;
 
         var preCheckTask = new PreLaunchCheckTask(App.GetService<JavaFetcher>(),
             _gameService,

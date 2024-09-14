@@ -10,10 +10,8 @@ using System.Collections.Generic;
 using WonderLab.Views.Dialogs.Setting;
 using Microsoft.Extensions.DependencyInjection;
 using WonderLab.Views.Dialogs;
-using WonderLab.ViewModels.Dialogs.Multiplayer;
 using WonderLab.Views.Dialogs.Multiplayer;
 using Avalonia.Threading;
-using Waher.Events;
 
 namespace WonderLab.Services.UI;
 
@@ -22,6 +20,7 @@ public sealed class DialogService {
     private readonly WindowService _windowService;
     private readonly Dictionary<string, Func<object>> _dialogs = new() {
         { nameof(FileDropDialog), App.ServiceProvider.GetRequiredService<FileDropDialog> },
+        { nameof(AccountDropDialog), App.ServiceProvider.GetRequiredService<AccountDropDialog> },
         { nameof(TestUserCheckDialog), App.ServiceProvider.GetRequiredService<TestUserCheckDialog> },
         { nameof(RecheckToOobeDialog), App.ServiceProvider.GetRequiredService<RecheckToOobeDialog> },
         { nameof(JoinMutilplayerDialog), App.ServiceProvider.GetRequiredService<JoinMutilplayerDialog> },

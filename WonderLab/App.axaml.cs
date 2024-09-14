@@ -141,6 +141,7 @@ public sealed partial class App : Application {
 
         //Dialog
         services.AddTransient<FileDropDialog>();
+        services.AddTransient<AccountDropDialog>();
         services.AddTransient<TestUserCheckDialog>();
         services.AddTransient<RecheckToOobeDialog>();
         services.AddTransient<RefreshAccountDialog>();
@@ -216,6 +217,7 @@ public sealed partial class App : Application {
 
         //Dialog
         services.AddTransient<FileDropDialogViewModel>();
+        services.AddTransient<AccountDropDialogViewModel>();
         services.AddTransient<TestUserCheckDialogViewModel>();
         services.AddTransient<RecheckToOobeDialogViewModel>();
         services.AddTransient<RefreshAccountDialogViewModel>();

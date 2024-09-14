@@ -4,9 +4,14 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using WonderLab.Extensions;
 
 namespace WonderLab.Views.Controls;
 
@@ -20,32 +25,55 @@ public sealed class DragDropSelector : TemplatedControl {
     private Point _dragInitialPoint;
     private PointerEventArgs _dragEventArgs;
 
-    private ListBox _PART_ListBox;
     private FontIcon _PART_FontIcon;
+    private Button _PART_AfreshButton;
     private Button _PART_CancelButton;
-    private Border _PRAT_SelectReceiver;
+    private Button _PART_ConfirmButton;
+    private Border _PART_SelectReceiver;
     private TextBlock _PART_TextBlock;
     private TextBlock _PART_SubTextBlock;
     private TextBlock _PART_SubTitleTextBlock;
+    private PageSwitcher _PART_PageSwitcher;
 
     public static readonly StyledProperty<IEnumerable> ItemSourceProperty =
         AvaloniaProperty.Register<DragDropSelector, IEnumerable>(nameof(ItemSource));
+
+    public static readonly StyledProperty<ICommand> ConfirmCommandProperty =
+        AvaloniaProperty.Register<DragDropSelector, ICommand>(nameof(ConfirmCommand));
+
+    public static readonly StyledProperty<ICommand> CancelCommandProperty =
+        AvaloniaProperty.Register<DragDropSelector, ICommand>(nameof(CancelCommand));
 
     public IEnumerable ItemSource {
         get => GetValue(ItemSourceProperty);
         set => SetValue(ItemSourceProperty, value);
     }
 
+    public ICommand ConfirmCommand {
+        get => GetValue(ConfirmCommandProperty);
+        set => SetValue(ConfirmCommandProperty, value);
+    }
+
+    public ICommand CancelCommand {
+        get => GetValue(CancelCommandProperty);
+        set => SetValue(CancelCommandProperty, value);
+    }
+
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
 
-        if (_PRAT_SelectReceiver is not null) {
-            DragDrop.SetAllowDrop(_PRAT_SelectReceiver, true);
+        if (_PART_SelectReceiver is not null) {
+            DragDrop.SetAllowDrop(_PART_SelectReceiver, true);
         }
 
-        _PRAT_SelectReceiver?.AddHandler(DragDrop.DropEvent, OnDragItemDrop, RoutingStrategies.Direct | RoutingStrategies.Tunnel | RoutingStrategies.Bubble);
+        _PART_SelectReceiver?.AddHandler(DragDrop.DropEvent, OnDragItemDrop, RoutingStrategies.Direct | RoutingStrategies.Tunnel | RoutingStrategies.Bubble);
 
-        foreach (var item in _PART_ListBox.ItemsSource ?? _PART_ListBox.Items) {
+        _PART_PageSwitcher.ItemsSource = null;
+        _PART_PageSwitcher.ItemsSource = (ItemSource as IEnumerable<object>)
+            .Select(x => new ListBoxItem() { DataContext = x })
+            .ToObservableList();
+
+        foreach (var item in _PART_PageSwitcher.ItemsSource) {
             (item as Control)?.AddHandler(PointerMovedEvent, OnDragItemPointerMoved, RoutingStrategies.Direct | RoutingStrategies.Tunnel | RoutingStrategies.Bubble);
             (item as Control)?.AddHandler(PointerPressedEvent, OnDragItemPointerPressed, RoutingStrategies.Direct | RoutingStrategies.Tunnel | RoutingStrategies.Bubble);
         }
@@ -54,33 +82,49 @@ public sealed class DragDropSelector : TemplatedControl {
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e) {
         base.OnApplyTemplate(e);
 
-        _PART_ListBox = e.NameScope.Find<ListBox>("PART_ListBox");
+        _PART_PageSwitcher = e.NameScope.Find<PageSwitcher>("PART_PageSwitcher");
         _PART_FontIcon = e.NameScope.Find<FontIcon>("PART_FontIcon");
         _PART_TextBlock = e.NameScope.Find<TextBlock>("PART_TextBlock");
         _PART_SubTextBlock = e.NameScope.Find<TextBlock>("PART_SubTextBlock");
         _PART_SubTitleTextBlock = e.NameScope.Find<TextBlock>("PART_SubTitleTextBlock");
         _PART_CancelButton = e.NameScope.Find<Button>("PART_CancelButton");
-        _PRAT_SelectReceiver = e.NameScope.Find<Border>("PRAT_SelectReceiver");
+        _PART_AfreshButton = e.NameScope.Find<Button>("PART_AfreshButton");
+        _PART_ConfirmButton = e.NameScope.Find<Button>("PART_ConfirmButton");
+        _PART_SelectReceiver = e.NameScope.Find<Border>("PRAT_SelectReceiver");
 
-        _PART_CancelButton.Click += (_, _) => {
+        _PART_AfreshButton.Click += (_, _) => {
+            ControlButtonGroup(false);
             HideReceiveInfo(true);
             HideListBox(true);
         };
     }
 
-    private void HideListBox(bool isReverse = false) {
-        _PART_ListBox.Opacity = isReverse ? 1 : 0;
-        _PART_ListBox.Margin = isReverse ? new(0, 0, 0, 0) : new(0, 0, 0, 10);
+    private void ControlButtonGroup(bool isShow = true) {
+        _PART_SelectReceiver.Width = isShow ? 260 : 180;
+        _PART_CancelButton.Width = isShow ? 0 : 180;
+        _PART_ConfirmButton.Width = isShow ? 172 : 0;
+
+        _PART_AfreshButton.IsVisible = isShow;
+        _PART_AfreshButton.Width = isShow ? 80 : 0;
     }
 
-    private void HideReceiveInfo(bool isReverse = false) {
-        _PART_FontIcon.Opacity = isReverse ? 1 : 0;
-        _PART_TextBlock.Opacity = isReverse ? 1 : 0;
-        _PART_FontIcon.Margin = isReverse ? new(0, 0, 0, 0) : new(0, 0, 0, -10);
-        _PART_TextBlock.Margin = isReverse ? new(0, 8, 0, 0) : new(0, 0, 0, 10);
+    private void HideListBox(bool isReverse = false) {
+        _PART_PageSwitcher.Opacity = isReverse ? 1 : 0;
+        _PART_PageSwitcher.Margin = isReverse ? new(16) : new(0, 0, 0, 26);
+    }
 
+    private async void HideReceiveInfo(bool isReverse = false) {
         _PART_SubTextBlock.Opacity = isReverse ? 0 : 1;
         _PART_SubTitleTextBlock.Opacity = isReverse ? 0 : 1;
+
+        if (isReverse) {
+            await Task.Delay(TimeSpan.FromSeconds(0.5));
+        }
+
+        _PART_FontIcon.Opacity = isReverse ? 1 : 0;
+        _PART_TextBlock.Opacity = isReverse ? 1 : 0;
+        _PART_FontIcon.Margin = isReverse ? new(0, 0, 0, 0) : new(0, 0, 0, 0);
+        _PART_TextBlock.Margin = isReverse ? new(0, 8, 0, 0) : new(0, 0, 0, 10);
     }
 
     private void OnDragItemDrop(object sender, DragEventArgs args) {
@@ -88,6 +132,7 @@ public sealed class DragDropSelector : TemplatedControl {
         //_PART_TextBlock.Text = (args.Data.Get(DEFAULT_DRAG_DATAFORMAT) as ListBoxItem).Content.ToString();
         HideListBox();
         HideReceiveInfo();
+        ControlButtonGroup();
     }
 
     private async void OnDragItemPointerMoved(object sender, PointerEventArgs e) {

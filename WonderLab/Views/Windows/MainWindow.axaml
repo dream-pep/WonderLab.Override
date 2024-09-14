@@ -29,6 +29,7 @@
 			<ia:CallMethodAction TargetObject="{Binding}" MethodName="OnLoaded"/>
 		</ia:EventTriggerBehavior>
 	</i:Interaction.Behaviors>
+
 	<Panel>
 		<ExperimentalAcrylicBorder Name="AcrylicMaterial"
 								   IsHitTestVisible="False">
@@ -140,7 +141,5 @@
 					    DisableOpeningAnimation="True"
 					    dha:DialogHostStyle.CornerRadius="14"
 						OverlayBackground="{DynamicResource DialogOverlayBackground}"/>
-		
-		<ui:DragDropSelector ZIndex="11111111"/>
 	</Panel>
 </Window>

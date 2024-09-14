@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System;
 using System.Threading;
 using Avalonia.Threading;
+using Avalonia.Interactivity;
 
 namespace WonderLab.Views.Controls;
 
@@ -28,7 +29,7 @@ public sealed class PageSwitcher : ItemsControl {
         AvaloniaProperty.Register<PageSwitcher, int>(nameof(MaxPageItemCount), 15);
 
     public static readonly StyledProperty<ObservableCollection<object>> SelectPageItemsProperty =
-        AvaloniaProperty.Register<PageSwitcher, ObservableCollection<object>>(nameof(SelectPageItems), []);
+        AvaloniaProperty.Register<PageSwitcher, ObservableCollection<object>>(nameof(SelectPageItems));
 
     public int PageIndex {
         get => GetValue(PageIndexProperty);
@@ -46,7 +47,7 @@ public sealed class PageSwitcher : ItemsControl {
     }
 
     private void Split() {
-        var dict = (ItemsSource as IEnumerable<object>)
+        var dict = ((ItemsSource ?? Items) as IEnumerable<object>)
             .Select((value, index) => new { Index = index, Value = value })
             .GroupBy(x => x.Index / MaxPageItemCount)
             .ToDictionary(group => group.Key, group => group.Select(v => v.Value).ToObservableList());
@@ -55,6 +56,11 @@ public sealed class PageSwitcher : ItemsControl {
 
         if (_cachePageData.TryGetValue(PageIndex - 1, out var items)) {
             SelectPageItems.Load(items);
+
+            if (_numericalIndicator is null) {
+                return;
+            }
+
             _numericalIndicator.Text = $"{PageIndex}/{_cachePageData.Count}";
         }
     }
@@ -85,6 +91,8 @@ public sealed class PageSwitcher : ItemsControl {
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e) {
         base.OnApplyTemplate(e);
+
+        SelectPageItems = [];
 
         _gobackButton = e.NameScope.Find<Button>("PART_GobackButton");
         _goforwardButton = e.NameScope.Find<Button>("PART_GoforwardButton");

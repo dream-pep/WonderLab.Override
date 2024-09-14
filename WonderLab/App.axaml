@@ -1,14 +1,33 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converter="using:WonderLab.Converters"
-			 xmlns:dialogHostAvalonia="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+			 xmlns:dha="using:DialogHostAvalonia"
              x:Class="WonderLab.App"
              RequestedThemeVariant="Default">
     <Application.Styles>
         <FluentTheme/>
-		<dialogHostAvalonia:DialogHostStyles/>
+		<dha:DialogHostStyles/>
 		<StyleInclude Source="avares://DialogHost.Avalonia/Styles.xaml"/>
 		<StyleInclude Source="avares://AsyncImageLoader.Avalonia/AdvancedImage.axaml" />
+
+		<Style Selector="dha|DialogHost">
+			<Setter Property="PopupTemplate">
+				<ControlTemplate>
+					<Border Name="PART_ContentBackground"
+							BorderBrush="{Binding Path=(dha:DialogHostStyle.BorderBrush), RelativeSource={RelativeSource FindAncestor, AncestorType=dha:DialogHost}}"
+							BorderThickness="{Binding Path=(dha:DialogHostStyle.BorderThickness), RelativeSource={RelativeSource FindAncestor, AncestorType=dha:DialogHost}}"
+							CornerRadius="{Binding Path=(dha:DialogHostStyle.CornerRadius), RelativeSource={RelativeSource FindAncestor, AncestorType=dha:DialogHost}}"
+							ClipToBounds="{Binding Path=(dha:DialogHostStyle.ClipToBounds), RelativeSource={RelativeSource FindAncestor, AncestorType=dha:DialogHost}}"
+							Background="{Binding Path=Background, RelativeSource={RelativeSource FindAncestor, AncestorType=dha:DialogHost}}">
+						<ContentPresenter Name="PART_ContentPresenter"
+										  Background="{TemplateBinding Background}"
+										  ContentTemplate="{TemplateBinding ContentTemplate}"
+										  Content="{TemplateBinding Content}"
+										  Padding="{TemplateBinding Padding}" />
+					</Border>
+				</ControlTemplate>
+			</Setter>
+		</Style>
     </Application.Styles>
 
 	<Application.Resources>

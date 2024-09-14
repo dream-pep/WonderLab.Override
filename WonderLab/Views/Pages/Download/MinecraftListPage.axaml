@@ -9,6 +9,57 @@
 			 xmlns:mlm="using:MinecraftLaunch.Classes.Models.Install"
 			 xmlns:ail="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
 			 x:DataType="vm:MinecraftListPageViewModel">
+	<UserControl.Styles>
+		<Style Selector="ListBoxItem">
+			<Setter Property="ClipToBounds" Value="True"/>
+			<Setter Property="Background" Value="Transparent"/>
+			<Setter Property="Template">
+				<ControlTemplate>
+					<ui:RippleControl CornerRadius="12"
+											RippleOpacity="0.2"
+											RippleFill="{DynamicResource DividerBrush}">
+						<Border CornerRadius="12"
+								Name="PART_LayoutBorder"
+								Background="Transparent"
+								BorderBrush="{DynamicResource ContentBrush3}">
+							<Border.Transitions>
+								<Transitions>
+									<BrushTransition Duration="0:0:0.35"
+													 Property="Background"
+													 Easing="QuinticEaseOut"/>
+								</Transitions>
+							</Border.Transitions>
+
+							<ContentPresenter Padding="0 8"
+											  Margin="0 0 0 0"
+											  Name="PART_Presenter"
+											  Content="{TemplateBinding Content}"
+											  ContentTemplate="{TemplateBinding ContentTemplate}"
+											  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+											  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}">
+								<ContentPresenter.Transitions>
+									<Transitions>
+										<ThicknessTransition Property="Margin"
+															 Duration="0:0:0.2"
+															 Easing="BackEaseOut"/>
+									</Transitions>
+								</ContentPresenter.Transitions>
+							</ContentPresenter>
+						</Border>
+					</ui:RippleControl>
+				</ControlTemplate>
+			</Setter>
+		</Style>
+
+		<Style Selector="ListBoxItem:pointerover /template/ Border#PART_LayoutBorder">
+			<Setter Property="Background" Value="{DynamicResource DividerBrush}"/>
+		</Style>
+
+		<Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_Presenter">
+			<Setter Property="Margin" Value="8 0 0 0"/>
+		</Style>
+	</UserControl.Styles>
+	
 	<Grid>
 		<ui:PageSwitcher ItemsSource="{Binding MinecraftList}">
 			<ui:PageSwitcher.ItemTemplate>
