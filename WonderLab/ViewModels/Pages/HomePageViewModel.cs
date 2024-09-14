@@ -15,6 +15,7 @@ using WonderLab.Services.Download;
 using CommunityToolkit.Mvvm.Messaging;
 using Avalonia.Controls.Notifications;
 using WonderLab.ViewModels.Dialogs;
+using System;
 
 namespace WonderLab.ViewModels.Pages;
 
@@ -63,12 +64,12 @@ public sealed partial class HomePageViewModel : ViewModelBase {
                 Content = "无法启动，原因：未选择任何游戏实例！",
                 NotificationType = NotificationType.Error
             });
-
+            
             return;
         }
 
+        _settingService.Data.ActiveAccount = default;
         _dialogService.ShowContentDialog<AccountDropDialogViewModel>();
-        return;
 
         var preCheckTask = new PreLaunchCheckTask(App.GetService<JavaFetcher>(),
             _gameService,
@@ -77,13 +78,6 @@ public sealed partial class HomePageViewModel : ViewModelBase {
             App.GetService<BackendService>(),
             _notificationService,
             App.GetService<WeakReferenceMessenger>());
-
-        preCheckTask.CanLaunch += (_, arg) => {
-            if (arg) {
-                var launchTask = new LaunchTask(_gameService, _settingService, _notificationService);
-                _taskService.QueueJob(launchTask);
-            }
-        };
 
         _taskService.QueueJob(preCheckTask);
     }

@@ -84,55 +84,60 @@ public sealed class PreLaunchCheckTask : TaskBase {
         var data = _settingService.Data ?? new();
 
         try {
-            //Check Java
-            ReportProgress(0.35d, "正在检查 Java 相关信息");
-            if (data.Javas.Count is 0) {
-                var javas = await _javaFetcher.FetchAsync();
-                data.Javas.AddRange(javas);
-            }
+            await Task.Run(async () => {
+                //Check Java
+                ReportProgress(0.35d, "正在检查 Java 相关信息");
+                if (data.Javas.Count is 0) {
+                    var javas = await _javaFetcher.FetchAsync();
+                    data.Javas.AddRange(javas);
+                }
 
-            if ((data.IsAutoSelectJava && data.Javas is { Count: 0 }) || (!data.IsAutoSelectJava && data.ActiveJava is null)) {
-                _notificationService.QueueJob(new NotificationViewData {
-                    Title = "错误",
-                    Content = data.IsAutoSelectJava ? "预启动检查失败，原因：未添加任何 Java！" : "预启动检查失败，原因：未选择任何 Java！",
-                    NotificationType = NotificationType.Error
-                });
+                if ((data.IsAutoSelectJava && data.Javas is { Count: 0 }) || (!data.IsAutoSelectJava && data.ActiveJava is null)) {
+                    _notificationService.QueueJob(new NotificationViewData {
+                        Title = "错误",
+                        Content = data.IsAutoSelectJava ? "预启动检查失败，原因：未添加任何 Java！" : "预启动检查失败，原因：未选择任何 Java！",
+                        NotificationType = NotificationType.Error
+                    });
 
-                InvokeTaskFinished();
-                return;
-            }
+                    InvokeTaskFinished();
+                    return;
+                }
 
-            //Check Resource
-            if (!await await Task.Run(_resourceChecker.CheckAsync)) {
-                _notificationService.QueueJob(new NotificationViewData {
-                    Title = "警告",
-                    Content = $"发现了 {_resourceChecker.MissingResources.Count} 个缺失资源，正在尝试将其补全！",
-                    NotificationType = NotificationType.Warning
-                });
+                //Check Resource
+                ReportProgress(0.5d, "正在检查依赖资源");
+                if (!await _resourceChecker.CheckAsync()) {
+                    _notificationService.QueueJob(new NotificationViewData {
+                        Title = "警告",
+                        Content = $"发现了 {_resourceChecker.MissingResources.Count} 个缺失资源，正在尝试将其补全！",
+                        NotificationType = NotificationType.Warning
+                    });
 
-                ResourceDownloader resourceDownloader = new(new() {
-                    IsPartialContentSupported = true,
-                    FileSizeThreshold = 1024 * 1024 * 3,
-                    MultiThreadsCount = data.MultiThreadsCount,
-                    MultiPartsCount = 8
-                },
-                    _resourceChecker.MissingResources,
-                    data.IsUseMirrorDownloadSource ? MirrorDownloadManager.Bmcl : default);
+                    ResourceDownloader resourceDownloader = new(new() {
+                        IsPartialContentSupported = true,
+                        FileSizeThreshold = 1024 * 1024 * 3,
+                        MultiThreadsCount = data.MultiThreadsCount,
+                        MultiPartsCount = 8
+                    },
+                        _resourceChecker.MissingResources,
+                        data.IsUseMirrorDownloadSource ? MirrorDownloadManager.Bmcl : default);
 
-                IsIndeterminate = false;
-                resourceDownloader.ProgressChanged += OnProgressChanged;
-                await resourceDownloader.DownloadAsync();
-                IsIndeterminate = true;
-            }
+                    IsIndeterminate = false;
+                    resourceDownloader.ProgressChanged += OnProgressChanged;
+                    await resourceDownloader.DownloadAsync();
+                    IsIndeterminate = true;
+                }
 
-            //Check Account
-            if (data.ActiveAccount is null) {
-                _notificationService.QueueJob(new NotificationViewData {
-                    Title = "错误",
-                    Content = "预启动检查失败，原因：未选择任何账户！",
-                    NotificationType = NotificationType.Error
-                });
-            }
+                //Check Account
+                if (data.ActiveAccount is null) {
+                    _notificationService.QueueJob(new NotificationViewData {
+                        Title = "错误",
+                        Content = "预启动检查失败，原因：未选择任何账户！",
+                        NotificationType = NotificationType.Error
+                    });
+                }
+            }, token);
+
+            InvokeTaskFinished();
         } catch (Exception) {
             _notificationService.QueueJob(new NotificationViewData {
                 Title = "错误",

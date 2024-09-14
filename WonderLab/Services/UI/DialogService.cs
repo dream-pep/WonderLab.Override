@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using WonderLab.Views.Dialogs;
 using WonderLab.Views.Dialogs.Multiplayer;
 using Avalonia.Threading;
+using System.Threading;
 
 namespace WonderLab.Services.UI;
 
@@ -79,7 +80,7 @@ public sealed class DialogService {
         return new(result.Path.LocalPath);
     }
 
-    public async void ShowContentDialog<TViewModel>() where TViewModel : DialogViewModelBase {
+    public void ShowContentDialog<TViewModel>() where TViewModel : DialogViewModelBase {
         if (DialogHost.IsDialogOpen("dialogHost")) {
             return;
         }
@@ -89,7 +90,7 @@ public sealed class DialogService {
         if (_dialogs.TryGetValue(viewName, out var contentFunc)) {
             var dialogObject = contentFunc() as UserControl;
             dialogObject!.DataContext = App.ServiceProvider!.GetRequiredService<TViewModel>();
-            await DialogHost.Show(dialogObject, "dialogHost");
+            DialogHost.Show(dialogObject, "dialogHost").Wait();
         }
     }
 

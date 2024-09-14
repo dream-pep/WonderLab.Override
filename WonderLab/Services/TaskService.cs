@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 namespace WonderLab.Services;
 
 public sealed partial class TaskService(IBackgroundTaskQueue queue, ILogger<TaskService> logger) : ObservableObject {
-    private int _currentRunningJobs;
     private readonly ILogger<TaskService> _logger = logger;
     private readonly IBackgroundTaskQueue _taskQueue = queue;
 
@@ -26,7 +25,6 @@ public sealed partial class TaskService(IBackgroundTaskQueue queue, ILogger<Task
             await _taskQueue.QueueBackgroundWorkItemAsync(job);
             job.TaskFinished += (_, args) => {
                 using (job) {
-                    Interlocked.Decrement(ref _currentRunningJobs);
                     if (TaskJobs.Remove(job)) {
                         _logger.LogInformation("任务已被移出队列！");
                     }
@@ -36,8 +34,6 @@ public sealed partial class TaskService(IBackgroundTaskQueue queue, ILogger<Task
             await Dispatcher.UIThread.InvokeAsync(() => {
                 TaskJobs.Add(job);
             });
-
-            Interlocked.Increment(ref _currentRunningJobs);
         });
     }
 }
