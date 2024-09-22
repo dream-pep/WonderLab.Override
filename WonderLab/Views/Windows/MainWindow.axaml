@@ -101,7 +101,8 @@
 											 Margin="8 0 0 0"
 											 VerticalAlignment="Center"/>
 
-								<Grid Grid.Column="0" RowDefinitions="Auto, Auto">
+								<Grid Grid.Column="0" 
+									  RowDefinitions="Auto, Auto">
 									<TextBlock FontSize="12"
 											   Text="任务中心"
 											   TextAlignment="Right"/>
@@ -124,7 +125,7 @@
 
 			<ui:TaskListPanel Grid.Row="1"
 							  Margin="0 0 10 60"
-							  Tasks="{Binding Tasks}"
+							  Tasks="{Binding Tasks, Mode=TwoWay}"
 							  IsPaneOpen="{Binding IsOpenTaskListPanel}"/>
 			
 			<ui:NotificationListPanel Grid.Row="1"

@@ -8,9 +8,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using WonderLab.Classes.Datas.ViewData;
 using WonderLab.Extensions;
 
 namespace WonderLab.Views.Controls;
@@ -35,6 +35,9 @@ public sealed class DragDropSelector : TemplatedControl {
     private TextBlock _PART_SubTitleTextBlock;
     private PageSwitcher _PART_PageSwitcher;
 
+    public static readonly StyledProperty<AccountViewData> SelectedAccountProperty =
+        AvaloniaProperty.Register<DragDropSelector, AccountViewData>(nameof(SelectedAccount));
+
     public static readonly StyledProperty<IEnumerable> ItemSourceProperty =
         AvaloniaProperty.Register<DragDropSelector, IEnumerable>(nameof(ItemSource));
 
@@ -43,6 +46,11 @@ public sealed class DragDropSelector : TemplatedControl {
 
     public static readonly StyledProperty<ICommand> CancelCommandProperty =
         AvaloniaProperty.Register<DragDropSelector, ICommand>(nameof(CancelCommand));
+
+    public AccountViewData SelectedAccount {
+        get => GetValue(SelectedAccountProperty);
+        set => SetValue(SelectedAccountProperty, value);
+    }
 
     public IEnumerable ItemSource {
         get => GetValue(ItemSourceProperty);
@@ -93,6 +101,8 @@ public sealed class DragDropSelector : TemplatedControl {
         _PART_SelectReceiver = e.NameScope.Find<Border>("PRAT_SelectReceiver");
 
         _PART_AfreshButton.Click += (_, _) => {
+            SelectedAccount = null;
+
             ControlButtonGroup(false);
             HideReceiveInfo(true);
             HideListBox(true);
@@ -129,6 +139,8 @@ public sealed class DragDropSelector : TemplatedControl {
 
     private void OnDragItemDrop(object sender, DragEventArgs args) {
         _captured = true;
+        SelectedAccount = (args.Data.Get(DEFAULT_DRAG_DATAFORMAT) as ListBoxItem).DataContext as AccountViewData;
+
         //_PART_TextBlock.Text = (args.Data.Get(DEFAULT_DRAG_DATAFORMAT) as ListBoxItem).Content.ToString();
         HideListBox();
         HideReceiveInfo();

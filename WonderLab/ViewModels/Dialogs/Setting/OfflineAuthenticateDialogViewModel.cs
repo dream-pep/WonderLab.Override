@@ -9,6 +9,7 @@ using MinecraftLaunch.Components.Authenticator;
 using WonderLab.Services.UI;
 using CommunityToolkit.Mvvm.Messaging;
 using WonderLab.Classes.Datas.MessageData;
+using System.Collections.Generic;
 
 namespace WonderLab.ViewModels.Dialogs.Setting;
 
@@ -32,9 +33,8 @@ public sealed partial class OfflineAuthenticateDialogViewModel : DialogViewModel
     [RelayCommand]
     private async Task Authenticate(string name) {
         try {
-            _accountService.InitializeComponent(new OfflineAuthenticator(name));
-            var accounts = await _accountService.AuthenticateAsync(1);
-            _settingService.Data.Accounts.AddRange(accounts);
+            var account = _accountService.AuthenticateOffline(name);
+            _settingService.Data.Accounts.Add(account);
 
             _notificationService.QueueJob(new NotificationViewData {
                 Title = "成功",
@@ -42,7 +42,7 @@ public sealed partial class OfflineAuthenticateDialogViewModel : DialogViewModel
                 NotificationType = NotificationType.Success
             });
 
-            WeakReferenceMessenger.Default.Send(new AccountMessage(accounts));
+            //WeakReferenceMessenger.Default.Send(new AccountMessage(account));
             if (_dialogService.IsDialogOpen) {
                 _dialogService.CloseContentDialog();
             }

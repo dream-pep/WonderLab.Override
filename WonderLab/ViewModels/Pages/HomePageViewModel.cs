@@ -16,14 +16,17 @@ using CommunityToolkit.Mvvm.Messaging;
 using Avalonia.Controls.Notifications;
 using WonderLab.ViewModels.Dialogs;
 using System;
+using System.Threading;
 
 namespace WonderLab.ViewModels.Pages;
 
 public sealed partial class HomePageViewModel : ViewModelBase {
     private readonly GameService _gameService;
     private readonly TaskService _taskService;
-    private readonly SettingService _settingService;
+    private readonly LaunchService _launchService;
     private readonly DialogService _dialogService;
+    private readonly AccountService _accountService;
+    private readonly SettingService _settingService;
     private readonly NotificationService _notificationService;
 
     [ObservableProperty] private bool _isGameEmpty;
@@ -34,12 +37,16 @@ public sealed partial class HomePageViewModel : ViewModelBase {
     public HomePageViewModel(
         GameService gameService,
         TaskService taskService,
+        LaunchService launchService,
         DialogService dialogService,
+        AccountService accountService,
         SettingService settingService,
         NotificationService notificationService) {
         _gameService = gameService;
         _taskService = taskService;
         _dialogService = dialogService;
+        _launchService = launchService;
+        _accountService = accountService;
         _settingService = settingService;
         _notificationService = notificationService;
 
@@ -57,7 +64,7 @@ public sealed partial class HomePageViewModel : ViewModelBase {
     }
 
     [RelayCommand]
-    private void Launch() {
+    private async void Launch() {
         if (_gameService.ActiveGameEntry is null) {
             _notificationService.QueueJob(new NotificationViewData {
                 Title = "´íÎó",
@@ -69,16 +76,13 @@ public sealed partial class HomePageViewModel : ViewModelBase {
         }
 
         _settingService.Data.ActiveAccount = default;
-        _dialogService.ShowContentDialog<AccountDropDialogViewModel>();
+        var task = _dialogService.ShowContentDialog<AccountDropDialogViewModel>();
+        await task.WaitAsync(new CancellationToken());
 
-        var preCheckTask = new PreLaunchCheckTask(App.GetService<JavaFetcher>(),
-            _gameService,
-            App.GetService<DialogService>(),
-            _settingService, App.GetService<AccountService>(),
-            App.GetService<BackendService>(),
-            _notificationService,
-            App.GetService<WeakReferenceMessenger>());
+        if (_accountService.AccountViewData is null) {
+            return;
+        }
 
-        _taskService.QueueJob(preCheckTask);
+        await _launchService.LaunchWithDisplayTaskAsync(_accountService.AccountViewData.Account);
     }
 }

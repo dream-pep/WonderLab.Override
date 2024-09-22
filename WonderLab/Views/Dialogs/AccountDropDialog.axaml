@@ -119,6 +119,7 @@
 
 	<ui:DragDropSelector ItemSource="{Binding Accounts}"
 						 CancelCommand="{Binding CancelCommand}"
-						 ConfirmCommand="{Binding ConfirmCommand}">
+						 ConfirmCommand="{Binding ConfirmCommand}"
+						 SelectedAccount="{Binding ActiveAccount, Mode=TwoWay}">
 	</ui:DragDropSelector>
 </UserControl>

@@ -80,9 +80,9 @@ public sealed class DialogService {
         return new(result.Path.LocalPath);
     }
 
-    public void ShowContentDialog<TViewModel>() where TViewModel : DialogViewModelBase {
+    public Task ShowContentDialog<TViewModel>() where TViewModel : DialogViewModelBase {
         if (DialogHost.IsDialogOpen("dialogHost")) {
-            return;
+            throw new InvalidOperationException("Open");
         }
 
         var viewName = typeof(TViewModel).Name.Replace("ViewModel", "");
@@ -90,8 +90,10 @@ public sealed class DialogService {
         if (_dialogs.TryGetValue(viewName, out var contentFunc)) {
             var dialogObject = contentFunc() as UserControl;
             dialogObject!.DataContext = App.ServiceProvider!.GetRequiredService<TViewModel>();
-            DialogHost.Show(dialogObject, "dialogHost").Wait();
+            return DialogHost.Show(dialogObject, "dialogHost");
         }
+
+        throw new InvalidOperationException("找不到这个对话框");
     }
 
     public async void ShowContentDialog<TViewModel>(object parameter) where TViewModel : DialogViewModelBase {

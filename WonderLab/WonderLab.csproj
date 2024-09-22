@@ -6,6 +6,7 @@
 		<LangVersion>latest</LangVersion>
 		<TargetFramework>net8.0</TargetFramework>
 		<NoWarn>CS1701;CS1702;VSTHRD110;VSTHRD002;VSTHRD101;VSTHRD100</NoWarn>
+
 		<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	</PropertyGroup>

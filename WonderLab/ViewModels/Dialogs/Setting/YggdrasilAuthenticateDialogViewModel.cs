@@ -13,6 +13,7 @@ using WonderLab.Classes.Datas.MessageData;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MinecraftLaunch.Components.Authenticator;
 using MinecraftLaunch.Classes.Models.Auth;
+using System.Runtime.Serialization;
 
 namespace WonderLab.ViewModels.Dialogs.Setting;
 
@@ -45,8 +46,7 @@ public sealed partial class YggdrasilAuthenticateDialogViewModel : DialogViewMod
                 Url = refreshAccount.YggdrasilServerUrl;
             }
 
-            _accountService.InitializeComponent(new YggdrasilAuthenticator(Url, Email, Password), AccountType.Yggdrasil);
-            var accounts = await _accountService.AuthenticateAsync(3);
+            var accounts = await _accountService.AuthenticateYggdrasilAsync(Url, Email, Password);
             _settingService.Data.Accounts.AddRange(accounts.Union(_settingService.Data.Accounts));
 
             if (refreshAccount is null) {

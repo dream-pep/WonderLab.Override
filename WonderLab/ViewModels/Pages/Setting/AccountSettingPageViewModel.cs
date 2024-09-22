@@ -8,7 +8,9 @@ using System.Threading.Tasks;
 using WonderLab.Classes.Datas.MessageData;
 using WonderLab.Classes.Datas.TaskData;
 using WonderLab.Classes.Datas.ViewData;
+using WonderLab.Extensions;
 using WonderLab.Services;
+using WonderLab.Services.Auxiliary;
 using WonderLab.Services.UI;
 using WonderLab.ViewModels.Dialogs.Setting;
 
@@ -24,6 +26,7 @@ public sealed partial class AccountSettingPageViewModel : ViewModelBase {
 
     public AccountSettingPageViewModel(
         DialogService dialogService,
+        AccountService accountService,
         SettingService settingService,
         NotificationService notificationService,
         TaskService taskService) {
@@ -32,11 +35,16 @@ public sealed partial class AccountSettingPageViewModel : ViewModelBase {
         _notificationService = notificationService;
 
         if (_settingService.Data.Accounts.Count != 0) {
-            RunBackgroundWork(() => taskService.QueueJob(new AccountLoadTask(_settingService.Data.Accounts)));
+            RunBackgroundWork(() => {
+                var list =  accountService.InitializeAccountsAsync()
+                                          .ToBlockingEnumerable()
+                                          .ToObservableList();
+
+                Accounts.Load(list);
+            });
         }
 
         WeakReferenceMessenger.Default.Register<AccountMessage>(this, AccountHandle);
-        WeakReferenceMessenger.Default.Register<AccountViewMessage>(this, AccountViewHandle);
         WeakReferenceMessenger.Default.Register<AccountChangeNotificationMessage>(this, AccountChangeHandle);
     }
 

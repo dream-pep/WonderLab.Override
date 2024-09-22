@@ -164,6 +164,7 @@ public sealed partial class App : Application {
         services.AddSingleton<SkinService>();
         services.AddSingleton<UPnPService>();
         services.AddSingleton<ThemeService>();
+        services.AddSingleton<LaunchService>();
         services.AddSingleton<UpdateService>();
         services.AddSingleton<DialogService>();
         services.AddSingleton<WindowService>();
@@ -178,11 +179,7 @@ public sealed partial class App : Application {
         services.AddSingleton<SettingNavigationService>();
         services.AddSingleton<DownloadNavigationService>();
 
-        services.AddHostedService<QueuedHostedService>();
         services.AddHostedService<SettingBackgroundService>();
-
-        services.AddSingleton((Func<IServiceProvider, IBackgroundTaskQueue>)((IServiceProvider _)
-            => new BackgroundTaskQueue(100)));
 
         //services.AddScoped<TelemetryService>();
     }

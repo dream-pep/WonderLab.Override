@@ -8,6 +8,7 @@ using MinecraftLaunch.Classes.Enums;
 using MinecraftLaunch.Classes.Interfaces;
 using MinecraftLaunch.Classes.Models.Auth;
 using MinecraftLaunch.Components.Authenticator;
+using WonderLab.Classes.Datas.ViewData;
 
 namespace WonderLab.Services.Auxiliary;
 
@@ -15,67 +16,51 @@ namespace WonderLab.Services.Auxiliary;
 /// 游戏账户服务类
 /// </summary>
 public sealed class AccountService {
+    private const string CLIENT_ID = "9fd44410-8ed7-4eb3-a160-9f1cc62c824c";
+
+    private readonly SettingService _settingService;
     private readonly ILogger<AccountService> _logger;
-    private OfflineAuthenticator _offlineAuthenticator;
-    private MicrosoftAuthenticator _microsoftAuthenticator;
-    private YggdrasilAuthenticator _yggdrasilAuthenticator;
 
-    public bool IsRefresh { get; private set; }
+    public AccountViewData AccountViewData { get; set; }
 
-    public AccountService(ILogger<AccountService> logger) {
+    public AccountService(ILogger<AccountService> logger, SettingService settingService) {
         _logger = logger;
+        _settingService = settingService;
     }
 
-    /// <summary>
-    /// 初始化验证器组件
-    /// </summary>
-    public bool InitializeComponent<T>(IAuthenticator<T> authenticator, AccountType type = AccountType.Offline, bool isRefresh = false) {
-        try {
-            _logger.LogInformation("开始初始化验证器，类型为：{type}", type);
-            IsRefresh = isRefresh;
+    public async IAsyncEnumerable<AccountViewData> InitializeAccountsAsync() {
+        var accounts = _settingService.Data.Accounts;
 
-            switch (type) {
-                case AccountType.Offline:
-                    _offlineAuthenticator = authenticator as OfflineAuthenticator;
-                    return true;
-                case AccountType.Microsoft:
-                    _microsoftAuthenticator = authenticator as MicrosoftAuthenticator;
-                    return true;
-                case AccountType.Yggdrasil:
-                    _yggdrasilAuthenticator = authenticator as YggdrasilAuthenticator;
-                    return true;
-                case AccountType.UnifiedPass://暂不支持
-                default:
-                    return false;
-            }
-        } catch (Exception ex) {
-            _logger.LogError("初始化验证器失败，错误类型为：{ErrorType}，错误信息为：{ErrorMessage}", ex.GetType().Name, ex.Message);
-            return false;
+        foreach (var account in accounts) {
+            yield return await Task.Run(() => new AccountViewData(account));
         }
     }
 
     /// <summary>
     /// 异步验证
     /// </summary>
-    public async ValueTask<IEnumerable<Account>> AuthenticateAsync(
-        int type, 
-        Action<DeviceCodeResponse> action = default, 
-        CancellationTokenSource tokenSource = default) {
+    public async ValueTask<IEnumerable<YggdrasilAccount>> AuthenticateYggdrasilAsync(string url, string email, string password, YggdrasilAccount account = default) {
+        YggdrasilAuthenticator yggdrasilAuthenticator = account is null ? new(url, email, password) : new(account);
+        return await yggdrasilAuthenticator.AuthenticateAsync();
+    }
 
-        _logger.LogInformation("开始验证，类型为：{type}", type);
-        switch (type) {
-            case 1:
-                return Enumerable.Repeat(_offlineAuthenticator.Authenticate(), 1);
-            case 2:
-                if (!IsRefresh) {
-                    await _microsoftAuthenticator.DeviceFlowAuthAsync(action, tokenSource);
-                }
+    /// <summary>
+    /// 异步验证
+    /// </summary>
+    public async ValueTask<MicrosoftAccount> AuthenticateMicrosoftAsync(Account account = default, Action<DeviceCodeResponse> action = default, CancellationTokenSource tokenSource = default) {
+        MicrosoftAuthenticator microsoftAuthenticator = new(CLIENT_ID);
 
-                return Enumerable.Repeat(await _microsoftAuthenticator.AuthenticateAsync(), 1);
-            case 3:
-                return await _yggdrasilAuthenticator.AuthenticateAsync();
-            default:
-                throw new Exception("Unkown Account Type");
+        if (account is null) {
+            await microsoftAuthenticator.DeviceFlowAuthAsync(action, tokenSource);
         }
+
+        return await microsoftAuthenticator.AuthenticateAsync();
+    }
+
+    /// <summary>
+    /// 异步验证
+    /// </summary>
+    public OfflineAccount AuthenticateOffline(string name, Guid uuid = default) {
+        return new OfflineAuthenticator(name, uuid).Authenticate();
     }
 }

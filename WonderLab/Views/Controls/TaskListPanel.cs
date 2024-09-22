@@ -32,8 +32,8 @@ public sealed class TaskListPanel : TemplatedControl {
     public static readonly StyledProperty<bool> IsPaneOpenProperty =
         AvaloniaProperty.Register<GameManagerPanel, bool>(nameof(IsPaneOpen), false);
 
-    public static readonly StyledProperty<IEnumerable<ITaskJob>> TasksProperty =
-        AvaloniaProperty.Register<GameManagerPanel, IEnumerable<ITaskJob>>(nameof(Tasks), []);
+    public static readonly StyledProperty<IEnumerable<ITaskJob<ITaskData>>> TasksProperty =
+        AvaloniaProperty.Register<GameManagerPanel, IEnumerable<ITaskJob<ITaskData>>>(nameof(Tasks), []);
 
     protected override void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);

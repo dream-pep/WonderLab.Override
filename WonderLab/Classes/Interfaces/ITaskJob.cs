@@ -1,27 +1,24 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.Input;
+using System;
+using System.Collections.Immutable;
 using System.Threading;
-using System.ComponentModel;
 using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.Input;
+using WonderLab.Classes.Datas.TaskData;
 
 namespace WonderLab.Classes.Interfaces;
 
-public interface ITaskJob : INotifyPropertyChanged, IDisposable {
-    string JobName { get; set; }
+public interface ITaskJob<in T> : IProgress<T> {
+    string JobName { get; }
     double Progress { get; set; }
-    bool IsDeletedRequested { get; }
-    bool CanBeCancelled { get; set; }
     bool IsIndeterminate { get; set; }
-    string ProgressDetail { get; set; }
+    Exception Exception { get; }
     TaskStatus TaskStatus { get; set; }
-    ValueTask? WorkingTask { get; set; }
     IRelayCommand CancelTaskCommand { get; }
-    IRelayCommand RequestDeleteCommand { get; }
-    CancellationTokenSource CancellationTokenSource { get; }
+    CancellationToken TaskCancellationToken { get; }
 
-    void InvokeTaskFinished();
-    ValueTask BuildWorkItemAsync(CancellationToken token);
-    ValueTask<TaskStatus> WaitForRunAsync(CancellationToken token);
+    event EventHandler Completed;
+}
 
-    event EventHandler<EventArgs> TaskFinished;
+public interface ITaskJobWithStep<in T> : ITaskJob<T> {
+    public ImmutableArray<TaskStep> TaskSteps { get; }
 }

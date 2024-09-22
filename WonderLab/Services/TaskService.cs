@@ -1,63 +1,47 @@
-﻿using System;
-using System.Threading;
-using Avalonia.Threading;
-using System.Threading.Tasks;
-using System.Threading.Channels;
-using WonderLab.Classes.Interfaces;
+﻿using WonderLab.Classes.Interfaces;
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
+using System.Threading.Tasks;
+using Avalonia.Threading;
+using WonderLab.Classes.Datas.ViewData;
 
 namespace WonderLab.Services;
 
-public sealed partial class TaskService(IBackgroundTaskQueue queue, ILogger<TaskService> logger) : ObservableObject {
+public sealed partial class TaskService(ILogger<TaskService> logger) : ObservableObject {
     private readonly ILogger<TaskService> _logger = logger;
-    private readonly IBackgroundTaskQueue _taskQueue = queue;
 
-    [ObservableProperty] private ObservableCollection<ITaskJob> taskJobs = [];
+    [ObservableProperty] private ObservableCollection<TaskViewData> _displayTasks = [];
 
-    public void QueueJob(ITaskJob job) {
-        if (job is null) {
+    public void QueueJob<T>(ITaskJob<T> job) where T : ITaskData {
+        if (job is not ITaskJob<ITaskData> jobData) {
             return;
         }
 
         _ = Task.Run(async () => {
-            await _taskQueue.QueueBackgroundWorkItemAsync(job);
-            job.TaskFinished += (_, args) => {
-                using (job) {
-                    if (TaskJobs.Remove(job)) {
-                        _logger.LogInformation("任务已被移出队列！");
-                    }
-                }
+            job.Completed += (_, _) => {
+                DisplayTasks.Remove(new(jobData));
+            };
+            
+            await Dispatcher.UIThread.InvokeAsync(() => {
+                DisplayTasks.Add(new(jobData));
+            }, DispatcherPriority.Background);
+        });
+    }
+
+    public void QueueJobWithStep<T>(ITaskJob<T> job) where T : ITaskData {
+        if (job is not ITaskJobWithStep<ITaskData> jobData) {
+            return;
+        }
+
+        _ = Task.Run(async () => {
+            job.Completed += (_, _) => {
+                DisplayTasks.Remove(new(jobData));
             };
 
             await Dispatcher.UIThread.InvokeAsync(() => {
-                TaskJobs.Add(job);
-            });
+                DisplayTasks.Add(new(jobData));
+            }, DispatcherPriority.Background);
         });
-    }
-}
-
-public sealed class BackgroundTaskQueue : IBackgroundTaskQueue {
-    private readonly Channel<ITaskJob> _queue;
-
-    public BackgroundTaskQueue(int queueLength) {
-        BoundedChannelOptions boundedChannelOptions = new(queueLength) {
-            FullMode = BoundedChannelFullMode.Wait
-        };
-
-        _queue = Channel.CreateBounded<ITaskJob>(boundedChannelOptions);
-    }
-
-    public async ValueTask QueueBackgroundWorkItemAsync(ITaskJob job) {
-        if (job == null) {
-            ArgumentNullException.ThrowIfNull(job);
-        }
-
-        await _queue.Writer.WriteAsync(job);
-    }
-
-    public async ValueTask<ITaskJob> DequeueAsync(CancellationToken cancellationToken) {
-        return await _queue.Reader.ReadAsync(cancellationToken);
     }
 }

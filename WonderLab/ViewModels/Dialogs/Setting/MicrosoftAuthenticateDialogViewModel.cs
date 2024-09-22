@@ -41,29 +41,26 @@ public sealed partial class MicrosoftAuthenticateDialogViewModel : DialogViewMod
     }
 
     private async ValueTask InitAsync() {
-        if (_accountService.InitializeComponent(new MicrosoftAuthenticator("9fd44410-8ed7-4eb3-a160-9f1cc62c824c"),
-            AccountType.Microsoft)) {
-            var accounts = (await _accountService.AuthenticateAsync(2, x => {
-                IsCodeLoadFinish = true;
-                DeviceCode = x.UserCode;
+        var account = (await _accountService.AuthenticateMicrosoftAsync(default, x => {
+            IsCodeLoadFinish = true;
+            DeviceCode = x.UserCode;
 
-                Process.Start(new ProcessStartInfo(x.VerificationUrl) {
-                    UseShellExecute = true,
-                    Verb = "open"
-                }).Dispose();
-            }));
+            Process.Start(new ProcessStartInfo(x.VerificationUrl) {
+                UseShellExecute = true,
+                Verb = "open"
+            }).Dispose();
+        }));
 
-            _settingService.Data.Accounts.AddRange(accounts);
-            _notificationService.QueueJob(new NotificationViewData {
-                Title = "成功",
-                Content = $"已成功将账户 {accounts.First().Name} 添加至 WonderLab！",
-                NotificationType = NotificationType.Success
-            });
+        _settingService.Data.Accounts.Add(account);
+        _notificationService.QueueJob(new NotificationViewData {
+            Title = "成功",
+            Content = $"已成功将账户 {account.Name} 添加至 WonderLab！",
+            NotificationType = NotificationType.Success
+        });
 
-            WeakReferenceMessenger.Default.Send(new AccountMessage(accounts));
-            if (_dialogService.IsDialogOpen) {
-                _dialogService.CloseContentDialog();
-            }
+        //WeakReferenceMessenger.Default.Send(new AccountMessage(account));
+        if (_dialogService.IsDialogOpen) {
+            _dialogService.CloseContentDialog();
         }
     }
 

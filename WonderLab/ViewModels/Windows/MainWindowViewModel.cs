@@ -16,6 +16,7 @@ using Avalonia.Input;
 using WonderLab.ViewModels.Dialogs;
 using System.Linq;
 using WonderLab.Views.Controls;
+using WonderLab.Classes.Datas.ViewData;
 
 namespace WonderLab.ViewModels.Windows;
 
@@ -40,7 +41,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
     [ObservableProperty] private bool _isOpenTaskListPanel;
     [ObservableProperty] private bool _isOpenBackgroundPanel;
 
-    [ObservableProperty] private ReadOnlyObservableCollection<ITaskJob> _tasks;
+    [ObservableProperty] private ReadOnlyObservableCollection<TaskViewData> _tasks;
     [ObservableProperty] private ReadOnlyObservableCollection<INotification> _notifications;
 
     [ObservableProperty] private Control _homePage;
@@ -118,9 +119,9 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
     }
 
     public void OnLoaded(object sender, object args) {
-        _taskService.QueueJob(new InitTask(_languageService, _settingService, _dialogService, _notificationService));
+        //_taskService.QueueJob(new InitTask(_languageService, _settingService, _dialogService, _notificationService));
 
-        Tasks = new(_taskService.TaskJobs);
+        Tasks = new(_taskService.DisplayTasks);
         Notifications = new(_notificationService.Notifications);
 
         IsAlignCenter = _settingService.Data.IsAlignCenter;
