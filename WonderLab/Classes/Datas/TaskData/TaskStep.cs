@@ -9,8 +9,9 @@ namespace WonderLab.Classes.Datas.TaskData;
 public partial class TaskStep : ObservableObject {
     [ObservableProperty] private string _stepName;
     [ObservableProperty] private double _progress;
-    [ObservableProperty] private double _maxProgress;
+    [ObservableProperty] private double _maxProgress = 1d;
     [ObservableProperty] private TaskStatus _taskStatus = TaskStatus.WaitingToRun;
 
+    public double ProgressValue => Progress * 100;
     public string ProgressText => Progress.ToString("P2");
 }

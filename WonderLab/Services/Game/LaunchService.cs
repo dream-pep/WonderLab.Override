@@ -6,6 +6,7 @@ using MinecraftLaunch.Classes.Models.Launch;
 using MinecraftLaunch.Components.Checker;
 using MinecraftLaunch.Components.Downloader;
 using MinecraftLaunch.Components.Launcher;
+using MinecraftLaunch.Extensions;
 using System;
 using System.Linq;
 using System.Threading;
@@ -39,26 +40,16 @@ public sealed class LaunchService {
         };
 
         _taskService.QueueJob(task);
-        //await LaunchAsync(account, task, task.LaunchCancellationTokenSource);
+
+        await Task.Run(async () => await LaunchAsync(account, task, task.LaunchCancellationTokenSource));
     }
 
     public async Task LaunchAsync(
         Account account,
         IProgress<TaskProgressData> progress,
         CancellationTokenSource cancellationToken) {
-        double progressCache = 0d;
-        DispatcherTimer dispatcherTimer = new(DispatcherPriority.ApplicationIdle) {
-            Interval = TimeSpan.FromSeconds(0.2d),
-        };
-
-        dispatcherTimer.Tick += (_, _) => {
-            progress.Report(new(3, progressCache));
-        };
-
         try {
             var settingData = _settingService.Data;
-
-            progress.Report(new(1, 0d));
 
             if (settingData.ActiveJava is null) {
                 //TODO: Text translation
@@ -70,24 +61,18 @@ public sealed class LaunchService {
             cancellationToken.Token.ThrowIfCancellationRequested();
 
             //Auth
-            progress.Report(new(2, 0d));
-
             await RefreshAccountAsync(account);
 
             progress.Report(new(2, 1d));
             cancellationToken.Token.ThrowIfCancellationRequested();
 
             //Complete
-            progress.Report(new(3, 0d));
-
-            await ResolveAndDownloadResourceAsync(x => progressCache = x, cancellationToken);
+            await ResolveAndDownloadResourceAsync(progress);
 
             progress.Report(new(3, 1d));
             cancellationToken.Token.ThrowIfCancellationRequested();
 
             //Launch
-            progress.Report(new(4, 0d));
-
             Launcher launcher = new(_gameService.GameResolver, new() {
                 JvmConfig = new JvmConfig(javaPath.JavaPath) {
                     MaxMemory = _settingService.Data.MaxMemory
@@ -114,7 +99,7 @@ public sealed class LaunchService {
         };
     }
 
-    private async Task ResolveAndDownloadResourceAsync(Func<double, double> func, CancellationTokenSource cancellationTokenSource = default) {
+    private async Task ResolveAndDownloadResourceAsync(IProgress<TaskProgressData> progress, CancellationTokenSource cancellationTokenSource = default) {
         ResourceChecker resourceChecker = new(_gameService.ActiveGameEntry.Entry);
         if (await resourceChecker.CheckAsync()) {
             return;
@@ -125,7 +110,7 @@ public sealed class LaunchService {
         }, resourceChecker.MissingResources, _settingService.Data.IsUseMirrorDownloadSource ? MirrorDownloadManager.Bmcl : default, cancellationTokenSource);
 
         resourceDownloader.ProgressChanged += (_, arg) => {
-            func(arg.CompletedCount / arg.TotalCount);
+            progress.Report(new(3, arg.ToPercentage()));
         };
 
         await resourceDownloader.DownloadAsync();

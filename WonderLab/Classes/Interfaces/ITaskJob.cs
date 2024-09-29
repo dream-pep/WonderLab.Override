@@ -9,6 +9,8 @@ namespace WonderLab.Classes.Interfaces;
 
 public interface ITaskJob<in T> : IProgress<T> {
     string JobName { get; }
+    double MaxProgress { get; }
+    string ProgressText { get; }
     double Progress { get; set; }
     bool IsIndeterminate { get; set; }
     Exception Exception { get; }
