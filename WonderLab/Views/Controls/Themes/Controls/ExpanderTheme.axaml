@@ -32,29 +32,43 @@
 
 							<LayoutTransformControl Grid.Row="0"
 													Name="PART_ToggleTransform">
-								<DockPanel>
-									<Border Height="2"
+								<Grid RowDefinitions="1*, Auto">
+									<Border Height="1"
+											Grid.Row="1"
 											Name="PART_BottomBorder"
-											DockPanel.Dock="Bottom"
 											HorizontalAlignment="Stretch"/>
 
-									<ToggleButton BorderThickness="0"
+									<controls:FontIcon Glyph="&#xE70D;"
+													   Margin="0 0 16 0"
+													   VerticalAlignment="Center"
+													   HorizontalAlignment="Right"
+													   Name="PART_IndicateFontIcon">
+										<controls:FontIcon.Transitions>
+											<Transitions>
+												<TransformOperationsTransition Duration="0:0:0.25"
+																			   Property="RenderTransform"
+																			   Easing="ExponentialEaseOut"/>
+											</Transitions>
+										</controls:FontIcon.Transitions>
+									</controls:FontIcon>
+									
+									<ToggleButton Grid.Row="0"
+												  MinHeight="50"
+												  Classes="Basic"
+												  BorderThickness="0"
 												  Name="PART_ToggleButton"
 												  Background="Transparent"
 												  VerticalAlignment="Center"
-												  Classes="Basic"
-												  MinHeight="50"
 												  HorizontalAlignment="Stretch"
 												  HorizontalContentAlignment="Stretch"
 												  BorderBrush="{DynamicResource SukiBorderBrush}"
 												  IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}">
 
-										<ContentPresenter Grid.Column="0"
+										<ContentPresenter VerticalAlignment="Center"
 														  HorizontalAlignment="Left"
-														  VerticalAlignment="Center"
 														  Content="{TemplateBinding Header}"/>
 									</ToggleButton>
-								</DockPanel>
+								</Grid>
 							</LayoutTransformControl>
 						</Grid>
 					</Border>
@@ -62,6 +76,14 @@
 			</ControlTemplate>
 		</Setter>
 
+		<Style Selector="^[IsExpanded=True] /template/ controls|FontIcon#PART_IndicateFontIcon">
+			<Setter Property="RenderTransform" Value="rotate(180deg)"/>
+		</Style>
+
+		<Style Selector="^[IsExpanded=False] /template/ controls|FontIcon#PART_IndicateFontIcon">
+			<Setter Property="RenderTransform" Value="rotate(0deg)"/>
+		</Style>
+		
 		<Style Selector="^:not(.no-transitions) /template/ controls|ContentExpandControl#PART_ContentExpand">
 			<Setter Property="Transitions">
 				<Transitions>
