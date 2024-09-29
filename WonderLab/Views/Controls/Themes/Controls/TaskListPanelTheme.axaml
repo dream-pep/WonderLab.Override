@@ -8,6 +8,8 @@
 		</Border>
 	</Design.PreviewWith>
 
+	
+	
 	<ControlTheme x:Key="{x:Type controls:TaskListPanel}" TargetType="controls:TaskListPanel">
 		<Setter Property="MinHeight" Value="130"/>
 		<Setter Property="CornerRadius" Value="12"/>
@@ -17,10 +19,10 @@
 		<Setter Property="Background" Value="{DynamicResource SettingSideBarBackground}"/>
 		<Setter Property="Template">
 			<ControlTemplate>
-				<Border Name="layout"
+				<Border Name="PART_LayoutBorder"
 						Background="{x:Null}">
 					<Border Width="300"
-							Name="contentLayout"
+							Name="PART_ContentLayout"
 						    VerticalAlignment="Bottom"
 						    HorizontalAlignment="Right"
 							Height="{TemplateBinding MinHeight}"
@@ -55,12 +57,12 @@
 									   FontWeight="Bold"/>
 
 							<ListBox Grid.Row="1"
-									 Margin="0 6 0 0"
-									 Name="taskListBox"
-									 ClipToBounds="False"
 									 Background="Transparent"
-									 ItemsSource="{TemplateBinding Tasks}"
-									 CornerRadius="{TemplateBinding CornerRadius}">
+									 ItemsPanel="{TemplateBinding ItemsPanel}"
+									 ItemsSource="{TemplateBinding ItemsSource}"
+									 CornerRadius="{TemplateBinding CornerRadius}"
+									 ItemTemplate="{TemplateBinding ItemTemplate}"
+									 ScrollViewer.VerticalScrollBarVisibility="Hidden">
 								<ListBox.Styles>
 									<Style Selector="ListBoxItem">
 										<Setter Property="CornerRadius" Value="8"/>
@@ -86,7 +88,7 @@
 																IsVisible="{Binding CanBeCancelled}"
 																Command="{Binding CancelTaskCommand}"
 																Foreground="{TemplateBinding Foreground}"/>-->
-														
+
 														<TextBlock Grid.Row="2"
 																   FontSize="12"
 																   Text="Hello World"/>
@@ -105,7 +107,7 @@
 
 							<TextBlock Grid.Row="1"
 									   FontSize="12"
-									   Name="taskListTip"
+									   Name="PART_TaskListTip"
 									   Text="没有正在进行中的任务"
 									   IsHitTestVisible="False"
 									   VerticalAlignment="Center"
@@ -113,7 +115,7 @@
 								<TextBlock.Transitions>
 									<Transitions>
 										<DoubleTransition Property="Opacity"
-														  Duration="0:0:0.15"/>					
+														  Duration="0:0:0.15"/>
 									</Transitions>
 								</TextBlock.Transitions>
 							</TextBlock>

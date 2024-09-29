@@ -1,16 +1,25 @@
 ﻿using Avalonia;
-using Avalonia.Collections;
 using Avalonia.Controls;
-using System.Collections;
+using Avalonia.Interactivity;
+using SixLabors.Fonts;
+using System.Diagnostics;
 
 namespace WonderLab.Views.Controls;
 
-public sealed class SettingCard : ContentControl {
-    public static readonly StyledProperty<string> TitleProperty =
-        AvaloniaProperty.Register<SettingCard, string>(nameof(Title), "Hello Title");
+public sealed class SettingCard : ItemsControl {
+    public static readonly StyledProperty<string> HeaderProperty =
+        AvaloniaProperty.Register<SettingCard, string>(nameof(Header), "Hello Title");
 
-    public string Title {
-        get => GetValue(TitleProperty);
-        set => SetValue(TitleProperty, value);
+    public static readonly StyledProperty<string> GlyphProperty =
+        AvaloniaProperty.Register<SettingCard, string>(nameof(Glyph));
+
+    public string Header {
+        get => GetValue(HeaderProperty);
+        set => SetValue(HeaderProperty, value);
+    }
+
+    public string Glyph {
+        get => GetValue(GlyphProperty);
+        set => SetValue(GlyphProperty, value);
     }
 }

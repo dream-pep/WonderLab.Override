@@ -16,8 +16,8 @@
 			<Setter Property="Template">
 				<ControlTemplate>
 					<ui:RippleControl CornerRadius="12"
-											RippleOpacity="0.2"
-											RippleFill="{DynamicResource DividerBrush}">
+									  RippleOpacity="0.2"
+									  RippleFill="{DynamicResource DividerBrush}">
 						<Border CornerRadius="12"
 								Name="PART_LayoutBorder"
 								Background="Transparent"

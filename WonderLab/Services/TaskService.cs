@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using WonderLab.Classes.Datas.ViewData;
+using WonderLab.Classes.Datas.TaskData;
 
 namespace WonderLab.Services;
 
@@ -13,34 +14,14 @@ public sealed partial class TaskService(ILogger<TaskService> logger) : Observabl
 
     [ObservableProperty] private ObservableCollection<TaskViewData> _displayTasks = [];
 
-    public void QueueJob<T>(ITaskJob<T> job) where T : ITaskData {
-        if (job is not ITaskJob<ITaskData> jobData) {
-            return;
-        }
-
+    public void QueueJob(ITaskJob<TaskProgressData> job) {
         _ = Task.Run(async () => {
             job.Completed += (_, _) => {
-                DisplayTasks.Remove(new(jobData));
+                DisplayTasks.Remove(new(job));
             };
             
             await Dispatcher.UIThread.InvokeAsync(() => {
-                DisplayTasks.Add(new(jobData));
-            }, DispatcherPriority.Background);
-        });
-    }
-
-    public void QueueJobWithStep<T>(ITaskJob<T> job) where T : ITaskData {
-        if (job is not ITaskJobWithStep<ITaskData> jobData) {
-            return;
-        }
-
-        _ = Task.Run(async () => {
-            job.Completed += (_, _) => {
-                DisplayTasks.Remove(new(jobData));
-            };
-
-            await Dispatcher.UIThread.InvokeAsync(() => {
-                DisplayTasks.Add(new(jobData));
+                DisplayTasks.Add(new(job));
             }, DispatcherPriority.Background);
         });
     }

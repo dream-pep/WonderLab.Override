@@ -1,9 +1,9 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="WonderLab.Views.Pages.Setting.DetailSettingPage"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 x:Class="WonderLab.Views.Pages.Setting.DetailSettingPage"
 			 xmlns:ui="using:WonderLab.Views.Controls"
 			 xmlns:vm="using:WonderLab.ViewModels.Pages.Setting"
 			 x:DataType="vm:DetailSettingPageViewModel">
@@ -11,70 +11,77 @@
 		<ItemsControl Margin="0 24 0 16">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<StackPanel Spacing="24"/>
+					<StackPanel Spacing="8"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
+
+			<TextBlock FontSize="24"
+					   Text="个性化设置"
+					   Margin="0 0 0 8"
+					   FontWeight="Bold"
+					   VerticalAlignment="Top"
+					   HorizontalAlignment="Left"
+					   Effect="{StaticResource LowTextBlockShadow}"/>
 			
-			<ui:SettingCard Title="{DynamicResource Settings_Appearance}">
-				<ItemsControl>
-					<ui:SettingCardItem Description="底栏居中对齐">
-						<ToggleSwitch OnContent=""
-									  OffContent=""
-									  Margin="0 0 -10 0"
-									  IsChecked="{Binding IsAlignCenter}"/>
-					</ui:SettingCardItem>
+			<ui:SettingCard Glyph="&#xE793;"
+							Header="{DynamicResource Settings_Appearance}">
+				<ui:SettingCardItem Description="底栏居中对齐">
+					<ToggleSwitch OnContent=""
+								  OffContent=""
+								  Margin="0 0 -10 0"
+								  IsChecked="{Binding IsAlignCenter}"/>
+				</ui:SettingCardItem>
 
-					<ui:SettingCardItem Description="{DynamicResource Settings_Appearance_Theme}">
-						<ComboBox SelectedIndex="{Binding ThemeIndex}">
-							<ComboBoxItem Content="{DynamicResource Item_Theme_Light}"/>
-							<ComboBoxItem Content="{DynamicResource Item_Theme_Dark}"/>
-							<ComboBoxItem Content="{DynamicResource Item_Theme_Auto}"/>
-						</ComboBox>
-					</ui:SettingCardItem>
+				<ui:SettingCardItem Description="{DynamicResource Settings_Appearance_Theme}">
+					<ComboBox SelectedIndex="{Binding ThemeIndex}">
+						<ComboBoxItem Content="{DynamicResource Item_Theme_Light}"/>
+						<ComboBoxItem Content="{DynamicResource Item_Theme_Dark}"/>
+						<ComboBoxItem Content="{DynamicResource Item_Theme_Auto}"/>
+					</ComboBox>
+				</ui:SettingCardItem>
 
-					<ui:SettingCardItem Description="{DynamicResource Settings_Background_Mode}">
-						<ComboBox SelectedIndex="{Binding BackgroundIndex}">
-							<ComboBoxItem Content="{DynamicResource Item_Background_Mica}"/>
-							<ComboBoxItem Content="{DynamicResource Item_Background_Acrylic}"/>
-							<ComboBoxItem Content="{DynamicResource Item_Background_Image}"/>
-						</ComboBox>
-					</ui:SettingCardItem>
-				</ItemsControl>
+				<ui:SettingCardItem Description="{DynamicResource Settings_Background_Mode}">
+					<ComboBox SelectedIndex="{Binding BackgroundIndex}">
+						<ComboBoxItem Content="{DynamicResource Item_Background_Mica}"/>
+						<ComboBoxItem Content="{DynamicResource Item_Background_Acrylic}"/>
+						<ComboBoxItem Content="{DynamicResource Item_Background_Image}"/>
+					</ComboBox>
+				</ui:SettingCardItem>
 			</ui:SettingCard>
 
-			<ui:SettingCard Title="{DynamicResource Settings_Background_Image}"
-							IsVisible="{Binding IsImage}">
-				<ItemsControl>
-					<ui:SettingCardItem Description="{DynamicResource Settings_Background_ImageChange}">
-						<Button Content="{DynamicResource Browse}"
-								Command="{Binding SearchCommand}"/>
-					</ui:SettingCardItem>
+			<ui:SettingCard Glyph="&#xE8B9;"
+							IsVisible="{Binding IsImage}"
+							Header="{DynamicResource Settings_Background_Image}">
+				<ui:SettingCardItem Description="{DynamicResource Settings_Background_ImageChange}">
+					<Button Content="{DynamicResource Browse}"
+							Command="{Binding SearchCommand}"/>
+				</ui:SettingCardItem>
 
-					<ui:SettingCardItem Description="{DynamicResource Settings_Background_ParallaxEffects}">
-						<ComboBox SelectedIndex="{Binding ParallaxMode}">
-							<ComboBoxItem Content="{DynamicResource Item_None}"/>
-							<ComboBoxItem Content="{DynamicResource Item_Background_Flat}"/>
-							<ComboBoxItem Content="{DynamicResource Item_Background_3D}"/>
-						</ComboBox>
-					</ui:SettingCardItem>
-					
-					<ui:SettingCardItem Description="{DynamicResource Settings_Background_GradualBlur}">
-						<ToggleSwitch OnContent=""
-									  OffContent=""
-									  Margin="0 0 -10 0"
-									  IsChecked="{Binding IsEnableBlur}"/>
-					</ui:SettingCardItem>
+				<ui:SettingCardItem Description="{DynamicResource Settings_Background_ParallaxEffects}">
+					<ComboBox SelectedIndex="{Binding ParallaxMode}">
+						<ComboBoxItem Content="{DynamicResource Item_None}"/>
+						<ComboBoxItem Content="{DynamicResource Item_Background_Flat}"/>
+						<ComboBoxItem Content="{DynamicResource Item_Background_3D}"/>
+					</ComboBox>
+				</ui:SettingCardItem>
 
-					<ui:SettingCardItem Description="{DynamicResource Settings_Background_BlurValue}"
-										IsVisible="{Binding IsEnableBlur, Converter={StaticResource BooleanReverseConverter}}">
-						<Slider Width="250"
-								Maximum="64"
-								Value="{Binding BlurRadius, Mode=TwoWay}"/>
-					</ui:SettingCardItem>
-				</ItemsControl>
+				<ui:SettingCardItem Description="{DynamicResource Settings_Background_GradualBlur}">
+					<ToggleSwitch OnContent=""
+								  OffContent=""
+								  Margin="0 0 -10 0"
+								  IsChecked="{Binding IsEnableBlur}"/>
+				</ui:SettingCardItem>
+
+				<ui:SettingCardItem Description="{DynamicResource Settings_Background_BlurValue}"
+									IsVisible="{Binding IsEnableBlur, Converter={StaticResource BooleanReverseConverter}}">
+					<Slider Width="250"
+							Maximum="64"
+							Value="{Binding BlurRadius, Mode=TwoWay}"/>
+				</ui:SettingCardItem>
 			</ui:SettingCard>
 			
-			<ui:SettingCard Title="{DynamicResource Settings_Lang}">
+			<ui:SettingCard Glyph="&#xF2B7;"
+							Header="{DynamicResource Settings_Lang}">
 				<ui:SettingCardItem Description="{DynamicResource Settings_Lang_Change}">
 					<ComboBox SelectedIndex="{Binding LanguageIndex}">
 						<ComboBoxItem Content="简体中文"/>
@@ -87,8 +94,8 @@
 				</ui:SettingCardItem>
 			</ui:SettingCard>
 
-			<ui:SettingCard Title="{DynamicResource Settings_DebugMode}">
-        <ItemsControl>
+			<ui:SettingCard Glyph="&#xEBE8;"
+							Header="{DynamicResource Settings_DebugMode}">
 				<ui:SettingCardItem Description="{DynamicResource Settings_DebugMode_Change}">
 					<ToggleSwitch OnContent=""
 								  OffContent=""
@@ -97,15 +104,15 @@
 								  Command="{Binding NotificationCommand}"
 								  CommandParameter="{DynamicResource Info_DebugMode_Changed}"/>
 				</ui:SettingCardItem>
-        <ui:SettingCardItem Description="{DynamicResource Settings_OOBE}">
+				
+				<ui:SettingCardItem Description="{DynamicResource Settings_OOBE}">
 					<Button Command="{Binding PressOobeCommand}"
-                  Content="{DynamicResource Item_Jump}"
-                  IsEnabled="{Binding IsDebugMode}"/>
-        </ui:SettingCardItem>
-        </ItemsControl>
+							IsEnabled="{Binding IsDebugMode}"
+							Content="{DynamicResource Item_Jump}"/>
+				</ui:SettingCardItem>
 			</ui:SettingCard>
 
-			<ui:SettingCard Title="{DynamicResource Settings_Font}">
+			<ui:SettingCard IsVisible="False" Header="{DynamicResource Settings_Font}">
 				<ui:SettingCardItem Description="{DynamicResource Settings_Font_Change}">
 					<ComboBox ItemsSource="{Binding Fonts}">
 						<ComboBox.ItemTemplate>
@@ -118,7 +125,6 @@
 					</ComboBox>
 				</ui:SettingCardItem>
 			</ui:SettingCard>
-      
 		</ItemsControl>
 	</ui:SmoothScrollViewer>
 </UserControl>

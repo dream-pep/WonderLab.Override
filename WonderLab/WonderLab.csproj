@@ -39,6 +39,7 @@
 		<None Remove="Assets\Images\steve.png" />
 		<None Remove="Assets\mods.json" />
 		<None Remove="Assets\WonderLab.Backend" />
+		<None Remove="Views\Controls\Themes\Controls\t1o4uer3.0ax~" />
 	</ItemGroup>
 
 	<ItemGroup>

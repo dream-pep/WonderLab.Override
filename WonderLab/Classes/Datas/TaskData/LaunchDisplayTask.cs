@@ -13,7 +13,7 @@ namespace WonderLab.Classes.Datas.TaskData;
 /// <summary>
 /// 可视化游戏启动任务
 /// </summary>
-public sealed partial class LaunchDisplayTask : ObservableObject, ITaskJobWithStep<LaunchTaskData> {
+public sealed partial class LaunchDisplayTask : ObservableObject, ITaskJob<TaskProgressData> {
     public readonly CancellationTokenSource LaunchCancellationTokenSource = new();
 
     [ObservableProperty] private double _progress;
@@ -34,18 +34,18 @@ public sealed partial class LaunchDisplayTask : ObservableObject, ITaskJobWithSt
         new TaskStep { StepName = "Launching the game" },
     ];
 
-    public void Report(LaunchTaskData value) {
-        if(value.Step is LaunchTaskStep.Inspecting) {
+    public void Report(TaskProgressData value) {
+        if(value.Step is 1) {
             TaskSteps[0].Progress = value.Progress;
-        } else if (value.Step is LaunchTaskStep.Authenticating) {
+        } else if (value.Step is 2) {
             TaskSteps[0].TaskStatus = TaskStatus.RanToCompletion;
             TaskSteps[1].TaskStatus = TaskStatus.Running;
             TaskSteps[1].Progress = value.Progress;
-        } else if (value.Step is LaunchTaskStep.Completing) {
+        } else if (value.Step is 3) {
             TaskSteps[1].TaskStatus = TaskStatus.RanToCompletion;
             TaskSteps[2].TaskStatus = TaskStatus.Running;
             TaskSteps[2].Progress = value.Progress;
-        } else if (value.Step is LaunchTaskStep.Launching) {
+        } else if (value.Step is 4) {
             TaskSteps[2].TaskStatus = TaskStatus.RanToCompletion;
             TaskSteps[3].TaskStatus = TaskStatus.Running;
             TaskSteps[3].Progress = value.Progress;
@@ -60,12 +60,4 @@ public sealed partial class LaunchDisplayTask : ObservableObject, ITaskJobWithSt
     }
 }
 
-public enum LaunchTaskStep {
-    Inspecting,
-    Authenticating,
-    Completing,
-    Launching,
-    Faulted
-}
-
-public record struct LaunchTaskData(LaunchTaskStep Step, double Progress, Exception Exception = default) : ITaskData;
+public record struct TaskProgressData(int Step, double Progress, Exception Exception = default) : ITaskData;

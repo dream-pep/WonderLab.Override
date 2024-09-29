@@ -16,9 +16,7 @@ public interface ITaskJob<in T> : IProgress<T> {
     IRelayCommand CancelTaskCommand { get; }
     CancellationToken TaskCancellationToken { get; }
 
-    event EventHandler Completed;
-}
+    ImmutableArray<TaskStep> TaskSteps { get; }
 
-public interface ITaskJobWithStep<in T> : ITaskJob<T> {
-    public ImmutableArray<TaskStep> TaskSteps { get; }
+    event EventHandler Completed;
 }

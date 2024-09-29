@@ -22,7 +22,14 @@
 					  OffsetY="1"
 					  BlurRadius="5"
 					  Color="#46000000"/>
-	
+
+	<DropShadowEffect x:Key="LowTextBlockShadow"
+					  Opacity="1"
+					  OffsetX="1"
+					  OffsetY="1"
+					  BlurRadius="5"
+					  Color="#36000000"/>
+
 	<ControlTheme x:Key="{x:Type controls:ImageCard}" TargetType="controls:ImageCard">
 		<Setter Property="MinWidth" Value="200"/>
 		<Setter Property="MinHeight" Value="150"/>

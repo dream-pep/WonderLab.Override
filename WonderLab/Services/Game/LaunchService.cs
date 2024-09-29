@@ -1,16 +1,12 @@
 ﻿using Avalonia.Threading;
 using MinecraftLaunch;
 using MinecraftLaunch.Classes.Enums;
-using MinecraftLaunch.Classes.Interfaces;
 using MinecraftLaunch.Classes.Models.Auth;
-using MinecraftLaunch.Classes.Models.Download;
 using MinecraftLaunch.Classes.Models.Launch;
 using MinecraftLaunch.Components.Checker;
 using MinecraftLaunch.Components.Downloader;
 using MinecraftLaunch.Components.Launcher;
-using MinecraftLaunch.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,13 +38,13 @@ public sealed class LaunchService {
             JobName = $"{_gameService.ActiveGameEntry.Entry.Id} 的启动任务",
         };
 
-        _taskService.QueueJobWithStep(task);
-        await LaunchAsync(account, task, task.LaunchCancellationTokenSource);
+        _taskService.QueueJob(task);
+        //await LaunchAsync(account, task, task.LaunchCancellationTokenSource);
     }
 
     public async Task LaunchAsync(
         Account account,
-        IProgress<LaunchTaskData> progress,
+        IProgress<TaskProgressData> progress,
         CancellationTokenSource cancellationToken) {
         double progressCache = 0d;
         DispatcherTimer dispatcherTimer = new(DispatcherPriority.ApplicationIdle) {
@@ -56,13 +52,13 @@ public sealed class LaunchService {
         };
 
         dispatcherTimer.Tick += (_, _) => {
-            progress.Report(new(LaunchTaskStep.Completing, progressCache));
+            progress.Report(new(3, progressCache));
         };
 
         try {
             var settingData = _settingService.Data;
 
-            progress.Report(new(LaunchTaskStep.Inspecting, 0d));
+            progress.Report(new(1, 0d));
 
             if (settingData.ActiveJava is null) {
                 //TODO: Text translation
@@ -70,27 +66,27 @@ public sealed class LaunchService {
             }
 
             var javaPath = settingData.IsAutoSelectJava ? settingData.ActiveJava : settingData.ActiveJava;
-            progress.Report(new(LaunchTaskStep.Inspecting, 1d));
+            progress.Report(new(1, 1d));
             cancellationToken.Token.ThrowIfCancellationRequested();
 
             //Auth
-            progress.Report(new(LaunchTaskStep.Authenticating, 0d));
+            progress.Report(new(2, 0d));
 
             await RefreshAccountAsync(account);
 
-            progress.Report(new(LaunchTaskStep.Authenticating, 1d));
+            progress.Report(new(2, 1d));
             cancellationToken.Token.ThrowIfCancellationRequested();
 
             //Complete
-            progress.Report(new(LaunchTaskStep.Completing, 0d));
+            progress.Report(new(3, 0d));
 
             await ResolveAndDownloadResourceAsync(x => progressCache = x, cancellationToken);
 
-            progress.Report(new(LaunchTaskStep.Completing, 1d));
+            progress.Report(new(3, 1d));
             cancellationToken.Token.ThrowIfCancellationRequested();
 
             //Launch
-            progress.Report(new(LaunchTaskStep.Launching, 0d));
+            progress.Report(new(4, 0d));
 
             Launcher launcher = new(_gameService.GameResolver, new() {
                 JvmConfig = new JvmConfig(javaPath.JavaPath) {
@@ -103,9 +99,9 @@ public sealed class LaunchService {
 
             await launcher.LaunchAsync(_gameService.ActiveGameEntry.Entry.Id);
 
-            progress.Report(new(LaunchTaskStep.Launching, 1d));
+            progress.Report(new(4, 1d));
         } catch (Exception ex) {
-            progress.Report(new(LaunchTaskStep.Faulted, 1d, ex));
+            progress.Report(new(-1, 1d, ex));
         }
     }
 

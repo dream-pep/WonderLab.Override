@@ -40,6 +40,7 @@
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/ListBoxTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/TextBoxTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/ComboBoxTheme.axaml"/>
+				<ResourceInclude Source="/Views/Controls/Themes/Controls/ExpanderTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/FontIconTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/ImageBoxTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/ImageCardTheme.axaml"/>
@@ -52,8 +53,8 @@
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/ProgressRingTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/SuperTitleBarTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/RippleControlTheme.axaml"/>
-				<ResourceInclude Source="/Views/Controls/Themes/Controls/NavigationViewTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/TaskListPanelTheme.axaml"/>
+				<ResourceInclude Source="/Views/Controls/Themes/Controls/NavigationViewTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/SettingCardItemTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/AutoCompleteBoxTheme.axaml"/>
 				<ResourceInclude Source="/Views/Controls/Themes/Controls/NotificationItemTheme.axaml"/>

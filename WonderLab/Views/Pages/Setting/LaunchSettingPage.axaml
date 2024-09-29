@@ -12,12 +12,21 @@
 		<ItemsControl Margin="0 24 0 16">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
-					<StackPanel Spacing="24"/>
+					<StackPanel Spacing="8"/>
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 
-			<ui:SettingCard Title="{DynamicResource Settings_Launch_Folder}">
-				<ItemsControl>
+			<TextBlock FontSize="24"
+					   Text="启动设置"
+					   Margin="0 0 0 8"
+					   FontWeight="Bold"
+					   VerticalAlignment="Top"
+					   HorizontalAlignment="Left"
+					   Effect="{StaticResource LowTextBlockShadow}"/>
+
+			<ui:SettingCard Glyph="&#xE8B7;"
+							Header="{DynamicResource Settings_Launch_Folder}">
+				<ui:SettingCard.Items>
 					<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Folder_Select}">
 						<ComboBox ItemsSource="{Binding GameFolders}"
 								  SelectedItem="{Binding ActiveGameFolder}"/>
@@ -36,80 +45,78 @@
 								Command="{Binding RemoveCommand}"
 								Content="{DynamicResource Item_Remove}"/>
 					</ui:SettingCardItem>
-				</ItemsControl>
+				</ui:SettingCard.Items>
 			</ui:SettingCard>
 
-			<ui:SettingCard Title="{DynamicResource Settings_Launch_Java}">
-				<ItemsControl>
-					<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Java_Select}">
-						<ComboBox SelectedItem="{Binding ActiveJava}"
-								  ItemsSource="{Binding Javas, Mode=TwoWay}">
-							<ComboBox.ItemTemplate>
-								<DataTemplate>
-									<TextBlock Text="{Binding JavaPath}"/>
-								</DataTemplate>
-							</ComboBox.ItemTemplate>
-						</ComboBox>
-					</ui:SettingCardItem>
+			<ui:SettingCard Glyph="&#xE8A5;"
+							Header="{DynamicResource Settings_Launch_Java}">
+				<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Java_Select}">
+					<ComboBox SelectedItem="{Binding ActiveJava}"
+							  ItemsSource="{Binding Javas, Mode=TwoWay}">
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding JavaPath}"/>
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
+				</ui:SettingCardItem>
 
-					<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Java_New}">
-						<StackPanel Spacing="8"
-									Orientation="Horizontal">
-							<Button CornerRadius="6"
-									CommandParameter="Java"
-									Content="{DynamicResource Item_Browse}"
-									Command="{Binding SearchCommand}"/>
-
-							<Button CornerRadius="6"
-									Content="{DynamicResource Item_Search}"
-									Command="{Binding AutoSearchCommand}"/>
-						</StackPanel>
-					</ui:SettingCardItem>
-
-					<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Java_Remove}">
+				<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Java_New}">
+					<StackPanel Spacing="8"
+								Orientation="Horizontal">
 						<Button CornerRadius="6"
 								CommandParameter="Java"
-								Command="{Binding RemoveCommand}"
-								Content="{DynamicResource Item_Remove}"/>
-					</ui:SettingCardItem>
+								Content="{DynamicResource Item_Browse}"
+								Command="{Binding SearchCommand}"/>
 
-					<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Java_SelectAuto}">
-						<ToggleSwitch OnContent=""
-									  OffContent=""
-									  Margin="0 0 -10 0"
-									  IsChecked="{Binding IsAutoSelectJava}"/>
-					</ui:SettingCardItem>
-				</ItemsControl>
+						<Button CornerRadius="6"
+								Content="{DynamicResource Item_Search}"
+								Command="{Binding AutoSearchCommand}"/>
+					</StackPanel>
+				</ui:SettingCardItem>
+
+				<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Java_Remove}">
+					<Button CornerRadius="6"
+							CommandParameter="Java"
+							Command="{Binding RemoveCommand}"
+							Content="{DynamicResource Item_Remove}"/>
+				</ui:SettingCardItem>
+
+				<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Java_SelectAuto}">
+					<ToggleSwitch OnContent=""
+								  OffContent=""
+								  Margin="0 0 -10 0"
+								  IsChecked="{Binding IsAutoSelectJava}"/>
+				</ui:SettingCardItem>
 			</ui:SettingCard>
 
-			<ui:SettingCard Title="{DynamicResource Settings_Launch_Game}">
-				<ItemsControl>
-					<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Game_Memory}">
-						<TextBox Text="{Binding MaxMemory}"
-								 UseFloatingWatermark="False"/>
-					</ui:SettingCardItem>
+			<ui:SettingCard Glyph="&#xE7FC;"
+							Header="{DynamicResource Settings_Launch_Game}">
+				<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Game_Memory}">
+					<TextBox Text="{Binding MaxMemory}"
+							 UseFloatingWatermark="False"/>
+				</ui:SettingCardItem>
 
-					<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Game_MemoryAuto}">
-						<ToggleSwitch OnContent=""
-									  OffContent=""
-									  Margin="0 0 -10 0"
-									  IsChecked="{Binding IsAutoAllocateMemory}"/>
-					</ui:SettingCardItem>
+				<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Game_MemoryAuto}">
+					<ToggleSwitch OnContent=""
+								  OffContent=""
+								  Margin="0 0 -10 0"
+								  IsChecked="{Binding IsAutoAllocateMemory}"/>
+				</ui:SettingCardItem>
 
-					<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Independent}">
-						<ToggleSwitch OnContent=""
-									  OffContent=""
-									  Margin="0 0 -10 0"
-									  IsChecked="{Binding IsGameIndependent}"/>
-					</ui:SettingCardItem>
+				<ui:SettingCardItem Description="{DynamicResource Settings_Launch_Independent}">
+					<ToggleSwitch OnContent=""
+								  OffContent=""
+								  Margin="0 0 -10 0"
+								  IsChecked="{Binding IsGameIndependent}"/>
+				</ui:SettingCardItem>
 
-					<ui:SettingCardItem Description="{DynamicResource Settings_Launch_FullScreen}">
-						<ToggleSwitch OnContent=""
-									  OffContent=""
-									  Margin="0 0 -10 0"
-									  IsChecked="{Binding IsFullScreen}"/>
-					</ui:SettingCardItem>
-				</ItemsControl>
+				<ui:SettingCardItem Description="{DynamicResource Settings_Launch_FullScreen}">
+					<ToggleSwitch OnContent=""
+								  OffContent=""
+								  Margin="0 0 -10 0"
+								  IsChecked="{Binding IsFullScreen}"/>
+				</ui:SettingCardItem>
 			</ui:SettingCard>
 		</ItemsControl>
 	</ui:SmoothScrollViewer>

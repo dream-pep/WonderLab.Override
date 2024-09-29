@@ -7,7 +7,7 @@
 			 xmlns:vm="using:WonderLab.ViewModels.Pages"
 			 x:DataType="vm:MultiplayerPageViewModel"
              x:Class="WonderLab.MultiplayerPage">
-	<ui:SmoothScrollViewer ScrollViewer.VerticalScrollBarVisibility="Hidden">
+	<ui:SmoothScrollViewer ScrollViewer.VerticalScrollBarVisibility="Hidden">		
 		<ItemsControl Margin="36 24 36 16">
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
@@ -15,43 +15,41 @@
 				</ItemsPanelTemplate>
 			</ItemsControl.ItemsPanel>
 
-			<ui:SettingCard Title="{DynamicResource Multiplayer_InternetInfo}">
-				<ItemsControl>
-					<ui:SettingCardItem Description="{DynamicResource Multiplayer_IfUPNP}">
-						<Panel>
-							<HyperlinkButton Content="{Binding IsSupportUPnP}"
-											 IsVisible="{Binding IsUPnPLoading, Converter={StaticResource BooleanReverseConverter}}"/>
+			<ui:SettingCard Header="{DynamicResource Multiplayer_InternetInfo}">
+				<ui:SettingCardItem Description="{DynamicResource Multiplayer_IfUPNP}">
+					<Panel>
+						<HyperlinkButton Content="{Binding IsSupportUPnP}"
+										 IsVisible="{Binding IsUPnPLoading, Converter={StaticResource BooleanReverseConverter}}"/>
 
-							<ui:ProgressRing Width="20"
-											 Height="20"
-											 BorderThickness="2.5"
-											 IsIndeterminate="True"
-											 Background="Transparent"
-											 IsVisible="{Binding IsUPnPLoading}"
-											 Foreground="{DynamicResource WarningBaseColor}"/>
-						</Panel>
-					</ui:SettingCardItem>
+						<ui:ProgressRing Width="20"
+										 Height="20"
+										 BorderThickness="2.5"
+										 IsIndeterminate="True"
+										 Background="Transparent"
+										 IsVisible="{Binding IsUPnPLoading}"
+										 Foreground="{DynamicResource WarningBaseColor}"/>
+					</Panel>
+				</ui:SettingCardItem>
 
-					<ui:SettingCardItem Description="{DynamicResource Multiplayer_EnvNAT}">
-						<Panel>
-							<HyperlinkButton Content="{Binding NatType}"
-											 IsVisible="{Binding IsNatTypeLoading, Converter={StaticResource BooleanReverseConverter}}"/>
+				<ui:SettingCardItem Description="{DynamicResource Multiplayer_EnvNAT}">
+					<Panel>
+						<HyperlinkButton Content="{Binding NatType}"
+										 IsVisible="{Binding IsNatTypeLoading, Converter={StaticResource BooleanReverseConverter}}"/>
 
-							<ui:ProgressRing Width="20"
-											 Height="20"
-											 BorderThickness="2.5"
-											 IsIndeterminate="True"
-											 Background="Transparent"
-											 VerticalAlignment="Center"
-											 HorizontalAlignment="Center"
-											 IsVisible="{Binding IsNatTypeLoading}"
-											 Foreground="{DynamicResource WarningBaseColor}"/>
-						</Panel>
-					</ui:SettingCardItem>
-				</ItemsControl>
+						<ui:ProgressRing Width="20"
+										 Height="20"
+										 BorderThickness="2.5"
+										 IsIndeterminate="True"
+										 Background="Transparent"
+										 VerticalAlignment="Center"
+										 HorizontalAlignment="Center"
+										 IsVisible="{Binding IsNatTypeLoading}"
+										 Foreground="{DynamicResource WarningBaseColor}"/>
+					</Panel>
+				</ui:SettingCardItem>
 			</ui:SettingCard>
 
-			<ui:SettingCard Title="{DynamicResource Multiplayer_Action}">
+			<ui:SettingCard Header="{DynamicResource Multiplayer_Action}">
 				<ui:SettingCardItem Description="{DynamicResource Multiplayer_Action_Connect}">
 					<StackPanel Spacing="8"
 								Orientation="Horizontal">
@@ -64,16 +62,14 @@
 				</ui:SettingCardItem>
 			</ui:SettingCard>
 
-			<ui:SettingCard Title="{DynamicResource Multiplayer_ControlRoom}">
-				<ItemsControl>
-					<ui:SettingCardItem Description="{DynamicResource Multiplayer_ControlRoom_UserToken}">
-						<StackPanel Spacing="8"
-									Orientation="Horizontal">
-							<HyperlinkButton Content="{Binding UserToken}"
-											 Command="{Binding CopyTokenCommand}"/>
-						</StackPanel>
-					</ui:SettingCardItem>
-				</ItemsControl>
+			<ui:SettingCard Header="{DynamicResource Multiplayer_ControlRoom}">
+				<ui:SettingCardItem Description="{DynamicResource Multiplayer_ControlRoom_UserToken}">
+					<StackPanel Spacing="8"
+								Orientation="Horizontal">
+						<HyperlinkButton Content="{Binding UserToken}"
+										 Command="{Binding CopyTokenCommand}"/>
+					</StackPanel>
+				</ui:SettingCardItem>
 			</ui:SettingCard>
 		</ItemsControl>
 	</ui:SmoothScrollViewer>

@@ -187,9 +187,11 @@
 			<SolidColorBrush x:Key="ComboBoxBackground" Color="{StaticResource ContentColor2}"/>
 			<SolidColorBrush x:Key="TextBoxBorderBrush" Color="{StaticResource ContentColor3}"/>
 			<SolidColorBrush x:Key="ComboBoxBorderBrush" Color="{StaticResource ContentColor3}"/>
+			<SolidColorBrush x:Key="ExpanderContentBackground" Color="{StaticResource ContentColor2}"/>
 			<SolidColorBrush x:Key="TitleBarBackground" Color="{StaticResource LayoutBackgroundColor}"/>
 			<SolidColorBrush x:Key="BottomBarBackground" Color="{StaticResource LayoutBackgroundColor}"/>
 			<SolidColorBrush x:Key="CardButtonBackground" Color="{StaticResource LayoutBackgroundColor}"/>
+			<SolidColorBrush x:Key="ExpanderHeaderBackground" Color="{StaticResource LayoutBackgroundColor}"/>
 			<SolidColorBrush x:Key="SettingSideBarBackground" Color="{StaticResource LayoutBackgroundColor}"/>
 			<SolidColorBrush x:Key="GameManagerPanelBackground" Color="{StaticResource LayoutBackgroundColor}"/>
 			<SolidColorBrush x:Key="NavigationViewItemSelectedBackground" Color="{StaticResource LayoutBackgroundColor}"/>
@@ -385,6 +387,8 @@
 			<SolidColorBrush x:Key="BottomBarBackground" Color="{StaticResource ContentColor3}"/>
 			<SolidColorBrush x:Key="CardButtonBackground" Color="{StaticResource ContentColor3}"/>
 			<SolidColorBrush x:Key="SettingSideBarBackground" Color="{StaticResource ContentColor3}"/>
+			<SolidColorBrush x:Key="ExpanderHeaderBackground" Color="{StaticResource ContentColor3}"/>
+			<SolidColorBrush x:Key="ExpanderContentBackground" Color="{StaticResource ContentColor2}"/>
 			<SolidColorBrush x:Key="GameManagerPanelBackground" Color="{StaticResource ContentColor3}"/>
 			<SolidColorBrush x:Key="NavigationViewItemSelectedBackground" Color="{StaticResource ContentColor4}"/>
 		</ResourceDictionary>
