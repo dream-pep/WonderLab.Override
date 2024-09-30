@@ -21,11 +21,27 @@ namespace WonderLab.Views.Controls;
 
 [PseudoClasses(":ispanelopen", ":ispanelclose")]
 public sealed class NavigationView : SelectingItemsControl {
+    private readonly Rotate3DTransform _rotate3DTransform = new() {
+        Depth = 500,
+        AngleX = 0,
+        AngleY = 0,
+        Transitions = [
+            new DoubleTransition {
+                Easing = new ExponentialEaseOut(),
+                Duration = TimeSpan.FromSeconds(0.3d),
+                Property = Rotate3DTransform.AngleXProperty
+            },
+            new DoubleTransition {
+                Easing = new ExponentialEaseOut(),
+                Duration = TimeSpan.FromSeconds(0.3d),
+                Property = Rotate3DTransform.AngleYProperty
+            }
+        ]
+    };
+
     private ContentPresenter _PART_ContentPresenter;
     private ScrollViewer _PART_ScrollViewer;
     private Border _PART_Border;
-
-    private bool _isRunPanelAnimation;
 
     [Obsolete("弃用回调逻辑.")]
     public event EventHandler GoBacked;
@@ -58,7 +74,6 @@ public sealed class NavigationView : SelectingItemsControl {
         get => GetValue(IsCenterProperty);
         set => SetValue(IsCenterProperty, value);
     }
-
 
     public bool CanGoBack {
         get => GetValue(CanGoBackProperty);
@@ -102,18 +117,6 @@ public sealed class NavigationView : SelectingItemsControl {
 
     protected override async void OnLoaded(RoutedEventArgs e) {
         base.OnLoaded(e);
-
-        App.GetService<WindowService>().HandlePropertyChanged(BoundsProperty, () => {
-            _PART_Border.Width = _PART_ContentPresenter.Bounds.Width - 10;
-            _PART_Border.Height = _PART_ContentPresenter.Bounds.Height - 10;
-
-            RunAnimation(IsCenter, false);
-        });
-
-        foreach (var item in Items.Cast<NavigationViewItem>()) {
-            item.Init();
-            await Task.Delay(TimeSpan.FromSeconds(0.2d));
-        }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e) {
@@ -122,6 +125,8 @@ public sealed class NavigationView : SelectingItemsControl {
         _PART_ContentPresenter = e.NameScope.Find<ContentPresenter>("PART_ContentPresenter");
         _PART_ScrollViewer = e.NameScope.Find<ScrollViewer>("PART_ScrollViewer");
         _PART_Border = e.NameScope.Find<Border>("PART_Border");
+
+        _PART_Border.RenderTransform = _rotate3DTransform;
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change) {
@@ -129,11 +134,12 @@ public sealed class NavigationView : SelectingItemsControl {
 
         if (change.Property == IsOpenBackgroundPanelProperty) {
             var @bool = change.GetNewValue<bool>();
-            _isRunPanelAnimation = @bool;
 
             Dispatcher.UIThread.Post(() => {
+                _PART_Border.Opacity = @bool ? 1 : 0;
+                _PART_Border.IsHitTestVisible = @bool;
                 _PART_ContentPresenter.Opacity = @bool ? 0 : 1;
-                _PART_Border.Margin = new(14, 5, 14, @bool ? 15 : -_PART_ContentPresenter.Bounds.Height);
+                
             }, DispatcherPriority.Render);
         }
 
@@ -146,7 +152,7 @@ public sealed class NavigationView : SelectingItemsControl {
 public sealed class NavigationViewItem : ListBoxItem, ICommandSource {
     private readonly TranslateTransform _defaultAnimation = new() {
         X = 0,
-        Y = 40,
+        Y = 0,
         Transitions = [
             new DoubleTransition {
                 Easing = new ExponentialEaseOut(),
@@ -183,10 +189,6 @@ public sealed class NavigationViewItem : ListBoxItem, ICommandSource {
     public object CommandParameter {
         get => GetValue(CommandParameterProperty);
         set => SetValue(CommandParameterProperty, value);
-    }
-
-    internal void Init() {
-        _defaultAnimation.Y = 0;
     }
 
     internal void GoCenter(double offset) {

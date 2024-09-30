@@ -38,29 +38,23 @@
 					</ContentPresenter>
 
 					<Border Grid.Row="0"
+							Opacity="0"
 							CornerRadius="12"
 							Name="PART_Border"
-							Margin="14 5 14 -520"
+							Margin="14 5 14 5"
 							BorderThickness="1.5"
 							Width="825"
+							IsHitTestVisible="False"
 							Height="425"
-							MinWidth="825"
-							MinHeight="425"
-							MaxWidth="1215"
-							MaxHeight="637"
-							VerticalAlignment="Bottom"
+							VerticalAlignment="Center"
 							HorizontalAlignment="Center"
 							Background="{TemplateBinding Background}"
 							BorderBrush="{TemplateBinding BorderBrush}">
 						<Border.Transitions>
 							<Transitions>
 								<DoubleTransition Property="Opacity"
-												  Duration="0:0:0.3"
+												  Duration="0:0:0.4"
 												  Easing="CubicEaseInOut"/>
-								
-								<ThicknessTransition Property="Margin"
-													 Duration="0:0:0.35"
-													 Easing="ExponentialEaseInOut"/>
 							</Transitions>
 						</Border.Transitions>
 
