@@ -1,4 +1,4 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls.Notifications;
 using MinecraftLaunch;
 using MinecraftLaunch.Classes.Enums;
 using MinecraftLaunch.Classes.Models.Auth;
@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WonderLab.Classes.Datas.TaskData;
+using WonderLab.Classes.Datas.ViewData;
 using WonderLab.Services.Auxiliary;
 
 namespace WonderLab.Services.Game;
@@ -35,6 +36,12 @@ public sealed class LaunchService {
     }
 
     public async Task LaunchWithDisplayTaskAsync(Account account) {
+        _notificationService.QueueJob(new NotificationViewData {
+            Title = "信息",
+            Content = $"已将游戏 \"{_gameService.ActiveGameEntry.Entry.Id}\" 的启动任务添加至调度队列",
+            NotificationType = NotificationType.Information
+        });
+
         var task = new LaunchDisplayTask {
             JobName = $"{_gameService.ActiveGameEntry.Entry.Id} 的启动任务",
         };

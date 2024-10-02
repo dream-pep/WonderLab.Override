@@ -122,16 +122,14 @@
 																									RippleFill="{DynamicResource DividerBrush}">
 																				<Grid RowDefinitions="1*, Auto">
 																					<Grid ColumnDefinitions="Auto, Auto">
-																						<controls:ProgressRing Height="15"
-																											   Width="15"
-																											   BorderThickness="2"
-																											   VerticalAlignment="Center"
-																											   Value="{Binding ProgressValue}"/>
-
 																						<TextBlock FontSize="12"
 																								   Grid.Column="1"
-																								   Text="{Binding StepName}"
-																								   VerticalAlignment="Center"/>
+																								   Margin="8"
+																								   VerticalAlignment="Center">
+																							<Run Text="{Binding StepName}"/>
+																							<Run Text=" - "/>
+																							<Run Text="{Binding ProgressText}"/>
+																						</TextBlock>
 																					</Grid>
 
 																					<Separator Grid.Row="1"
