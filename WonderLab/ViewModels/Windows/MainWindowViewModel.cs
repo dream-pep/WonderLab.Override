@@ -1,30 +1,36 @@
-﻿using WonderLab.ViewModels.Pages;
-using CommunityToolkit.Mvvm.Input;
-using WonderLab.Classes.Interfaces;
-using WonderLab.Services.Navigation;
-using CommunityToolkit.Mvvm.ComponentModel;
-using WonderLab.ViewModels.Pages.Navigation;
-using System.Collections.ObjectModel;
-using WonderLab.Services;
-using WonderLab.Services.UI;
-using CommunityToolkit.Mvvm.Messaging;
-using WonderLab.Classes.Datas.MessageData;
-using WonderLab.Classes.Enums;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
-using WonderLab.ViewModels.Dialogs;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
-using WonderLab.Views.Controls;
+using WonderLab.Classes.Datas.MessageData;
 using WonderLab.Classes.Datas.ViewData;
+using WonderLab.Classes.Enums;
+using WonderLab.Classes.Interfaces;
+using WonderLab.Extensions;
+using WonderLab.Services;
+using WonderLab.Services.Game;
+using WonderLab.Services.Navigation;
+using WonderLab.Services.UI;
+using WonderLab.ViewModels.Dialogs;
+using WonderLab.ViewModels.Pages;
+using WonderLab.ViewModels.Pages.Navigation;
+using WonderLab.Views.Controls;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WonderLab.ViewModels.Windows;
 
 public sealed partial class MainWindowViewModel : ViewModelBase {
+    private GameService _gameService;
     private readonly TaskService _taskService;
     private readonly DialogService _dialogService;
     private readonly SettingService _settingService;
     private readonly LanguageService _languageService;
     private readonly NotificationService _notificationService;
+    private readonly WeakReferenceMessenger _weakReferenceMessenger;
 
     public readonly HostNavigationService _navigationService;
 
@@ -34,12 +40,15 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
 
     [ObservableProperty] private object _activePage;
     [ObservableProperty] private ParallaxMode _parallaxMode;
+    [ObservableProperty] private GameViewData _activeGameEntry;
 
     [ObservableProperty] private bool _isEnableBlur;
     [ObservableProperty] private bool _isAlignCenter;
+    [ObservableProperty] private bool _isOpenGamePanel;
     [ObservableProperty] private bool _isOpenTaskListPanel;
     [ObservableProperty] private bool _isOpenBackgroundPanel;
 
+    [ObservableProperty] private ReadOnlyObservableCollection<GameViewData> _gameEntries;
     [ObservableProperty] private ReadOnlyObservableCollection<TaskViewData> _tasks;
     [ObservableProperty] private ReadOnlyObservableCollection<INotification> _notifications;
 
@@ -51,18 +60,29 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         SettingService settingService,
         LanguageService languageService,
         HostNavigationService navigationService,
-        NotificationService notificationService) {
+        NotificationService notificationService,
+        WeakReferenceMessenger weakReferenceMessenger) {
         _taskService = taskService;
         _dialogService = dialogService;
         _settingService = settingService;
         _languageService = languageService;
         _navigationService = navigationService;
         _notificationService = notificationService;
+        _weakReferenceMessenger = weakReferenceMessenger;
 
-        WeakReferenceMessenger.Default.Register<BlurEnableMessage>(this, BlurEnableValueHandle);
-        WeakReferenceMessenger.Default.Register<BlurRadiusChangeMessage>(this, BlurRadiusChangeHandle);
-        WeakReferenceMessenger.Default.Register<AlignCenterChangeMessage>(this, AlignCenterChangeHandle);
-        WeakReferenceMessenger.Default.Register<ParallaxModeChangeMessage>(this, ParallaxModeChangeHandle);
+        weakReferenceMessenger.Register<BlurEnableMessage>(this, BlurEnableValueHandle);
+        weakReferenceMessenger.Register<BlurRadiusChangeMessage>(this, BlurRadiusChangeHandle);
+        weakReferenceMessenger.Register<AlignCenterChangeMessage>(this, AlignCenterChangeHandle);
+        weakReferenceMessenger.Register<ParallaxModeChangeMessage>(this, ParallaxModeChangeHandle);
+
+        weakReferenceMessenger.Register<SettingDataChangedMessage>(this, (_, _) => {
+            _gameService = App.GetService<GameService>();
+        });
+
+        weakReferenceMessenger.Register<GameManagerMessage>(this, (_, _) => {
+            IsOpenGamePanel = !IsOpenGamePanel;
+            GameEntries = _gameService.GameEntries;
+        });
     }
 
     [RelayCommand]
@@ -117,9 +137,7 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         };
     }
 
-    public void OnLoaded(object sender, object args) {
-        //_taskService.QueueJob(new InitTask(_languageService, _settingService, _dialogService, _notificationService));
-
+    public void OnLoaded() {
         Tasks = new(_taskService.DisplayTasks);
         Notifications = new(_notificationService.Notifications);
 
@@ -132,6 +150,8 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
         };
 
         HomePage = _navigationService.NavigationToHome();
+
+        GameEntries = _gameService.GameEntries;
     }
 
     public void OnDrop(object sender, DragEventArgs args) {
@@ -149,5 +169,14 @@ public sealed partial class MainWindowViewModel : ViewModelBase {
 
     public void OnDragLeave(object sender, DragEventArgs args) {
         _dialogService.CloseContentDialog();
+    }
+
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e) {
+        base.OnPropertyChanged(e);
+
+        if (e.PropertyName is nameof(ActiveGameEntry)) {
+            _gameService.ActivateGameViewEntry(ActiveGameEntry);
+            _weakReferenceMessenger.Send(new ActiveGameEntryMessage(ActiveGameEntry));
+        }
     }
 }

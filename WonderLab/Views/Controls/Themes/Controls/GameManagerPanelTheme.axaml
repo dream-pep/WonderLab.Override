@@ -9,184 +9,144 @@
     </Design.PreviewWith>
     
     <ControlTheme x:Key="{x:Type controls:GameManagerPanel}" TargetType="controls:GameManagerPanel">
-		<Setter Property="Width" Value="155"/>
-        <Setter Property="Height" Value="85"/>
 		<Setter Property="ClipToBounds" Value="False"/>
-        <Setter Property="HorizontalAlignment" Value="Left"/>
-        <Setter Property="VerticalAlignment" Value="Bottom"/>
-		<Setter Property="BorderBrush" Value="{DynamicResource PrimaryBrush500}"/>
-		<Setter Property="Background" Value="{DynamicResource GameManagerPanelBackground}"/>
+		<Setter Property="Background" Value="{DynamicResource ContentBrush2}"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource ContentBrush4}"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <Border CornerRadius="12"
-                        BorderThickness="2"
-                        Width="{TemplateBinding Width}"
-                        Height="{TemplateBinding Height}"
-                        Background="{TemplateBinding Background}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="5"
-                                          Opacity="1"
-                                          OffsetX="0"
-                                          OffsetY="0"
-                                          Color="#46000000"/>
-                    </Border.Effect>
-                    
-                    <Border.Transitions>
-                        <Transitions>
-                            <DoubleTransition Duration="0:0:0.35"
-                                              Property="Width"
-                                              Easing="QuinticEaseOut"/>
+				<Border Background="#66000000"
+						IsVisible="{TemplateBinding IsOpenPanel}"
+						IsHitTestVisible="{TemplateBinding IsOpenPanel}">
+					<Grid RowDefinitions="1*, Auto">
+						<Border Background="Transparent"
+								VerticalAlignment="Stretch"
+								Name="PART_ClosePanelBorder"
+								HorizontalAlignment="Stretch"/>
 
-                            <DoubleTransition Duration="0:0:0.6"
-                                              Property="Height"
-                                              Easing="QuinticEaseOut"/>
-                        </Transitions>
-                    </Border.Transitions>
-                    
-                    <Grid Margin="5"
-                          RowDefinitions="1*, Auto">
-                        <Grid RowDefinitions="Auto,Auto"
-                              IsVisible="{TemplateBinding IsPaneOpen, Converter={StaticResource BooleanReverseConverter}}">
-                            <TextBlock Classes="large"
-                                       Margin="0 2 0 0"
-									   FontWeight="Bold"
-									   Name="TitleTextBlock"
-                                       HorizontalAlignment="Left"
-									   TextTrimming="CharacterEllipsis"/>
-						 
-                            <TextBlock Grid.Row="1"
-                                       FontSize="12"
-									   Classes="small"
-                                       Margin="0 2 0 0"
-                                       Name="SubTitleTextBlock"
-                                       TextTrimming="CharacterEllipsis"
-                                       Text="{DynamicResource Unknown}"
-                                       Foreground="{DynamicResource DefaultBrush400}"/>
-                        </Grid>
+						<controls:SmoothScrollViewer Background="{x:Null}">
+							<StackPanel Spacing="8"
+										Margin="36 16"
+										Orientation="Vertical">
+								<TextBlock FontSize="22"
+										   Text="所有核心"
+										   Margin="0 6 0 2"
+										   FontWeight="Bold"
+										   VerticalAlignment="Top"
+										   HorizontalAlignment="Left"
+										   Effect="{StaticResource LowTextBlockShadow}"/>
 
-                        <Grid Opacity="0"
-                              Grid.Row="0"
-                              Name="ContentPanel"
-                              RowDefinitions="Auto, 1*">
-                            <Grid.Transitions>
-                               <Transitions>
-                                   <DoubleTransition Property="Opacity"
-                                                     Duration="0:0:0.35"
-                                                     Easing="QuinticEaseOut"/>
-                               </Transitions>
-                            </Grid.Transitions>
-                            <TextBox Height="45"
-									 Margin="12 8 12 5"
-                                     Watermark="{DynamicResource GameSearchBoxWatermark}"/>
+								<ListBox Margin="0 8"
+										 CornerRadius="12"
+										 Effect="{StaticResource TextBlockShadow}"
+										 ItemsSource="{TemplateBinding ItemsSource}"
+										 SelectedItem="{TemplateBinding SelectedItem, Mode=TwoWay}">
+									<ListBox.Styles>
+										<Style Selector="ListBoxItem">
+											<Setter Property="Margin" Value="12 5 12 5"/>
+											<Setter Property="ClipToBounds" Value="False"/>
+											<Setter Property="Background" Value="Transparent"/>
+											<Setter Property="Template">
+												<ControlTemplate x:DataType="data:GameViewData">
+													<controls:RippleControl CornerRadius="12"
+																			RippleOpacity="0.2"
+																			Background="{x:Null}"
+																			RippleFill="{DynamicResource DividerBrush}">
+														<Border CornerRadius="12"
+																Name="PART_LayoutBorder"
+																Background="Transparent">
+															<Grid Margin="12 10"
+																  ColumnDefinitions="Auto, 1*, Auto">
+																<controls:FontIcon FontSize="28"
+																				   Glyph="&#xE7FC;"
+																				   Margin="0 1 12 0"
+																				   VerticalAlignment="Center"
+																				   Foreground="{DynamicResource LayoutForeground}"/>
 
-							<StackPanel Grid.Row="1"
-										Spacing="8"
-										VerticalAlignment="Center"
-										HorizontalAlignment="Center"
-										IsVisible="{TemplateBinding IsGameEmpty}">
-								<controls:FontIcon FontSize="55"
-												   Glyph="&#xE74D;"
-												   HorizontalAlignment="Center"/>
-								
-								<TextBlock Classes="subtitle"
-										   Text="未找到游戏核心"/>
+																<Grid Grid.Column="1"
+																	  HorizontalAlignment="Left"
+																	  VerticalAlignment="Center"
+																	  RowDefinitions="Auto, Auto">
+																	<TextBlock Text="{Binding Entry.Id}"
+																			   Foreground="{DynamicResource LayoutForeground}"/>
+
+																	<TextBlock Grid.Row="1"
+																			   FontSize="12"
+																			   Text="{Binding Entry.Id}"
+																			   Foreground="{DynamicResource DefaultBrush400}"/>
+																</Grid>
+
+																<StackPanel Spacing="5"
+																			Grid.Column="2"
+																			Orientation="Horizontal">
+																	<Button Padding="4"
+																					Classes="ripple"
+																					Background="Transparent">
+																		<controls:FontIcon Glyph="&#xE734;"/>
+																	</Button>
+
+																	<Button Padding="4"
+																			Classes="ripple"
+																			Background="Transparent">
+																		<controls:FontIcon Glyph="&#xE74D;"/>
+																	</Button>
+
+																	<Button Padding="4"
+																			Classes="ripple"
+																			Background="Transparent">
+																		<controls:FontIcon Glyph="&#xE713;"/>
+																	</Button>
+																</StackPanel>
+															</Grid>
+														</Border>
+													</controls:RippleControl>
+												</ControlTemplate>
+											</Setter>
+										</Style>
+
+										<Style Selector="ListBoxItem:selected /template/ Border#PART_LayoutBorder">
+											<Setter Property="Background" Value="{DynamicResource DividerBrush}"/>
+										</Style>
+									</ListBox.Styles>
+								</ListBox>
 							</StackPanel>
+						</controls:SmoothScrollViewer>
+						
+						<Border Opacity="1"
+								Padding="36 12"
+								Grid.Row="1"
+								Height="102"
+								Margin="0 0 0 -105"
+								BorderThickness="1"
+								VerticalAlignment="Bottom"
+								Name="PART_BottomBarLayout"
+								HorizontalAlignment="Stretch"
+								Effect="{StaticResource TextBlockShadow}"
+								BorderBrush="{TemplateBinding BorderBrush}"
+								Background="{DynamicResource BottomBarBackground}">
+							<Border.Transitions>
+								<Transitions>
+									<ThicknessTransition Property="Margin"
+														 Duration="0:0:0.35"
+														 Easing="ExponentialEaseOut"/>
+								</Transitions>
+							</Border.Transitions>
 							
-							<ListBox Grid.Row="1"
-		                             Margin="0 5 0 0"
-		                             Name="GameListBox"
-		                             Background="Transparent"
-		                             ItemsSource="{TemplateBinding GameEntries}"
-		                             ScrollViewer.VerticalScrollBarVisibility="Hidden"
-									 IsVisible="{TemplateBinding IsGameEmpty, Converter={StaticResource BooleanReverseConverter}}">
-								<ListBox.Styles>
-									<Style Selector="ListBoxItem">
-										<Setter Property="Margin" Value="12 5 12 0"/>
-										<Setter Property="ClipToBounds" Value="False"/>
-										<Setter Property="Background" Value="Transparent"/>
-										<Setter Property="Template">
-											<ControlTemplate x:DataType="data:GameViewData">
-												<Border Name="Layout"
-                                                        CornerRadius="12"
-                                                        Background="Transparent"
-                                                        BorderBrush="{DynamicResource ContentBrush3}">
-													<Border.Transitions>
-														<Transitions>
-															<BrushTransition Duration="0:0:0.35"
-                                                                             Property="Background"
-                                                                             Easing="QuinticEaseOut"/>
-														</Transitions>
-													</Border.Transitions>
+							<Grid RowDefinitions="Auto, 10, Auto">
+								<StackPanel Spacing="8"
+											Orientation="Horizontal">
+									<Button CornerRadius="12"
+											Content="安装新的游戏核心"/>
+									<Button CornerRadius="12"
+											Content="导入游戏整合包"/>
+								</StackPanel>
 
-													<Grid Margin="12 10"
-														  ColumnDefinitions="Auto,1*, Auto">
-														<controls:FontIcon FontSize="28"
-                                                                        Glyph="&#xE7FC;"
-                                                                        Margin="0 1 5 0"
-                                                                        VerticalAlignment="Center"
-                                                                        Foreground="{DynamicResource LayoutForeground}"/>
-
-														<Grid Grid.Column="1"
-                                                              RowDefinitions="Auto, Auto">
-															<TextBlock Text="{Binding Entry.Id}"
-                                                                       Foreground="{DynamicResource LayoutForeground}"/>
-
-															<TextBlock Grid.Row="1"
-                                                                       FontSize="12"
-                                                                       Text="{Binding Entry.Id}"
-                                                                       Foreground="{DynamicResource DefaultBrush400}"/>
-														</Grid>
-
-														<StackPanel Spacing="5"
-                                                                    Grid.Column="2"
-                                                                    Orientation="Horizontal">
-															<Button Padding="4"
-                                                                            Classes="ripple"
-                                                                            Background="Transparent">
-																<controls:FontIcon Glyph="&#xE734;"/>
-															</Button>
-
-															<Button Padding="4"
-                                                                    Classes="ripple"
-                                                                    Background="Transparent">
-																<controls:FontIcon Glyph="&#xE74D;"/>
-															</Button>
-
-															<Button Padding="4"
-                                                                    Classes="ripple"
-                                                                    Background="Transparent">
-																<controls:FontIcon Glyph="&#xE713;"/>
-															</Button>
-														</StackPanel>
-													</Grid>
-												</Border>
-											</ControlTemplate>
-										</Setter>
-									</Style>
-
-									<Style Selector="ListBoxItem:pointerover /template/ Border#Layout">
-										<Setter Property="Background" Value="{DynamicResource DividerBrush}"/>
-									</Style>
-								</ListBox.Styles>
-							</ListBox>
-						</Grid>
-                        
-                        <Button Grid.Row="1"
-                                FontSize="13"
-                                Classes="ripple"
-                                Padding="0 3 3 3"
-                                FontWeight="Bold"
-                                Name="OpenPaneButton"
-                                Background="Transparent"
-                                VerticalAlignment="Bottom"
-                                Command="{TemplateBinding OpenCommand}"
-                                Content="{DynamicResource ExpandInterface}"  
-                                Foreground="{DynamicResource PrimaryBrush500}"/>
-                    </Grid>
-                </Border>
+								<TextBox Height="35"
+										 Grid.Row="2"
+										 Watermark="搜索你的游戏库..."/>
+							</Grid>
+						</Border>
+					</Grid>
+				</Border>
             </ControlTemplate>
         </Setter>
     </ControlTheme>

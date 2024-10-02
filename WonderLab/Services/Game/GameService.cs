@@ -31,7 +31,7 @@ public sealed class GameService {
         }
     }
 
-    private void Initialize() {
+    public void Initialize() {
         _logger.LogInformation("开始初始化游戏实例服务");
         GameResolver = new GameResolver(_settingService?.Data?.ActiveGameFolder ?? "C:\\Users\\w\\Desktop\\temp\\.minecraft");
         RefreshGameViewEntry();

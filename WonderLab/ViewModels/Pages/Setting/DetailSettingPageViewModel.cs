@@ -18,11 +18,12 @@ namespace WonderLab.ViewModels.Pages.Setting;
 
 public sealed partial class DetailSettingPageViewModel : ViewModelBase {
     private readonly ThemeService _themeService;
+    private readonly DialogService _dialogService;
     private readonly WindowService _windowService;
     private readonly SettingService _settingService;
     private readonly LanguageService _languageService;
     private readonly NotificationService _notificationService;
-    private readonly DialogService _dialogService;
+    private readonly WeakReferenceMessenger _weakReferenceMessenger;
 
     [ObservableProperty] private bool _isImage = false;
     [ObservableProperty] private bool _isDebugMode = false;
@@ -40,16 +41,18 @@ public sealed partial class DetailSettingPageViewModel : ViewModelBase {
     public DetailSettingPageViewModel(
         ThemeService themeService, 
         WindowService windowService,
+        DialogService dialogService,
         SettingService settingService, 
         LanguageService languageService,
         NotificationService notificationService,
-        DialogService dialogService) {
+        WeakReferenceMessenger weakReferenceMessenger) {
         _themeService = themeService;
         _windowService = windowService;
         _settingService = settingService;
         _languageService = languageService;
         _notificationService = notificationService;
         _dialogService = dialogService;
+        _weakReferenceMessenger = weakReferenceMessenger;
 
         BlurRadius = _settingService.Data.BlurRadius;
         ThemeIndex = _settingService.Data.ThemeIndex;
@@ -105,19 +108,19 @@ public sealed partial class DetailSettingPageViewModel : ViewModelBase {
                 break;
             case nameof(IsAlignCenter):
                 _settingService.Data.IsAlignCenter = IsAlignCenter;
-                WeakReferenceMessenger.Default.Send(new AlignCenterChangeMessage(IsAlignCenter));
+                _weakReferenceMessenger.Send(new AlignCenterChangeMessage(IsAlignCenter));
                 break;
             case nameof(IsEnableBlur):
                 _settingService.Data.IsEnableBlur = IsEnableBlur;
-                WeakReferenceMessenger.Default.Send(new BlurEnableMessage(IsEnableBlur));
+                _weakReferenceMessenger.Send(new BlurEnableMessage(IsEnableBlur));
                 break;
             case nameof(ParallaxMode):
                 _settingService.Data.ParallaxMode = ParallaxMode;
-                WeakReferenceMessenger.Default.Send(new ParallaxModeChangeMessage(ParallaxMode));
+                _weakReferenceMessenger.Send(new ParallaxModeChangeMessage(ParallaxMode));
                 break;
             case nameof(BlurRadius):
                 _settingService.Data.BlurRadius = BlurRadius;
-                WeakReferenceMessenger.Default.Send(new BlurRadiusChangeMessage(BlurRadius));
+                _weakReferenceMessenger.Send(new BlurRadiusChangeMessage(BlurRadius));
                 break;
         }
     }

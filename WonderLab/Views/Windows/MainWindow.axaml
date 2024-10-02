@@ -17,7 +17,6 @@
         Title="WonderLab"
 		Name="Window"
         Background="Transparent"
-        TransparencyLevelHint="Mica"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaToDecorationsHint="True"
 		Icon="/Assets/Images/wonderlab.ico"
@@ -31,116 +30,123 @@
 	</i:Interaction.Behaviors>
 
 	<Panel>
-		<ExperimentalAcrylicBorder Name="AcrylicMaterial"
-								   IsHitTestVisible="False">
-			<ExperimentalAcrylicBorder.Material>
-				<ExperimentalAcrylicMaterial
-					BackgroundSource="Digger"
-					TintColor="Black"
-					TintOpacity="1"
-					MaterialOpacity="0.65" />
-			</ExperimentalAcrylicBorder.Material>
-		</ExperimentalAcrylicBorder>
+		<Panel Name="PART_LayoutPanel">			
+			<ExperimentalAcrylicBorder Name="AcrylicMaterial"
+						   IsHitTestVisible="False">
+				<ExperimentalAcrylicBorder.Material>
+					<ExperimentalAcrylicMaterial
+						BackgroundSource="Digger"
+						TintColor="Black"
+						TintOpacity="1"
+						MaterialOpacity="0.65" />
+				</ExperimentalAcrylicBorder.Material>
+			</ExperimentalAcrylicBorder>
 
-		<ui:ImageBox Name="imageBox"
-					 Source="{Binding ImagePath}"
-					 BlurRadius="{Binding BlurRadius}"
-					 IsEnableBlur="{Binding IsEnableBlur}"
-					 ParallaxMode="{Binding ParallaxMode}"/>
-		
-		<Grid RowDefinitions="Auto, 1*">
-			<ui:SuperTitleBar Grid.Row="0"
-							  Title="WonderLab - DEBUG MODE"/>
+			<ui:ImageBox Name="imageBox"
+						 Source="{Binding ImagePath}"
+						 BlurRadius="{Binding BlurRadius}"
+						 IsEnableBlur="{Binding IsEnableBlur}"
+						 ParallaxMode="{Binding ParallaxMode}"/>
 
-			<ui:NavigationView Grid.Row="1"
-							   ClipToBounds="False"
-							   Name="navigationView"
-							   IsCenter="{Binding IsAlignCenter}"
-							   MainContent="{Binding HomePage, Mode=OneWay}"
-							   IsOpenBackgroundPanel="{Binding IsOpenBackgroundPanel}">
-				<ui:NavigationView.Items>
-					<ui:NavigationViewItem Icon="&#xEA8A;"
-										   IsSelected="True"
-										   CommandParameter="HomePage"
-										   Content="{DynamicResource Main_Home}"
-										   Command="{Binding NavigationToCommand}"
-										   Foreground="{DynamicResource PrimaryBaseColor}"/>
+			<Grid RowDefinitions="Auto, 1*">
+				<ui:SuperTitleBar Grid.Row="0"
+								  Title="WonderLab - DEBUG MODE"/>
 
-					<ui:NavigationViewItem Icon="&#xEDDC;"
-										   Command="{Binding NavigationToCommand}"
-										   Content="{DynamicResource Main_Download}"
-										   CommandParameter="DownloadNavigationPage"
-										   Foreground="{DynamicResource SuccessBaseColor}"/>
+				<ui:NavigationView Grid.Row="1"
+								   ClipToBounds="False"
+								   Name="navigationView"
+								   IsCenter="{Binding IsAlignCenter}"
+								   MainContent="{Binding HomePage, Mode=OneWay}"
+								   IsOpenBackgroundPanel="{Binding IsOpenBackgroundPanel}">
+					<ui:NavigationView.Items>
+						<ui:NavigationViewItem Icon="&#xEA8A;"
+											   IsSelected="True"
+											   CommandParameter="HomePage"
+											   Content="{DynamicResource Main_Home}"
+											   Command="{Binding NavigationToCommand}"
+											   Foreground="{DynamicResource PrimaryBaseColor}"/>
 
-					<ui:NavigationViewItem Icon="&#xF0B9;"
-										   CommandParameter="MultiplayerPage"
-										   Command="{Binding NavigationToCommand}"
-										   Content="{DynamicResource Main_Multiplayer}"
-										   Foreground="{DynamicResource WarningBaseColor}"/>
+						<ui:NavigationViewItem Icon="&#xEDDC;"
+											   Command="{Binding NavigationToCommand}"
+											   Content="{DynamicResource Main_Download}"
+											   CommandParameter="DownloadNavigationPage"
+											   Foreground="{DynamicResource SuccessBaseColor}"/>
 
-					<ui:NavigationViewItem Icon="&#xF8B0;"
-										   Command="{Binding NavigationToCommand}"
-										   CommandParameter="SettingNavigationPage"
-										   Content="{DynamicResource Main_Settings}"
-										   Foreground="{DynamicResource SecondaryColor600}"/>
-				</ui:NavigationView.Items>
+						<ui:NavigationViewItem Icon="&#xF0B9;"
+											   CommandParameter="MultiplayerPage"
+											   Command="{Binding NavigationToCommand}"
+											   Content="{DynamicResource Main_Multiplayer}"
+											   Foreground="{DynamicResource WarningBaseColor}"/>
 
-				<ui:NavigationView.FooterContent>
-					<Grid ColumnDefinitions="Auto,Auto">
-						<Button Classes="ripple"
-								Margin="0 5 0 5"
-								Padding="10 1 10 1"
-								CornerRadius="10"
-								Background="Transparent"
-								VerticalAlignment="Center"
-								Command="{Binding ControlTaskListPanelCommand}">
-							<Grid ColumnDefinitions="Auto,Auto">
-								<ui:FontIcon Glyph="&#xE7E7;"
-											 FontSize="18"
-											 Grid.Column="1"
-											 Margin="8 0 0 0"
-											 VerticalAlignment="Center"/>
+						<ui:NavigationViewItem Icon="&#xF8B0;"
+											   Command="{Binding NavigationToCommand}"
+											   CommandParameter="SettingNavigationPage"
+											   Content="{DynamicResource Main_Settings}"
+											   Foreground="{DynamicResource SecondaryColor600}"/>
+					</ui:NavigationView.Items>
 
-								<Grid Grid.Column="0" 
-									  RowDefinitions="Auto, Auto">
-									<TextBlock FontSize="12"
-											   Text="任务中心"
-											   TextAlignment="Right"/>
+					<ui:NavigationView.FooterContent>
+						<Grid ColumnDefinitions="Auto,Auto">
+							<Button Classes="ripple"
+									Margin="0 5 0 5"
+									Padding="10 1 10 1"
+									CornerRadius="10"
+									Background="Transparent"
+									VerticalAlignment="Center"
+									Command="{Binding ControlTaskListPanelCommand}">
+								<Grid ColumnDefinitions="Auto,Auto">
+									<ui:FontIcon Glyph="&#xE7E7;"
+												 FontSize="18"
+												 Grid.Column="1"
+												 Margin="8 0 0 0"
+												 VerticalAlignment="Center"/>
 
-									<TextBlock Grid.Row="1"
-											   FontSize="12"
-											   TextAlignment="Right">
-										<Run Text="当前正在执行"/>
-										<Run Text="{Binding Tasks.Count}"/>
-										<Run Text="个任务"/>
-									</TextBlock>
+									<Grid Grid.Column="0"
+										  RowDefinitions="Auto, Auto">
+										<TextBlock FontSize="12"
+												   Text="任务中心"
+												   TextAlignment="Right"/>
+
+										<TextBlock Grid.Row="1"
+												   FontSize="12"
+												   TextAlignment="Right">
+											<Run Text="当前正在执行"/>
+											<Run Text="{Binding Tasks.Count}"/>
+											<Run Text="个任务"/>
+										</TextBlock>
+									</Grid>
 								</Grid>
-							</Grid>
-						</Button>
-					</Grid>
-				</ui:NavigationView.FooterContent>
+							</Button>
+						</Grid>
+					</ui:NavigationView.FooterContent>
 
-				<ui:Frame Name="frame"/>
-			</ui:NavigationView>
+					<ui:Frame Name="frame"/>
+				</ui:NavigationView>
 
-			<ui:TaskListPanel Grid.Row="1"
-							  Margin="0 0 10 60"
-							  ItemsSource="{Binding Tasks}"
-							  IsPaneOpen="{Binding IsOpenTaskListPanel}"/>
-			
-			<ui:NotificationListPanel Grid.Row="1"
-									  Margin="0 0 0 60"
-									  ClipToBounds="False"
-									  VerticalAlignment="Top"
-									  HorizontalAlignment="Right"
-									  Notifications="{Binding Notifications}"/>
-		</Grid>
+				<ui:TaskListPanel Grid.Row="1"
+								  Margin="0 0 10 60"
+								  ItemsSource="{Binding Tasks}"
+								  IsPaneOpen="{Binding IsOpenTaskListPanel}"/>
 
-		<dha:DialogHost DialogMargin="0"
-					    Identifier="dialogHost"
-						CloseOnClickAway="False"
-					    DisableOpeningAnimation="True"
-					    dha:DialogHostStyle.CornerRadius="14"
-						OverlayBackground="{DynamicResource DialogOverlayBackground}"/>
+				<ui:NotificationListPanel Grid.Row="1"
+										  Margin="0 0 0 60"
+										  ClipToBounds="False"
+										  VerticalAlignment="Top"
+										  HorizontalAlignment="Right"
+										  Notifications="{Binding Notifications}"/>
+			</Grid>
+
+			<dha:DialogHost DialogMargin="0"
+							Identifier="dialogHost"
+							CloseOnClickAway="False"
+							DisableOpeningAnimation="True"
+							dha:DialogHostStyle.CornerRadius="14"
+							OverlayBackground="{DynamicResource DialogOverlayBackground}"/>
+		</Panel>
+		
+		<ui:GameManagerPanel ItemsSource="{Binding GameEntries, Mode=OneWay}"
+							 IsOpenPanel="{Binding IsOpenGamePanel, Mode=TwoWay}"
+							 SelectedItem="{Binding ActiveGameEntry, Mode=TwoWay}"
+							 EffectControl="{Binding ElementName=PART_LayoutPanel, Mode=OneWay}"/>
 	</Panel>
 </Window>

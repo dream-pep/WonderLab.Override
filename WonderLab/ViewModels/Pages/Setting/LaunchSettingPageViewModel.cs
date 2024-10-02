@@ -17,12 +17,14 @@ using System;
 using System.IO;
 using WonderLab.Extensions;
 using Microsoft.Extensions.Logging;
+using WonderLab.Services.Game;
 
 namespace WonderLab.ViewModels.Pages.Setting;
 
 public sealed partial class LaunchSettingPageViewModel : ViewModelBase {
     private readonly SettingData _data;
     private readonly JavaFetcher _javaFetcher;
+    private readonly GameService _gameService;
     private readonly DialogService _dialogService;
     private readonly SettingService _settingService;
     private readonly ILogger<LaunchSettingPageViewModel> _logger;
@@ -42,9 +44,11 @@ public sealed partial class LaunchSettingPageViewModel : ViewModelBase {
 
     public LaunchSettingPageViewModel(
         JavaFetcher javaFetcher,
+        GameService gameService,
         DialogService dialogService,
         SettingService settingService,
         ILogger<LaunchSettingPageViewModel> logger) {
+        _gameService = gameService;
         _dialogService = dialogService;
         _settingService = settingService;
 
@@ -146,6 +150,7 @@ public sealed partial class LaunchSettingPageViewModel : ViewModelBase {
                 break;
             case nameof(ActiveGameFolder):
                 _data.ActiveGameFolder = ActiveGameFolder;
+                _gameService.Initialize();
                 break;
             case nameof(IsFullScreen):
                 _data.IsFullScreen = IsFullScreen;

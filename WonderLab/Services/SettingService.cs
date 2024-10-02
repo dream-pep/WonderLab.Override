@@ -134,8 +134,9 @@ internal sealed class SettingBackgroundService : BackgroundService {
         _windowService.SetBackground(_settingData.BackgroundIndex);
     }
 
-    public override async Task StopAsync(CancellationToken cancellationToken) {
+    public override Task StopAsync(CancellationToken cancellationToken) {
         Save();
+        return Task.CompletedTask;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken) {

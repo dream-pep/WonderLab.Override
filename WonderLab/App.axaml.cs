@@ -155,10 +155,10 @@ public sealed partial class App : Application {
     }
 
     private static void ConfigureServices(IServiceCollection services) {
-        services.AddTransient<GameService>();
         services.AddTransient<BackendService>();
         services.AddTransient<DownloadService>();
 
+        services.AddSingleton<GameService>();
         services.AddSingleton<TaskService>();
         services.AddSingleton<WrapService>();
         services.AddSingleton<SkinService>();

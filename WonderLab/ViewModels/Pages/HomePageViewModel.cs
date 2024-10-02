@@ -17,6 +17,7 @@ using Avalonia.Controls.Notifications;
 using WonderLab.ViewModels.Dialogs;
 using System;
 using System.Threading;
+using WonderLab.Classes.Datas.MessageData;
 
 namespace WonderLab.ViewModels.Pages;
 
@@ -28,6 +29,7 @@ public sealed partial class HomePageViewModel : ViewModelBase {
     private readonly AccountService _accountService;
     private readonly SettingService _settingService;
     private readonly NotificationService _notificationService;
+    private readonly WeakReferenceMessenger _weakReferenceMessenger;
 
     [ObservableProperty] private bool _isGameEmpty;
     [ObservableProperty] private GameViewData _activeGameEntry;
@@ -41,7 +43,8 @@ public sealed partial class HomePageViewModel : ViewModelBase {
         DialogService dialogService,
         AccountService accountService,
         SettingService settingService,
-        NotificationService notificationService) {
+        NotificationService notificationService,
+        WeakReferenceMessenger weakReferenceMessenger) {
         _gameService = gameService;
         _taskService = taskService;
         _dialogService = dialogService;
@@ -50,13 +53,12 @@ public sealed partial class HomePageViewModel : ViewModelBase {
         _settingService = settingService;
         _notificationService = notificationService;
 
-        GameEntries = _gameService.GameEntries.ToObservableList();
-        IsGameEmpty = GameEntries.Count == 0;
-
-        RunBackgroundWork(async() => {
-            await Task.Delay(250);
-            ActiveGameEntry = _gameService.ActiveGameEntry;
+        _weakReferenceMessenger = weakReferenceMessenger;
+        _weakReferenceMessenger.Register<ActiveGameEntryMessage>(this, (_, args) => {
+            ActiveGameEntry = args.Data;
         });
+
+        ActiveGameEntry = gameService.ActiveGameEntry;
     }
 
     partial void OnActiveGameEntryChanged(GameViewData value) {
@@ -84,5 +86,10 @@ public sealed partial class HomePageViewModel : ViewModelBase {
         }
 
         await _launchService.LaunchWithDisplayTaskAsync(_accountService.AccountViewData.Account);
+    }
+
+    [RelayCommand]
+    private void OpenGameManager() {
+        _weakReferenceMessenger.Send(new GameManagerMessage());
     }
 }
