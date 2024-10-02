@@ -48,7 +48,7 @@ public sealed class AccountService {
     /// 异步验证
     /// </summary>
     public async ValueTask<MicrosoftAccount> AuthenticateMicrosoftAsync(Account account = default, Action<DeviceCodeResponse> action = default, CancellationTokenSource tokenSource = default) {
-        MicrosoftAuthenticator microsoftAuthenticator = new(CLIENT_ID);
+        MicrosoftAuthenticator microsoftAuthenticator = new(account as MicrosoftAccount, CLIENT_ID, true);
 
         if (account is null) {
             await microsoftAuthenticator.DeviceFlowAuthAsync(action, tokenSource);
