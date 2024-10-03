@@ -1,4 +1,4 @@
 files:
-  - source: /WonderLab/Assets/Languages/
+  - source: /WonderLab/Assets/Languages/en-US.axaml
     translation: /WonderLab/Assets/Languages/
     multilingual: 1
