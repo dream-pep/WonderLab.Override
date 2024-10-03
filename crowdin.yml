@@ -1,0 +1,4 @@
+files:
+  - source: /WonderLab/Assets/Languages
+    translation: /WonderLab/Assets/Languages
+    multilingual: 1
