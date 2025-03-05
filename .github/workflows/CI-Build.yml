@@ -41,7 +41,7 @@ jobs:
     - name: Build
       run: dotnet build wonderlab/wonderlab.csproj -t:CreateZip --arch ${{ matrix.arch }} --os win ${{ env.compile-flags }}
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Windows
         path: wonderlab/bin/Release/${{ env.target-version }}/win-${{ matrix.arch }}/*.zip
@@ -70,7 +70,7 @@ jobs:
     - name: Build
       run: pupnet -r win-${{ matrix.arch }} -k setup -y -o wonderlab.${{ steps.package_version.outputs.version }}.win-${{ matrix.arch }}.installer.exe
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: WindowsInstaller
         path: Deploy/OUT/*.exe
@@ -117,7 +117,7 @@ jobs:
     - name: Build
       run: pupnet --runtime linux-${{ matrix.arch }} --kind appimage -y -o wonderlab.${{ steps.package_version.outputs.version }}.linux-${{ matrix.arch }}.AppImage
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: AppImage
         path: Deploy/OUT/*.AppImage
@@ -135,7 +135,7 @@ jobs:
     - name: Build
       run: dotnet build wonderlab/wonderlab.csproj -t:CreateZip --arch ${{ matrix.arch }} --os osx ${{ env.compile-flags }}
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: MacOS
         path: wonderlab/bin/Release/${{ env.target-version }}/osx-${{ matrix.arch }}/*.zip
@@ -153,7 +153,7 @@ jobs:
     - name: Build
       run: dotnet build wonderlab/wonderlab.csproj -t:CreateDeb --arch ${{ matrix.arch }} --os linux ${{ env.compile-flags }}
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Linux_Deb
         path: wonderlab/bin/Release/${{ env.target-version }}/linux-${{ matrix.arch }}/*.deb
@@ -171,7 +171,7 @@ jobs:
     - name: Build
       run: dotnet build wonderlab/wonderlab.csproj -t:CreateRpm --arch ${{ matrix.arch }} --os linux ${{ env.compile-flags }}
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Linux_Rpm
         path: wonderlab/bin/Release/${{ env.target-version }}/linux-${{ matrix.arch }}/*.rpm
@@ -201,7 +201,7 @@ jobs:
          filename: 'wonderlab.${{ steps.package_version.outputs.version }}.osx.app-${{ matrix.arch }}.zip'
          path: 'WonderLab.app'
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: MacOS
         path: 'wonderlab/bin/Release/${{ env.target-version }}/osx-${{ matrix.arch }}/publish/*.zip'
@@ -214,31 +214,31 @@ jobs:
     steps:
     - uses: nelonoel/branch-name@v1
     - name: Download Windows Build
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
        name: Windows
     - name: Download Windows Installer Build
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
        name: WindowsInstaller
     #- name: Download Linux Build
-    #  uses: actions/download-artifact@v3
+    #  uses: actions/download-artifact@v4
     #  with:
     #   name: Linux
     - name: Download AppImage Build
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
        name: AppImage
     - name: Download Deb Build
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
        name: Linux_Deb
     - name: Download Rpm Build
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
         name: Linux_Rpm
     - name: Download MacOS Build
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4
       with:
        name: MacOS
     - name: Create Release
